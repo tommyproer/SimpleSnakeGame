@@ -14,7 +14,6 @@ class Window extends JFrame {
 		
 		// Creates the arraylist that'll contain the threads
 		Grid = new ArrayList<>();
-
 		
 		// Creates Threads and its data and adds it to the arrayList
 		for(int i=0;i<width;i++){
@@ -32,7 +31,7 @@ class Window extends JFrame {
 		// Start & pauses all threads, then adds every square of each thread to the panel
 		for(int i=0;i<width;i++){
 			for(int j=0;j<height;j++){
-				getContentPane().add(Grid.get(i).get(j).square);
+				getContentPane().add(Grid.get(i).get(j).getSquare());
 			}
 		}
 		
