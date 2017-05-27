@@ -1,7 +1,6 @@
 package com.snake.main;
 
 import java.awt.GridLayout;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -38,20 +37,19 @@ class Window extends JFrame {
 		}
 		
 		// initial position of the snake
-		Tuple position = new Tuple(10,10);
+		Position position = new Position(10,10);
 		// passing this value to the controller
-		ThreadsController c = new ThreadsController(position);
+		ThreadsController threadsController = new ThreadsController(position);
 		//Let's start the game now..
-		c.start();
+		threadsController.start();
 
 		// Links the window to the keyboard listener.
-		this.addKeyListener((KeyListener) new KeyboardListener());
+		this.addKeyListener(new KeyboardListener());
 
 		//To do : handle multiplayers .. The above works, test it and see what happens
 		
-		//Tuple position2 = new Tuple(13,13);
+		//Position position2 = new Position(13,13);
 		//ControlleurThreads c2 = new ControlleurThreads(position2);
 		//c2.start();
-		
 	}
 }

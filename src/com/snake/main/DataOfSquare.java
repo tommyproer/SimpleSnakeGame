@@ -15,7 +15,6 @@ public class DataOfSquare {
 	public void lightMeUp(final GameColor gameColor){
 		square.changeColor(convertToColor(gameColor));
 	}
-
 	public SquarePanel getSquare() {
 		return square;
 	}
