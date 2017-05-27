@@ -1,20 +1,23 @@
-import java.util.ArrayList;
+package com.snake.main;
+
 import java.awt.Color;
 
 public class DataOfSquare {
-
 	public enum GameColor {
 		SNAKE, FOOD, BACKGROUND
 	}
 
-	//ArrayList that'll contain the colors
-	ArrayList<Color> C =new ArrayList<Color>();
-	SquarePanel square;
+	private SquarePanel square;
+
 	public DataOfSquare(final GameColor gameColor){
 		square = new SquarePanel(convertToColor(gameColor));
 	}
 	public void lightMeUp(final GameColor gameColor){
-		square.ChangeColor(convertToColor(gameColor));
+		square.changeColor(convertToColor(gameColor));
+	}
+
+	public SquarePanel getSquare() {
+		return square;
 	}
 
 	private Color convertToColor(GameColor gameColor) {

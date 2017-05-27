@@ -1,3 +1,5 @@
+package com.snake.main;
+
 import java.awt.Color;
 import javax.swing.JPanel;
 
@@ -9,7 +11,7 @@ public class SquarePanel extends JPanel{
 		this.setBackground(d);
 	}
 	
-	public void ChangeColor(Color d){
+	public void changeColor(Color d){
 		this.setBackground(d);
 		this.repaint();
 	}

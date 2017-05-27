@@ -1,4 +1,6 @@
-public class Tuple { 
+package com.snake.main;
+
+public class Tuple {
 	  public  int x; 
 	  public  int y; 
 	  public int xf;
