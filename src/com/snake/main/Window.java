@@ -15,27 +15,21 @@ class Window extends JFrame {
 		
 		// Creates the arraylist that'll contain the threads
 		Grid = new ArrayList<>();
-		
+
+		// Setting up the layout of the panel
+		getContentPane().setLayout(new GridLayout(20, 20,1,1));
+
 		// Creates Threads and its data and adds it to the arrayList
-		for(int i=0;i<width;i++){
+		for (int i=0; i<width; i++){
 			ArrayList<DataOfSquare> data= new ArrayList<>();
 			for(int j=0;j<height;j++){
-				DataOfSquare c = new DataOfSquare(DataOfSquare.GameColor.BACKGROUND);
-				data.add(c);
+				DataOfSquare dataOfSquare = new DataOfSquare(DataOfSquare.GameColor.BACKGROUND);
+				data.add(dataOfSquare);
+				getContentPane().add(dataOfSquare.getSquare());
 			}
 			Grid.add(data);
 		}
-		
-		// Setting up the layout of the panel
-		getContentPane().setLayout(new GridLayout(20,20,0,0));
-		
-		// Start & pauses all threads, then adds every square of each thread to the panel
-		for(int i=0;i<width;i++){
-			for(int j=0;j<height;j++){
-				getContentPane().add(Grid.get(i).get(j).getSquare());
-			}
-		}
-		
+
 		// initial position of the snake
 		Position position = new Position(10,10);
 		// passing this value to the controller

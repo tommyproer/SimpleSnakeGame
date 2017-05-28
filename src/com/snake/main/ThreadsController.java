@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 public class ThreadsController extends Thread {
     private Position headSnakePos;
-    private int sizeSnake = 6;
+    private int sizeSnake = 5;
     private final long speed = 70;
     public static int directionSnake;
 
@@ -18,7 +18,7 @@ public class ThreadsController extends Thread {
     //Constructor of Controller Thread
     ThreadsController(final Position positionDepart) {
         headSnakePos = new Position(positionDepart.getX(), positionDepart.getY());
-        directionSnake = 1;
+        directionSnake = 4;
 
         //!!! Pointer !!!!
         positions.add(new Position(headSnakePos.getX(), headSnakePos.getY()));
@@ -60,7 +60,7 @@ public class ThreadsController extends Thread {
              }
          }
 
-         boolean eatingFood = headSnakePos.getX()==foodPosition.getY() && headSnakePos.getY()==foodPosition.getX();
+         boolean eatingFood = headSnakePos.getY()==foodPosition.getY() && headSnakePos.getX()==foodPosition.getX();
          if (eatingFood) {
              System.out.println("Yummy!");
              sizeSnake = sizeSnake + 1;
@@ -90,13 +90,14 @@ public class ThreadsController extends Thread {
          int ranY = (int) (Math.random()*20);
          p = new Position(ranX,ranY);
          for (int i = 0; i <= positions.size()-1; i++){
-             if (p.getY()==positions.get(i).getX() && p.getX()==positions.get(i).getY()) {
+             if (p.getX()==positions.get(i).getX() && p.getY()==positions.get(i).getY()) {
                  ranX = (int) (Math.random()*20);
                  ranY = (int) (Math.random()*20);
                  p = new Position(ranX,ranY);
                  i = 0;
              }
          }
+         System.out.println("new food position: " + p.getX() + ", " + p.getY());
          return p;
      }
 
@@ -134,7 +135,7 @@ public class ThreadsController extends Thread {
      //Refresh the squares that needs to be
      private void moveExterne(){
          for (Position position : positions) {
-             Window.Grid.get(position.getY()).get(position.getX()).lightMeUp(DataOfSquare.GameColor.SNAKE);
+             Window.Grid.get(position.getX()).get(position.getY()).lightMeUp(DataOfSquare.GameColor.SNAKE);
          }
      }
 
@@ -143,9 +144,9 @@ public class ThreadsController extends Thread {
      * than its actual size.
      */
     private void deleteTail() {
-         if (positions.size() == sizeSnake) {
+         if (positions.size()-1 == sizeSnake) {
              Position tail = positions.get(0);
-             Window.Grid.get(tail.getY()).get(tail.getX()).lightMeUp(DataOfSquare.GameColor.BACKGROUND);
+             Window.Grid.get(tail.getX()).get(tail.getY()).lightMeUp(DataOfSquare.GameColor.BACKGROUND);
              positions.remove(0);
          }
      }
