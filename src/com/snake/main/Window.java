@@ -5,14 +5,14 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
-
 class Window extends JFrame {
 	private static final long serialVersionUID = -2542001418764869760L;
 	public static ArrayList<ArrayList<DataOfSquare>> Grid;
 	public static int width = 20;
 	public static int height = 20;
+
 	public Window() {
-		
+
 		// Creates the arraylist that'll contain the threads
 		Grid = new ArrayList<>();
 

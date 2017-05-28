@@ -2,29 +2,31 @@ package com.snake.main;
 
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Controls game logic.
  * TODO: Bug with user pressing two directions in quick succession may lead to false collision
  */
 public class ThreadsController extends Thread {
+    Logger LOG = LoggerFactory.getLogger(ThreadsController.class);
     private Position headSnakePos;
-    private int sizeSnake = 5;
-    private final long speed = 70;
+    private int sizeSnake = Configuration.getInitialSnakeSize();
     public static int directionSnake;
 
     private ArrayList<Position> positions = new ArrayList<>();
     private Position foodPosition;
 	 
-    //Constructor of Controller Thread
+    // Constructor of Controller Thread
     ThreadsController(final Position positionDepart) {
         headSnakePos = new Position(positionDepart.getX(), positionDepart.getY());
-        directionSnake = 4;
+        directionSnake = Configuration.getInitialSnakeDirection();
 
         //!!! Pointer !!!!
         positions.add(new Position(headSnakePos.getX(), headSnakePos.getY()));
 
-        foodPosition = spawnFoodRandomly();
-        spawnFood(foodPosition);
+        spawnFoodRandomly();
     }
 
     public void run() {
@@ -42,7 +44,7 @@ public class ThreadsController extends Thread {
      */
     private void pause(){
          try {
-                sleep(speed);
+                sleep(Configuration.getSpeed());
          } catch (InterruptedException e) {
                 e.printStackTrace();
          }
@@ -60,19 +62,16 @@ public class ThreadsController extends Thread {
              }
          }
 
-         boolean eatingFood = headSnakePos.getY()==foodPosition.getY() && headSnakePos.getX()==foodPosition.getX();
-         if (eatingFood) {
-             System.out.println("Yummy!");
+         if (headSnakePos.equals(foodPosition)) {
+             LOG.info("Yummy");
              sizeSnake = sizeSnake + 1;
-             foodPosition = spawnFoodRandomly();
-
-             spawnFood(foodPosition);
+             spawnFoodRandomly();
          }
      }
 
      //Stops The Game
      private void stopTheGame(){
-         System.out.println("COLISION! \n");
+         LOG.info("Collision!");
          while(true){
              pause();
          }
@@ -83,22 +82,17 @@ public class ThreadsController extends Thread {
          Window.Grid.get(foodPositionIn.getX()).get(foodPositionIn.getY()).lightMeUp(DataOfSquare.GameColor.FOOD);
      }
 
-     //return a position not occupied by the snake
-     private Position spawnFoodRandomly() {
-         Position p ;
-         int ranX = (int) (Math.random()*20);
-         int ranY = (int) (Math.random()*20);
-         p = new Position(ranX,ranY);
-         for (int i = 0; i <= positions.size()-1; i++){
-             if (p.getX()==positions.get(i).getX() && p.getY()==positions.get(i).getY()) {
-                 ranX = (int) (Math.random()*20);
-                 ranY = (int) (Math.random()*20);
-                 p = new Position(ranX,ranY);
-                 i = 0;
-             }
+    /**
+     * TODO: This needs to be more efficient
+     */
+     private void spawnFoodRandomly() {
+         Position p = new Position((int) (Math.random()*20), (int) (Math.random()*20));
+         while (positions.contains(p)) {
+             p = new Position((int) (Math.random()*20), (int) (Math.random()*20));
          }
-         System.out.println("new food position: " + p.getX() + ", " + p.getY());
-         return p;
+         LOG.info("New food spawn: {}, {}", p.getX(), p.getY());
+         spawnFood(p);
+         foodPosition = p;
      }
 
     //Moves the head of the snake and refreshes the positions in the arraylist

@@ -22,6 +22,4 @@ The code is well commented, if you have any questions or want to continue this p
 * If you lose, just close it and re-open it (I will add a restart button possibly)
 
 
-
-
-Made in a couple of hours ..
+You will have to edit log4j.properties file and Configuration file..
