@@ -15,7 +15,7 @@ public class ThreadsController extends Thread {
     private int sizeSnake = Configuration.getInitialSnakeSize();
     public static int directionSnake;
 
-    private ArrayList<Position> positions = new ArrayList<>();
+    private ArrayList<Position> snakePositions = new ArrayList<>();
     private Position foodPosition;
 	 
     // Constructor of Controller Thread
@@ -24,7 +24,7 @@ public class ThreadsController extends Thread {
         directionSnake = Configuration.getInitialSnakeDirection();
 
         //!!! Pointer !!!!
-        positions.add(new Position(headSnakePos.getX(), headSnakePos.getY()));
+        snakePositions.add(new Position(headSnakePos.getX(), headSnakePos.getY()));
 
         spawnFoodRandomly();
     }
@@ -56,14 +56,13 @@ public class ThreadsController extends Thread {
      * there is a collision.
      */
      private void checkCollision() {
-         for(int i = 0; i<=positions.size()-2; i++) {
-             if (headSnakePos.equals(positions.get(i))) {
+         for(int i = 0; i<= snakePositions.size()-2; i++) {
+             if (headSnakePos.equals(snakePositions.get(i))) {
                 stopTheGame();
              }
          }
 
          if (headSnakePos.equals(foodPosition)) {
-             LOG.info("Yummy");
              sizeSnake = sizeSnake + 1;
              spawnFoodRandomly();
          }
@@ -71,7 +70,7 @@ public class ThreadsController extends Thread {
 
      //Stops The Game
      private void stopTheGame(){
-         LOG.info("Collision!");
+         LOG.info("Collision, game over. Snake size: " + sizeSnake);
          while(true){
              pause();
          }
@@ -79,7 +78,7 @@ public class ThreadsController extends Thread {
 
      // Put food in a position and displays it
      private void spawnFood(Position foodPositionIn){
-         Window.Grid.get(foodPositionIn.getX()).get(foodPositionIn.getY()).lightMeUp(DataOfSquare.GameColor.FOOD);
+         Window.gameGrid.get(foodPositionIn.getX()).get(foodPositionIn.getY()).lightMeUp(DataOfSquare.GameColor.FOOD);
      }
 
     /**
@@ -87,21 +86,21 @@ public class ThreadsController extends Thread {
      */
      private void spawnFoodRandomly() {
          Position p = new Position((int) (Math.random()*20), (int) (Math.random()*20));
-         while (positions.contains(p)) {
+         while (snakePositions.contains(p)) {
              p = new Position((int) (Math.random()*20), (int) (Math.random()*20));
          }
-         LOG.info("New food spawn: {}, {}", p.getX(), p.getY());
+         LOG.info("New food spawn: {}, {}, snake size: {}", p.getX(), p.getY(), sizeSnake);
          spawnFood(p);
          foodPosition = p;
      }
 
-    //Moves the head of the snake and refreshes the positions in the arraylist
+    //Moves the head of the snake and refreshes the snakePositions in the arraylist
     //1:right 2:left 3:top 4:bottom 0:nothing
     private void moveInterne(int dir){
         switch(dir){
             case 4:
                 headSnakePos.changeData(headSnakePos.getX(),(headSnakePos.getY()+1)%20);
-                positions.add(new Position(headSnakePos.getX(),headSnakePos.getY()));
+                snakePositions.add(new Position(headSnakePos.getX(),headSnakePos.getY()));
                 break;
             case 3:
                 if(headSnakePos.getY()-1<0){
@@ -109,7 +108,7 @@ public class ThreadsController extends Thread {
                 } else {
                     headSnakePos.changeData(headSnakePos.getX(),(headSnakePos.getY()-1)%20);
                 }
-                positions.add(new Position(headSnakePos.getX(),headSnakePos.getY()));
+                snakePositions.add(new Position(headSnakePos.getX(),headSnakePos.getY()));
                 break;
             case 2:
                 if(headSnakePos.getX()-1<0){
@@ -117,31 +116,30 @@ public class ThreadsController extends Thread {
                 } else {
                     headSnakePos.changeData((headSnakePos.getX()-1)%20,headSnakePos.getY());
                 }
-                positions.add(new Position(headSnakePos.getX(),headSnakePos.getY()));
+                snakePositions.add(new Position(headSnakePos.getX(),headSnakePos.getY()));
                 break;
             case 1:
                 headSnakePos.changeData((headSnakePos.getX()+1)%20,headSnakePos.getY());
-                positions.add(new Position(headSnakePos.getX(),headSnakePos.getY()));
+                snakePositions.add(new Position(headSnakePos.getX(),headSnakePos.getY()));
                 break;
         }
     }
 
      //Refresh the squares that needs to be
      private void moveExterne(){
-         for (Position position : positions) {
-             Window.Grid.get(position.getX()).get(position.getY()).lightMeUp(DataOfSquare.GameColor.SNAKE);
+         for (Position position : snakePositions) {
+             Window.gameGrid.get(position.getX()).get(position.getY()).lightMeUp(DataOfSquare.GameColor.SNAKE);
          }
      }
 
     /**
-     * Remove the tail only if the displayed snake size is less
-     * than its actual size.
+     * Remove all squares that exceed the size of the snake
      */
     private void deleteTail() {
-         if (positions.size()-1 == sizeSnake) {
-             Position tail = positions.get(0);
-             Window.Grid.get(tail.getX()).get(tail.getY()).lightMeUp(DataOfSquare.GameColor.BACKGROUND);
-             positions.remove(0);
+         while (snakePositions.size() > sizeSnake) {
+             Position tail = snakePositions.get(0);
+             Window.gameGrid.get(tail.getX()).get(tail.getY()).lightMeUp(DataOfSquare.GameColor.BACKGROUND);
+             snakePositions.remove(0);
          }
      }
 }

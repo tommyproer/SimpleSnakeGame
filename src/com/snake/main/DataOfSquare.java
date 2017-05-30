@@ -19,7 +19,7 @@ public class DataOfSquare {
 		return square;
 	}
 
-	private Color convertToColor(GameColor gameColor) {
+	private Color convertToColor(final GameColor gameColor) {
 		switch (gameColor) {
 			case SNAKE:
 				return Color.DARK_GRAY;
