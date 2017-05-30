@@ -3,9 +3,10 @@ package com.snake.main;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-public class KeyboardListener extends KeyAdapter{
+public class KeyboardListener extends KeyAdapter {
 
-	public void keyPressed(KeyEvent e){
+	@Override
+	public void keyPressed(final KeyEvent e){
 		switch(e.getKeyCode()){
 			case 39:	// -> Right
 						//if it's not the opposite direction

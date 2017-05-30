@@ -4,46 +4,48 @@ import java.awt.GridLayout;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.WindowConstants;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ * New window for the snake game.
+ */
 class Window extends JFrame {
+	private final Logger LOG = LoggerFactory.getLogger(Window.class);
+
 	private static final long serialVersionUID = -2542001418764869760L;
-	public static ArrayList<ArrayList<DataOfSquare>> Grid;
+	public static ArrayList<ArrayList<DataOfSquare>> gameGrid;
 	public static int width = 20;
-	public static int height = 20;
+	public static int height = 20; // TODO: Get this into config, which requires some thought because Gridlayout is kinda using this
 
-	public Window() {
+	public Window(final String title) {
+		LOG.info("New game. Speed: " + Configuration.getSpeed() + ", Snake size: " + Configuration.getInitialSnakeSize());
+		setTitle(title);
+		setSize(Configuration.getWindowWidth(), Configuration.getWindowHeight());
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+	}
 
-		// Creates the arraylist that'll contain the threads
-		Grid = new ArrayList<>();
-
-		// Setting up the layout of the panel
-		getContentPane().setLayout(new GridLayout(20, 20,1,1));
+	public void run() {
+		gameGrid = new ArrayList<>();
+		getContentPane().setLayout(new GridLayout(20, 20,0,0));
 
 		// Creates Threads and its data and adds it to the arrayList
-		for (int i=0; i<width; i++){
-			ArrayList<DataOfSquare> data= new ArrayList<>();
-			for(int j=0;j<height;j++){
+		for (int i = 0; i < width; i++){
+			ArrayList<DataOfSquare> data = new ArrayList<>();
+			for(int j = 0 ;j < height; j++){
 				DataOfSquare dataOfSquare = new DataOfSquare(DataOfSquare.GameColor.BACKGROUND);
 				data.add(dataOfSquare);
 				getContentPane().add(dataOfSquare.getSquare());
 			}
-			Grid.add(data);
+			gameGrid.add(data);
 		}
 
-		// initial position of the snake
-		Position position = new Position(10,10);
-		// passing this value to the controller
-		ThreadsController threadsController = new ThreadsController(position);
-		//Let's start the game now..
+		ThreadsController threadsController = new ThreadsController(new Position(Configuration.getInitialSnakePosx(),Configuration.getInitialSnakePoxy()));
 		threadsController.start();
 
 		// Links the window to the keyboard listener.
 		this.addKeyListener(new KeyboardListener());
-
-		//To do : handle multiplayers .. The above works, test it and see what happens
-		
-		//Position position2 = new Position(13,13);
-		//ControlleurThreads c2 = new ControlleurThreads(position2);
-		//c2.start();
 	}
 }

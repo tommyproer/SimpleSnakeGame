@@ -28,3 +28,7 @@ jar {
 		attributes 'Main-Class': 'com.snake.main.Main'
 	}
 }
+
+clean {
+	delete "${rootDir}/log"
+}

@@ -1,22 +1,17 @@
 package com.snake.main;
 
-import javax.swing.JFrame;
-
 import org.apache.log4j.PropertyConfigurator;
 
+/**
+ * Invoked through gradle.
+ */
 public class Main {
 
 	public static void main(String[] args) {
-		PropertyConfigurator.configure(Configuration.getMainPath() + "\\src\\resources\\log4j.properties");
+		PropertyConfigurator.configure(Configuration.getMainPath() + Configuration.getLog4jPath());
 
-		//Creating the window with all its awesome snaky features
-		Window f1= new Window();
-		
-		//Setting up the window settings
-		f1.setTitle("Snake");
-		f1.setSize(300,300);
-		f1.setVisible(true);
-		f1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);             
-
+		Window window = new Window("SimpleSnakeGame");
+		window.run();
+		window.setVisible(true);
 	}
 }

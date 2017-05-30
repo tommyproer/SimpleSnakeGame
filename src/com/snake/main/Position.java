@@ -1,7 +1,7 @@
 package com.snake.main;
 
 /**
- * Position
+ * Position on the game grid.
  */
 public class Position {
 	private int x;
@@ -29,5 +29,9 @@ public class Position {
 		}
 		Position other = (Position) obj;
 		return other.getX() == x && other.getY() == y;
+	}
+
+	private void validatePosition(final int x, final int y) {
+		System.out.println("TODO: validate positions within grid here");
 	}
 } 
