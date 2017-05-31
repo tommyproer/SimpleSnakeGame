@@ -9,21 +9,21 @@ public class KeyboardListener extends KeyAdapter {
 	public void keyPressed(final KeyEvent e) {
 		switch(e.getKeyCode()) {
 			case 39:	// -> Right
-						if (ThreadsController.gameDirection != ThreadsController.GameDirection.LEFT)
-							ThreadsController.gameDirection = ThreadsController.GameDirection.RIGHT;
+						if (RunnableGame.direction != RunnableGame.GameDirection.LEFT)
+							RunnableGame.direction = RunnableGame.GameDirection.RIGHT;
 						break;
 			case 38:	// -> Top
-						if(ThreadsController.gameDirection != ThreadsController.GameDirection.DOWN)
-							ThreadsController.gameDirection = ThreadsController.GameDirection.UP;
+						if(RunnableGame.direction != RunnableGame.GameDirection.DOWN)
+							RunnableGame.direction = RunnableGame.GameDirection.UP;
 						break;
 			case 37: 	// -> Left
-						if(ThreadsController.gameDirection != ThreadsController.GameDirection.RIGHT)
-							ThreadsController.gameDirection = ThreadsController.GameDirection.LEFT;
+						if(RunnableGame.direction != RunnableGame.GameDirection.RIGHT)
+							RunnableGame.direction = RunnableGame.GameDirection.LEFT;
 						break;
 
 			case 40:	// -> Bottom
-						if(ThreadsController.gameDirection != ThreadsController.GameDirection.UP)
-							ThreadsController.gameDirection = ThreadsController.GameDirection.DOWN;
+						if(RunnableGame.direction != RunnableGame.GameDirection.UP)
+							RunnableGame.direction = RunnableGame.GameDirection.DOWN;
 						break;
 
 			default: 	break;

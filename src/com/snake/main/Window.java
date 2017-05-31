@@ -48,10 +48,12 @@ public class Window extends JFrame {
 			gameGrid.add(data);
 		}
 
-		ThreadsController threadsController = new ThreadsController(new Position(Configuration.getInitialSnakePosx(),
+		RunnableGame runnableGame = new RunnableGame(new Position(Configuration.getInitialSnakePosx(),
 				Configuration.getInitialSnakePoxy()));
+		Thread thread = new Thread(runnableGame);
+
 		try {
-			threadsController.start();
+			thread.start();
 		} catch (Exception e) {
 			e.printStackTrace();
 			LOG.error(e.getMessage());
