@@ -56,8 +56,5 @@ public class Window extends JFrame {
 			e.printStackTrace();
 			LOG.error(e.getMessage());
 		}
-
-
-
 	}
 }
