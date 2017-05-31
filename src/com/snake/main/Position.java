@@ -11,10 +11,30 @@ public class Position {
 		this.x = x;
 		this.y = y;
 	}
-	public void changeData(int x, int y){
-		this.x = x;
-		this.y = y;
+	public void moveLeft() {
+		if (y == 0) {
+			y = 19;
+		} else {
+			y = (y-1) % 20;
+		}
 	}
+
+	public void moveRight() {
+		 y = (y+1) % 20;
+	}
+
+	public void moveUp() {
+		if (x == 0) {
+			x = 19;
+		} else {
+			x = (x-1) % 20;
+		}
+	}
+
+	public void moveDown() {
+		x = (x+1) % 20;
+	}
+
 	public int getX(){
 	  return x;
 	}
