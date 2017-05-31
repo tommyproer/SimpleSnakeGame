@@ -11,6 +11,11 @@ import org.slf4j.LoggerFactory;
  */
 public class ThreadsController extends Thread {
     private final Logger LOG = LoggerFactory.getLogger(ThreadsController.class);
+
+    public enum gameDirection {
+        LEFT, RIGHT, UP, DOWN
+    }
+
     private Position headSnakePos;
     private int sizeSnake = Configuration.getInitialSnakeSize();
     public static int directionSnake;
@@ -31,10 +36,9 @@ public class ThreadsController extends Thread {
 
     public void run() {
         while(true) {
-            moveInterne(directionSnake);
+            moveSnake(directionSnake);
             checkCollision();
-            moveExterne();
-            deleteTail();
+            commitMove();
             pause();
         }
     }
@@ -44,9 +48,9 @@ public class ThreadsController extends Thread {
     */
     private void pause() {
         try {
-        sleep(Configuration.getSpeed());
-            } catch (InterruptedException e) {
-        e.printStackTrace();
+            sleep(Configuration.getSpeed());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
@@ -76,8 +80,8 @@ public class ThreadsController extends Thread {
      }
 
      // Put food in a position and displays it
-     private void spawnFood(Position foodPositionIn) {
-         Window.gameGrid.get(foodPositionIn.getX()).get(foodPositionIn.getY()).lightMeUp(DataOfSquare.GameColor.FOOD);
+     private void spawnFood(final Position foodPositionIn) {
+         Window.gameGrid.get(foodPositionIn.getX()).get(foodPositionIn.getY()).lightSquare(DataOfSquare.GameColor.FOOD);
      }
 
     /**
@@ -95,7 +99,7 @@ public class ThreadsController extends Thread {
 
     //Moves the head of the snake and refreshes the snakePositions in the arraylist
     //1:right 2:left 3:top 4:bottom 0:nothing
-    private void moveInterne(int dir) {
+    private void moveSnake(int dir) {
         switch(dir){
             case 4:
                 headSnakePos.changeData(headSnakePos.getX(),(headSnakePos.getY()+1)%20);
@@ -124,21 +128,15 @@ public class ThreadsController extends Thread {
         }
     }
 
-     //Refresh the squares that needs to be
-     private void moveExterne() {
-         for (Position position : snakePositions) {
-             Window.gameGrid.get(position.getX()).get(position.getY()).lightMeUp(DataOfSquare.GameColor.SNAKE);
-         }
-     }
-
     /**
-     * Remove all squares that exceed the size of the snake
-     */
-    private void deleteTail() {
-         while (snakePositions.size() > sizeSnake) {
-             Position tail = snakePositions.get(0);
-             Window.gameGrid.get(tail.getX()).get(tail.getY()).lightMeUp(DataOfSquare.GameColor.BACKGROUND);
-             snakePositions.remove(0);
-         }
-     }
+    * Remove all squares that exceed the size of the snake
+    */
+    private void commitMove() {
+        Window.gameGrid.get(headSnakePos.getX()).get(headSnakePos.getY()).lightSquare(DataOfSquare.GameColor.SNAKE);
+        while (snakePositions.size() > sizeSnake) {
+            Position tail = snakePositions.get(0);
+            Window.gameGrid.get(tail.getX()).get(tail.getY()).lightSquare(DataOfSquare.GameColor.BACKGROUND);
+            snakePositions.remove(0);
+        }
+    }
 }

@@ -12,7 +12,7 @@ public class DataOfSquare {
 	public DataOfSquare(final GameColor gameColor){
 		square = new SquarePanel(convertToColor(gameColor));
 	}
-	public void lightMeUp(final GameColor gameColor){
+	public void lightSquare(final GameColor gameColor){
 		square.changeColor(convertToColor(gameColor));
 	}
 	public SquarePanel getSquare() {

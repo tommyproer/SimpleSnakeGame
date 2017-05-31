@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 /**
  * New window for the snake game.
  */
-class Window extends JFrame {
+public class Window extends JFrame {
 	private final Logger LOG = LoggerFactory.getLogger(Window.class);
 
 	private static final long serialVersionUID = -2542001418764869760L;
@@ -20,11 +20,17 @@ class Window extends JFrame {
 	public static int width = 20;
 	public static int height = 20; // TODO: Get this into config, which requires some thought because Gridlayout is kinda using this
 
+	/**
+	 * Initialize window, set the title, size, close operation and add key listener.
+	 *
+	 * @param title title of the window.
+	 */
 	public Window(final String title) {
 		LOG.info("New game. Speed: " + Configuration.getSpeed() + ", Snake size: " + Configuration.getInitialSnakeSize());
 		setTitle(title);
 		setSize(Configuration.getWindowWidth(), Configuration.getWindowHeight());
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		addKeyListener(new KeyboardListener());
 	}
 
 	public void run() {
@@ -42,10 +48,16 @@ class Window extends JFrame {
 			gameGrid.add(data);
 		}
 
-		ThreadsController threadsController = new ThreadsController(new Position(Configuration.getInitialSnakePosx(),Configuration.getInitialSnakePoxy()));
-		threadsController.start();
+		ThreadsController threadsController = new ThreadsController(new Position(Configuration.getInitialSnakePosx(),
+				Configuration.getInitialSnakePoxy()));
+		try {
+			threadsController.start();
+		} catch (Exception e) {
+			e.printStackTrace();
+			LOG.error(e.getMessage());
+		}
 
-		// Links the window to the keyboard listener.
-		this.addKeyListener(new KeyboardListener());
+
+
 	}
 }

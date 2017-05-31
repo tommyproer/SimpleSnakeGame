@@ -5,7 +5,7 @@ import org.apache.log4j.PropertyConfigurator;
 /**
  * Invoked through gradle.
  */
-public class Main {
+class Main {
 
 	public static void main(String[] args) {
 		PropertyConfigurator.configure(Configuration.getMainPath() + Configuration.getLog4jPath());
