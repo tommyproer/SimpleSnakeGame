@@ -4,7 +4,7 @@ public class Configuration {
 
     private static int SPEED = 80;
     private static final int INITIAL_SNAKE_SIZE = 3;
-    private static final RunnableGame.GameDirection INITIAL_SNAKE_DIRECTION = RunnableGame.GameDirection.RIGHT;
+    private static final GameDirection.Direction INITIAL_SNAKE_DIRECTION = GameDirection.Direction.RIGHT;
     private static final String MAIN_PATH = "C:\\Users\\Tommy\\TommysDocuments\\workspace\\SimpleSnakeGame";
     private static final String LOG_PATH = "\\src\\resources\\log4j.properties";
     private static final int WINDOW_HEIGHT = 700;
@@ -18,7 +18,7 @@ public class Configuration {
         return INITIAL_SNAKE_SIZE;
     }
 
-    public static RunnableGame.GameDirection getInitialSnakeDirection() {
+    public static GameDirection.Direction getInitialSnakeDirection() {
         return INITIAL_SNAKE_DIRECTION;
     }
 

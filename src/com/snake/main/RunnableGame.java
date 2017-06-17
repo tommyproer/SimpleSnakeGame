@@ -12,13 +12,9 @@ import org.slf4j.LoggerFactory;
 public class RunnableGame implements Runnable{
     private final Logger LOG = LoggerFactory.getLogger(RunnableGame.class);
 
-    public enum GameDirection {
-        LEFT, RIGHT, UP, DOWN
-    }
-
     private static int sizeSnake = Configuration.getInitialSnakeSize();
-    public static RunnableGame.GameDirection lastDirection; // TODO: implement this.
-    public static RunnableGame.GameDirection direction;
+    public static GameDirection lastDirection; // TODO: implement this.
+    public static GameDirection.Direction direction;
 
     private Position headSnakePosition;
     private ArrayList<Position> snakePositions = new ArrayList<>();
@@ -98,7 +94,7 @@ public class RunnableGame implements Runnable{
      *
      * @param gameDirection direction of the snake.
      */
-    private void moveSnake(final RunnableGame.GameDirection gameDirection) {
+    private void moveSnake(final GameDirection.Direction gameDirection) {
         switch(gameDirection) {
             case RIGHT:
                 headSnakePosition.moveRight();
