@@ -7,13 +7,12 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Controls game logic.
- * TODO: Bug with user pressing two directions in quick succession may lead to false collision
  */
 public class RunnableGame implements Runnable{
     private final Logger LOG = LoggerFactory.getLogger(RunnableGame.class);
 
     private static int sizeSnake = Configuration.getInitialSnakeSize();
-    public static GameDirection lastDirection; // TODO: implement this.
+    public static GameDirection.Direction lastDirection;
     public static GameDirection.Direction direction;
 
     private Position headSnakePosition;
@@ -23,6 +22,7 @@ public class RunnableGame implements Runnable{
     // Constructor of Controller Thread
     RunnableGame(final Position initialPosition) {
         direction = Configuration.getInitialSnakeDirection();
+        lastDirection = Configuration.getInitialSnakeDirection();
 
         headSnakePosition = new Position(initialPosition.getX(), initialPosition.getY());
         snakePositions.add(new Position(headSnakePosition.getX(), headSnakePosition.getY()));
@@ -70,6 +70,7 @@ public class RunnableGame implements Runnable{
 
     private void stopTheGame() {
         LOG.info("Collision, game over. Snake size: " + sizeSnake);
+        System.out.println("Collision!");
         while(true){
             pause();
         }
@@ -98,15 +99,19 @@ public class RunnableGame implements Runnable{
         switch(gameDirection) {
             case RIGHT:
                 headSnakePosition.moveRight();
+                lastDirection = GameDirection.Direction.RIGHT;
                 break;
             case LEFT:
                 headSnakePosition.moveLeft();
+                lastDirection = GameDirection.Direction.LEFT;
                 break;
             case UP:
                 headSnakePosition.moveUp();
+                lastDirection = GameDirection.Direction.UP;
                 break;
             case DOWN:
                 headSnakePosition.moveDown();
+                lastDirection = GameDirection.Direction.DOWN;
                 break;
         }
         snakePositions.add(new Position(headSnakePosition.getX(), headSnakePosition.getY()));

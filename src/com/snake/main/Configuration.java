@@ -2,7 +2,7 @@ package com.snake.main;
 
 public class Configuration {
 
-    private static int SPEED = 80;
+    private static int SPEED = 500;
     private static final int INITIAL_SNAKE_SIZE = 3;
     private static final GameDirection.Direction INITIAL_SNAKE_DIRECTION = GameDirection.Direction.RIGHT;
     private static final String MAIN_PATH = "C:\\Users\\Tommy\\TommysDocuments\\workspace\\SimpleSnakeGame";
