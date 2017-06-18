@@ -1,12 +1,19 @@
 package com.snake.main;
 
+/**
+ * TODO: We should be able to figure out the main path implicitly..
+ * TODO: log4.properties file is not properly rotating files.
+ * TODO: log4j.properties file should be able to get the main path from this file (i.e. have only one source of truth for this)
+ */
 public class Configuration {
 
-    private static int SPEED = 500;
+    private static int SPEED = 150;
     private static final int INITIAL_SNAKE_SIZE = 3;
     private static final GameDirection.Direction INITIAL_SNAKE_DIRECTION = GameDirection.Direction.RIGHT;
-    private static final String MAIN_PATH = "C:\\Users\\Tommy\\TommysDocuments\\workspace\\SimpleSnakeGame";
-    private static final String LOG_PATH = "\\src\\resources\\log4j.properties";
+    private static final String MAIN_PATH = "/home/tommy/workspace/SimpleSnakeGame";
+    private static final String WINDOWS_MAIN_PATH = "C:\\Users\\Tommy\\TommysDocuments\\workspace\\SimpleSnakeGame";
+    private static final String LOG_PATH = "/src/resources/log4j.properties";
+    private static final String WINDOWS_LOG_PATH = "\\src\\resources\\log4j.properties";
     private static final int WINDOW_HEIGHT = 700;
     private static final int WINDOW_WIDTH = 700;
     private static final int INITIAL_SNAKE_POSX = 10;
