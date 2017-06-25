@@ -1,7 +1,11 @@
 package com.snake.main;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
+import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,12 +21,20 @@ public class RunnableGame implements Runnable{
 
     private Position headSnakePosition;
     private ArrayList<Position> snakePositions = new ArrayList<>();
+    private Set<Position> allPositions = new HashSet<>();
     private Position foodPosition;
 
     // Constructor of Controller Thread
-    RunnableGame(final Position initialPosition) {
+    public RunnableGame(final Position initialPosition) {
         direction = Configuration.getInitialSnakeDirection();
         lastDirection = Configuration.getInitialSnakeDirection();
+
+        // Initialize all positions
+        for (int i = 0; i < 20; i++) {
+            for (int j = 0; j < 20; j++) {
+                allPositions.add(new Position(i, j));
+            }
+        }
 
         headSnakePosition = new Position(initialPosition.getX(), initialPosition.getY());
         snakePositions.add(new Position(headSnakePosition.getX(), headSnakePosition.getY()));
@@ -71,20 +83,17 @@ public class RunnableGame implements Runnable{
     private void stopTheGame() {
         LOG.info("Collision, game over. Snake size: " + sizeSnake);
         System.out.println("Collision!");
-        while(true){
+        while(true) {
             pause();
         }
     }
 
     /**
-     * TODO: This needs to be more efficient
+     * Spawns food in a random location that is not occupied by the snake.
      */
     private void spawnFoodRandomly() {
-        Position newFoodPosition = new Position((int) (Math.random()*20), (int) (Math.random()*20));
-        while (snakePositions.contains(newFoodPosition)) {
-            newFoodPosition = new Position((int) (Math.random()*20), (int) (Math.random()*20));
-        }
-        this.foodPosition = newFoodPosition;
+        final List<Position> nonSnakePositions = new ArrayList<>(Sets.filter(allPositions, (input) -> !snakePositions.contains(input)));
+        this.foodPosition = nonSnakePositions.get(((int) (Math.random()*1000)) % nonSnakePositions.size());
 
         LOG.info("New food spawn: {}, {}, snake size: {}", foodPosition.getX(), foodPosition.getY(), sizeSnake);
         Window.gameGrid.get(foodPosition.getX()).get(foodPosition.getY()).lightSquare(DataOfSquare.GameColor.FOOD);

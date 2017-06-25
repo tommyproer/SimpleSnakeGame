@@ -43,6 +43,11 @@ public class Position {
 	}
 
 	@Override
+	public String toString() {
+		return String.format("[%d, %d]", x, y);
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Position)) {
 			return false;

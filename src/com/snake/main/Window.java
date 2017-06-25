@@ -48,15 +48,18 @@ public class Window extends JFrame {
 			gameGrid.add(data);
 		}
 
-		RunnableGame runnableGame = new RunnableGame(new Position(Configuration.getInitialSnakePosx(),
-				Configuration.getInitialSnakePoxy()));
-		Thread thread = new Thread(runnableGame);
+		final RunnableGame runnableGame =
+				new RunnableGame(
+						new Position(Configuration.getInitialSnakePosx(),
+								Configuration.getInitialSnakePoxy())
+				);
+		final Thread thread = new Thread(runnableGame);
 
 		try {
 			thread.start();
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOG.error(e.getMessage());
+			LOG.error("Encountered error while executing main thread", e);
 		}
 	}
 }
