@@ -13,26 +13,26 @@ public class Position {
 	}
 	public void moveLeft() {
 		if (y == 0) {
-			y = 20 - 1;
+			y = Window.windowSize - 1;
 		} else {
-			y = (y-1) % 20;
+			y = (y-1) % Window.windowSize;
 		}
 	}
 
 	public void moveRight() {
-		 y = (y+1) % 20;
+		 y = (y+1) % Window.windowSize;
 	}
 
 	public void moveUp() {
 		if (x == 0) {
-			x = 20 - 1;
+			x = Window.windowSize - 1;
 		} else {
-			x = (x-1) % 20;
+			x = (x-1) % Window.windowSize;
 		}
 	}
 
 	public void moveDown() {
-		x = (x+1) % 20;
+		x = (x+1) % Window.windowSize;
 	}
 
 	public int getX(){

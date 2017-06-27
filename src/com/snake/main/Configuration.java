@@ -13,8 +13,9 @@ public class Configuration {
     private static final GameDirection.Direction INITIAL_SNAKE_DIRECTION = GameDirection.Direction.RIGHT;
     private static final int WINDOW_HEIGHT = 600;
     private static final int WINDOW_WIDTH = 600;
-    private static final int INITIAL_SNAKE_POSX = 10;
-    private static final int INITIAL_SNAKE_POXY = 10;
+    private static final int windowSize = 20;
+    private static final int INITIAL_SNAKE_POSX = windowSize/2;
+    private static final int INITIAL_SNAKE_POXY = windowSize/2;
 
     public static int getSpeed() { return SPEED; }
 
@@ -48,4 +49,6 @@ public class Configuration {
     public static int getInitialSnakePosx() { return INITIAL_SNAKE_POSX; }
 
     public static int getInitialSnakePoxy() { return INITIAL_SNAKE_POXY; }
+
+    public static int getWindowSize() { return windowSize; }
 }

@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Controls game logic.
  */
-public class RunnableGame implements Runnable{
+public class RunnableGame implements Runnable {
     private final Logger LOG = LoggerFactory.getLogger(RunnableGame.class);
 
     private static int sizeSnake = Configuration.getInitialSnakeSize();
@@ -24,14 +24,13 @@ public class RunnableGame implements Runnable{
     private Set<Position> allPositions = new HashSet<>();
     private Position foodPosition;
 
-    // Constructor of Controller Thread
     public RunnableGame(final Position initialPosition) {
         direction = Configuration.getInitialSnakeDirection();
         lastDirection = Configuration.getInitialSnakeDirection();
 
         // Initialize all positions
-        for (int i = 0; i < 20; i++) {
-            for (int j = 0; j < 20; j++) {
+        for (int i = 0; i < Window.windowSize; i++) {
+            for (int j = 0; j < Window.windowSize; j++) {
                 allPositions.add(new Position(i, j));
             }
         }
@@ -81,7 +80,7 @@ public class RunnableGame implements Runnable{
     }
 
     private void stopTheGame() {
-        LOG.info("Collision, game over. Snake size: " + sizeSnake);
+        LOG.info("Collision, game over. Snake windowSize: " + sizeSnake);
         System.out.println("Collision!");
         while(true) {
             pause();
@@ -95,7 +94,7 @@ public class RunnableGame implements Runnable{
         final List<Position> nonSnakePositions = new ArrayList<>(Sets.filter(allPositions, (input) -> !snakePositions.contains(input)));
         this.foodPosition = nonSnakePositions.get(((int) (Math.random()*1000)) % nonSnakePositions.size());
 
-        LOG.info("New food spawn: {}, {}, snake size: {}", foodPosition.getX(), foodPosition.getY(), sizeSnake);
+        LOG.info("New food spawn: {}, {}, snake windowSize: {}", foodPosition.getX(), foodPosition.getY(), sizeSnake);
         Window.gameGrid.get(foodPosition.getX()).get(foodPosition.getY()).lightSquare(DataOfSquare.GameColor.FOOD);
     }
 
