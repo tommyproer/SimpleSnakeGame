@@ -11,28 +11,13 @@ public class Position {
 		this.x = x;
 		this.y = y;
 	}
-	public void moveLeft() {
-		if (y == 0) {
-			y = Window.windowSize - 1;
-		} else {
-			y = (y-1) % Window.windowSize;
-		}
-	}
-
+	public void moveLeft() { y = (y + Window.getGridSize() - 1) % Window.getGridSize(); }
 	public void moveRight() {
-		 y = (y+1) % Window.windowSize;
+		 y = (y+1) % Window.getGridSize();
 	}
-
-	public void moveUp() {
-		if (x == 0) {
-			x = Window.windowSize - 1;
-		} else {
-			x = (x-1) % Window.windowSize;
-		}
-	}
-
+	public void moveUp() { x = (x + Window.getGridSize() - 1) % Window.getGridSize(); }
 	public void moveDown() {
-		x = (x+1) % Window.windowSize;
+		x = (x+1) % Window.getGridSize();
 	}
 
 	public int getX(){
@@ -54,9 +39,5 @@ public class Position {
 		}
 		Position other = (Position) obj;
 		return other.getX() == x && other.getY() == y;
-	}
-
-	private void validatePosition(final int x, final int y) {
-		System.out.println("TODO: validate positions within grid here");
 	}
 } 

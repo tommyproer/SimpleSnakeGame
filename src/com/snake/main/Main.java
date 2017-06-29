@@ -5,9 +5,14 @@ package com.snake.main;
  */
 class Main {
 	public static void main(String[] args) {
+		final Thread thread = new Thread(
+				new RunnableGame());
 
-		final Window window = new Window("SimpleSnakeGame");
-		window.run();
-		window.setVisible(true);
+		try {
+			thread.start();
+		} catch (Exception e) {
+			System.out.println("Encountered error: ");
+			e.printStackTrace();
+		}
 	}
 }
