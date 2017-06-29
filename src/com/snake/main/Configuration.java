@@ -1,10 +1,8 @@
 package com.snake.main;
 
-import java.io.File;
 
 /**
  * Controls game configuration.
- * TODO: log4.properties file is not properly "renaming" files
  */
 public class Configuration {
 
@@ -29,17 +27,6 @@ public class Configuration {
 
     public static String getMainPath() {
         return System.getProperty("user.dir");
-    }
-
-    public static String getLog4jPath() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(File.separator);
-        sb.append("src");
-        sb.append(File.separator);
-        sb.append("resources");
-        sb.append(File.separator);
-        sb.append("log4j.properties");
-        return sb.toString();
     }
 
     public static int getWindowHeight() { return WINDOW_HEIGHT; }

@@ -6,14 +6,11 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Controls game logic.
  */
 public class RunnableGame implements Runnable {
-    private final Logger LOG = LoggerFactory.getLogger(RunnableGame.class);
 
     private static int sizeSnake = Configuration.getInitialSnakeSize();
     public static GameDirection.Direction lastDirection;
@@ -80,8 +77,7 @@ public class RunnableGame implements Runnable {
     }
 
     private void stopTheGame() {
-        LOG.info("Collision, game over. Snake windowSize: " + sizeSnake);
-        System.out.println("Collision!");
+        System.out.println("Collision, game over. Snake windowSize: " + sizeSnake);
         while(true) {
             pause();
         }
@@ -94,7 +90,7 @@ public class RunnableGame implements Runnable {
         final List<Position> nonSnakePositions = new ArrayList<>(Sets.filter(allPositions, (input) -> !snakePositions.contains(input)));
         this.foodPosition = nonSnakePositions.get(((int) (Math.random()*1000)) % nonSnakePositions.size());
 
-        LOG.info("New food spawn: {}, {}, snake windowSize: {}", foodPosition.getX(), foodPosition.getY(), sizeSnake);
+        System.out.println(String.format("New food spawn: %d, %d", foodPosition.getX(), foodPosition.getY(), sizeSnake));
         Window.gameGrid.get(foodPosition.getX()).get(foodPosition.getY()).lightSquare(DataOfSquare.GameColor.FOOD);
     }
 

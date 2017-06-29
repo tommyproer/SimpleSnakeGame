@@ -10,14 +10,11 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * New window for the snake game.
+ * X position is position from the top, Y position is the position from the left.
  */
 public class Window extends JFrame {
-	private final Logger LOG = LoggerFactory.getLogger(Window.class);
 
 	private static final long serialVersionUID = -2542001418764869760L;
 	public static ArrayList<ArrayList<DataOfSquare>> gameGrid;
@@ -30,7 +27,6 @@ public class Window extends JFrame {
 	 * @param title title of the window.
 	 */
 	public Window(final String title) {
-		LOG.info("New game. Speed: " + Configuration.getSpeed() + ", Snake windowSize: " + Configuration.getInitialSnakeSize());
 		setTitle(title);
 		setSize(Configuration.getWindowWidth(), Configuration.getWindowHeight());
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -55,7 +51,6 @@ public class Window extends JFrame {
 				DataOfSquare dataOfSquare = new DataOfSquare(DataOfSquare.GameColor.BACKGROUND);
 				data.add(dataOfSquare);
 				snakeContainer.add(dataOfSquare.getSquare());
-
 			}
 			gameGrid.add(data);
 		}
@@ -75,7 +70,7 @@ public class Window extends JFrame {
 			thread.start();
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOG.error("Encountered error while executing main thread", e);
+			System.out.println(String.format("Encountered error while executing main thread: %s", e));
 		}
 	}
 
