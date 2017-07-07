@@ -1,17 +1,23 @@
 package com.snake.main;
 
+import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.AbstractAction;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
 
 import com.google.common.collect.Sets;
@@ -21,32 +27,6 @@ import com.google.common.collect.Sets;
  * X position is position from the top, Y position is the position from the left.
  */
 public class Window extends JFrame {
-	public class KeyboardListener extends KeyAdapter {
-		@Override
-		public void keyPressed(final KeyEvent e) {
-			switch(e.getKeyCode()) {
-				case 39:	// -> Right
-					if (lastDirection != GameDirection.Direction.LEFT)
-						currentDirection = GameDirection.Direction.RIGHT;
-					break;
-				case 38:	// -> Top
-					if(lastDirection != GameDirection.Direction.DOWN)
-						currentDirection = GameDirection.Direction.UP;
-					break;
-				case 37: 	// -> Left
-					if(lastDirection != GameDirection.Direction.RIGHT)
-						currentDirection = GameDirection.Direction.LEFT;
-					break;
-
-				case 40:	// -> Bottom
-					if(lastDirection != GameDirection.Direction.UP)
-						currentDirection = GameDirection.Direction.DOWN;
-					break;
-				default:
-					break;
-			}
-		}
-	}
 
 //	private static final long serialVersionUID = -2542001418764869760L;
 	private static final int gridSize = Configuration.getGridSize();
@@ -62,6 +42,9 @@ public class Window extends JFrame {
 	private Position foodPosition;
 	private Position headSnakePosition;
 
+	private int score = 0;
+	private JTextField scoreField;
+
 	/**
 	 * Initialize window, set the title, gridSize, close operation and add key listener.
 	 */
@@ -69,7 +52,6 @@ public class Window extends JFrame {
 		setTitle(Configuration.getGameTitle());
 		setSize(Configuration.getWindowWidth(), Configuration.getWindowHeight());
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		addKeyListener(new KeyboardListener());
 
 		sizeSnake = Configuration.getInitialSnakeSize();
 		snakePositions = new ArrayList<>();
@@ -144,7 +126,7 @@ public class Window extends JFrame {
 				.filter(headSnakePosition::equals)
 				.findAny()
 				.isPresent()) {
-			System.out.println(String.format("Game Over! Final Score: %s", sizeSnake));
+			System.out.println(String.format("Game Over! Final Score: %s", score));
 
 			for (int i = 0 ; i < 20; i++) {
 				pause();
@@ -152,7 +134,11 @@ public class Window extends JFrame {
 			return true;
 		}
 
+		// Check to see if snake ate the food
 		if (headSnakePosition.equals(foodPosition)) {
+			score += 20;
+			scoreField.setText(Integer.toString(score));
+
 			sizeSnake = sizeSnake + 1;
 			spawnFoodRandomly();
 		}
@@ -205,15 +191,51 @@ public class Window extends JFrame {
 			}
 		}
 
-		getContentPane().add(snakeGridContainer);
-		setJMenuBar(createMenuBar());
+		// TODO: Put all below of this into a separate method
+		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("UP"), "doSomething");
+		snakeGridContainer.getActionMap().put("doSomething", new MoveUp());
 
-		//TODO: This invalidates the key listener for some reason
-//		JPanel t2 = new JPanel();
-//		JTextArea jTextArea = new JTextArea("Testing");
-//		jTextArea.setEditable(false);
-//		t2.add(jTextArea);
-//		getContentPane().add(t2, BorderLayout.SOUTH);
+		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("DOWN"), "doSomething2");
+		snakeGridContainer.getActionMap().put("doSomething2", new MoveDown());
+
+		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("LEFT"), "doSomething3");
+		snakeGridContainer.getActionMap().put("doSomething3", new MoveLeft());
+
+		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("RIGHT"), "doSomething4");
+		snakeGridContainer.getActionMap().put("doSomething4", new MoveRight());
+
+
+
+		scoreField = new JTextField(5);
+		scoreField.setEditable(false);
+		scoreField.setActionCommand("Score");
+		scoreField.setFocusable(false);
+		scoreField.setText(Integer.toString(score));
+
+		JLabel scoreLabel = new JLabel("Score: ");
+		scoreLabel.setLabelFor(scoreField);
+
+		JPanel scorePanel = new JPanel();
+		scorePanel.setLayout(new GridBagLayout());
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.anchor = GridBagConstraints.WEST;
+		constraints.gridwidth = GridBagConstraints.RELATIVE;
+		constraints.fill = GridBagConstraints.NONE;
+		constraints.weightx = 0.0;
+
+		scorePanel.add(scoreLabel, constraints);
+
+		constraints.gridwidth = GridBagConstraints.REMAINDER;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.weightx = 1.0;
+
+		scorePanel.add(scoreField, constraints);
+
+
+		getContentPane().add(snakeGridContainer);
+		getContentPane().add(scorePanel, BorderLayout.SOUTH);
+		setJMenuBar(createMenuBar());
+		// TODO: Put all above to separate method
 
 		spawnFoodRandomly();
 	}
@@ -230,5 +252,45 @@ public class Window extends JFrame {
 		jMenuBar.add(new JMenu("Options"));
 
 		return jMenuBar;
+	}
+
+	private class MoveUp extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (lastDirection != GameDirection.Direction.DOWN) {
+				currentDirection = GameDirection.Direction.UP;
+			}
+
+		}
+	}
+
+	private class MoveDown extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (lastDirection != GameDirection.Direction.UP) {
+				currentDirection = GameDirection.Direction.DOWN;
+			}
+
+		}
+	}
+
+	private class MoveRight extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (lastDirection != GameDirection.Direction.LEFT) {
+				currentDirection = GameDirection.Direction.RIGHT;
+			}
+
+		}
+	}
+
+	private class MoveLeft extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (lastDirection != GameDirection.Direction.RIGHT) {
+				currentDirection = GameDirection.Direction.LEFT;
+			}
+
+		}
 	}
 }

@@ -6,7 +6,7 @@ package com.snake.main;
 public class Configuration {
 
     private static final String GAME_TITLE = "Simple Snake Game";
-    private static int SPEED = 70;
+    private static int SPEED = 60; // TODO: Implement difficulty level (put in menu?) to adjust speed
     private static final int INITIAL_SNAKE_SIZE = 3;
     private static final GameDirection.Direction INITIAL_SNAKE_DIRECTION = GameDirection.Direction.RIGHT;
     private static final int WINDOW_HEIGHT = 600;
