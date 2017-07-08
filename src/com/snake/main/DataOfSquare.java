@@ -1,33 +1,21 @@
 package com.snake.main;
 
-import java.awt.Color;
+import java.awt.Image;
 
 public class DataOfSquare {
 	public enum GameColor {
-		SNAKE, FOOD, BACKGROUND
+		SNAKE, SNAKE_HEAD, SNAKE_TAIL, FOOD, BACKGROUND
 	}
 
 	private SquarePanel square;
 
-	public DataOfSquare(final GameColor gameColor){
-		square = new SquarePanel(convertToColor(gameColor));
+	public DataOfSquare(final Image image){
+		square = new SquarePanel(image);
 	}
-	public void lightSquare(final GameColor gameColor){
-		square.changeColor(convertToColor(gameColor));
+	public void lightSquare(final Image image){
+		square.changeImage(image);
 	}
 	public SquarePanel getSquare() {
 		return square;
-	}
-
-	private Color convertToColor(final GameColor gameColor) {
-		switch (gameColor) {
-			case SNAKE:
-				return Color.DARK_GRAY;
-			case FOOD:
-				return Color.BLUE;
-			case BACKGROUND:
-			default:
-				return Color.WHITE;
-		}
 	}
 }

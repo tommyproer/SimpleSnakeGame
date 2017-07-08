@@ -6,7 +6,7 @@ package com.snake.main;
 public class Configuration {
 
     private static final String GAME_TITLE = "Simple Snake Game";
-    private static int SPEED = 60; // TODO: Implement difficulty level (put in menu?) to adjust speed
+    private static int SPEED = 40; // TODO: Implement difficulty level (put in menu?) to adjust speed
     private static final int INITIAL_SNAKE_SIZE = 3;
     private static final GameDirection.Direction INITIAL_SNAKE_DIRECTION = GameDirection.Direction.RIGHT;
     private static final int WINDOW_HEIGHT = 600;
@@ -36,4 +36,22 @@ public class Configuration {
     public static int getGridSize() { return gridSize; }
 
     public static String getGameTitle() { return GAME_TITLE; }
+
+    public static String getSnakeBodyLocation() { return "\\src\\resources\\snake.png"; }
+
+    public static String getSnakeHeadRightLocation() { return "\\src\\resources\\snake_head_right.png"; }
+
+    public static String getSnakeHeadLeftLocation() { return "\\src\\resources\\snake_head_left.png"; }
+
+    public static String getSnakeHeadUpLocation() { return "\\src\\resources\\snake_head_up.png"; }
+
+    public static String getSnakeHeadDownLocation() { return "\\src\\resources\\snake_head_down.png"; }
+
+    public static String getSnakeTailLocation() { return "\\src\\resources\\snake_tail.png"; }
+
+    public static String getFoodLocation() { return "\\src\\resources\\food.png"; }
+
+    public static String getBgLocation() { return "\\src\\resources\\bg.png"; }
+
+    public static String getCollisionLocation() { return "\\src\\resources\\collision.png"; }
 }

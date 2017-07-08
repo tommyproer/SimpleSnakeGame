@@ -8,7 +8,6 @@ public class RunnableGame implements Runnable {
 
     public RunnableGame() {
         window = new Window();
-        window.setVisible(true);
     }
 
     @Override

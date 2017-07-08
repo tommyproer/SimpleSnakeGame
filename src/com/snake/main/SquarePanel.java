@@ -1,22 +1,27 @@
 package com.snake.main;
 
-import java.awt.Color;
-import javax.swing.JPanel;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import java.awt.Image;
 
 /**
- * TODO: Replace with actual image of snake and food
+ * TODO: Have multiple icons of possible snakes/animals
  */
-public class SquarePanel extends JPanel {
+public class SquarePanel extends JLabel {
 	
 	private static final long serialVersionUID = 1L;
 
-	public SquarePanel(final Color color){
-		this.setBackground(color);
+	public SquarePanel(final Image image){
+		ImageIcon imageIcon = new ImageIcon(image);
+
+		this.setIcon(imageIcon);
 	}
 	
-	public void changeColor(final Color color) {
-		this.setBackground(color);
-		this.repaint();
+	public void changeImage(final Image image) {
+		ImageIcon imageIcon =
+				new ImageIcon(image.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_DEFAULT));
+
+		this.setIcon(imageIcon);
 	}
 }
 
