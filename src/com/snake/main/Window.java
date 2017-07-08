@@ -296,7 +296,9 @@ public class Window extends JFrame {
 		setJMenuBar(createMenuBar());
 		// TODO: Put all above to separate method
 
+		this.setSize(1000, 1000); // TODO: Have the user be able to set a permanent window size before beginning game
 		this.setVisible(true);
+		this.setResizable(false);
 		spawnFoodRandomly();
 	}
 
