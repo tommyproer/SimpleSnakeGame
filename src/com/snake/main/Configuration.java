@@ -9,13 +9,17 @@ public class Configuration {
     private static int SPEED = 40; // TODO: Implement difficulty level (put in menu?) to adjust speed
     private static final int INITIAL_SNAKE_SIZE = 3;
     private static final GameDirection.Direction INITIAL_SNAKE_DIRECTION = GameDirection.Direction.RIGHT;
-    private static final int WINDOW_HEIGHT = 600;
-    private static final int WINDOW_WIDTH = 600;
+    private static final int WINDOW_HEIGHT = 850;
+    private static final int WINDOW_WIDTH = 850;
     private static final int gridSize = 20;
     private static final int INITIAL_SNAKE_POSX = gridSize /2;
     private static final int INITIAL_SNAKE_POXY = gridSize /2;
 
     public static int getSpeed() { return SPEED; }
+
+    public static void setSpeed(final int speed) {
+        SPEED = speed;
+    }
 
     public static int getInitialSnakeSize() {
         return INITIAL_SNAKE_SIZE;

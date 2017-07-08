@@ -19,6 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
@@ -66,6 +67,8 @@ public class Window extends JFrame {
 	public Window() {
 		setTitle(Configuration.getGameTitle());
 		setSize(Configuration.getWindowWidth(), Configuration.getWindowHeight());
+		// TODO: Have the user be able to set a permanent window size before beginning game
+		// TODO: adjust image to be this scale once the window size is set so we don't haave to scale the image every time
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		sizeSnake = Configuration.getInitialSnakeSize();
@@ -77,24 +80,10 @@ public class Window extends JFrame {
 		headSnakePosition = new Position(Configuration.getInitialSnakePosx(), Configuration.getInitialSnakePoxy());
 		snakePositions.add(new Position(headSnakePosition.getX(), headSnakePosition.getY()));
 
-		try {
-			bgImage = ImageIO.read(new File(System.getProperty("user.dir") + Configuration.getBgLocation()));
-			food = ImageIO.read(new File(System.getProperty("user.dir") + Configuration.getFoodLocation()));
-			snakeHeadRight = ImageIO.read(new File(System.getProperty("user.dir") + Configuration.getSnakeHeadRightLocation()));
-			snakeHeadLeft = ImageIO.read(new File(System.getProperty("user.dir") + Configuration.getSnakeHeadLeftLocation()));
-			snakeHeadUp = ImageIO.read(new File(System.getProperty("user.dir") + Configuration.getSnakeHeadUpLocation()));
-			snakeHeadDown = ImageIO.read(new File(System.getProperty("user.dir") + Configuration.getSnakeHeadDownLocation()));
-			snake = ImageIO.read(new File(System.getProperty("user.dir") + Configuration.getSnakeBodyLocation()));
-			snakeTail = ImageIO.read(new File(System.getProperty("user.dir") + Configuration.getSnakeTailLocation()));
-			collision = ImageIO.read(new File(System.getProperty("user.dir") + Configuration.getCollisionLocation()));
-		} catch (IOException e) {
-			System.out.println("Encountered IOException: " + e.getMessage());
-			this.dispose();
-		}
-
 
 
 		initializeGame(gridSize);
+		displayMenu();
 	}
 
 	/**
@@ -112,6 +101,21 @@ public class Window extends JFrame {
 		pause();
 		moveSnake();
 		return checkCollision();
+	}
+
+	// TODO: can we make this a JFrame?
+	private void displayMenu() {
+		Object[] options = {"Easy", "Normal", "Hard"};
+		int n = JOptionPane.showOptionDialog(this, "Select difficulty", "Difficulty",
+				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
+
+		if (n == JOptionPane.YES_OPTION) {
+			Configuration.setSpeed(50);
+		} else if (n == JOptionPane.NO_OPTION) {
+			Configuration.setSpeed(20);
+		} else {
+			Configuration.setSpeed(8);
+		}
 	}
 
 	/**
@@ -230,6 +234,20 @@ public class Window extends JFrame {
 	 */
 	private void initializeGame(final int gridSize) {
 
+		try {
+			bgImage = ImageIO.read(new File(System.getProperty("user.dir") + Configuration.getBgLocation()));
+			food = ImageIO.read(new File(System.getProperty("user.dir") + Configuration.getFoodLocation()));
+			snakeHeadRight = ImageIO.read(new File(System.getProperty("user.dir") + Configuration.getSnakeHeadRightLocation()));
+			snakeHeadLeft = ImageIO.read(new File(System.getProperty("user.dir") + Configuration.getSnakeHeadLeftLocation()));
+			snakeHeadUp = ImageIO.read(new File(System.getProperty("user.dir") + Configuration.getSnakeHeadUpLocation()));
+			snakeHeadDown = ImageIO.read(new File(System.getProperty("user.dir") + Configuration.getSnakeHeadDownLocation()));
+			snake = ImageIO.read(new File(System.getProperty("user.dir") + Configuration.getSnakeBodyLocation()));
+			snakeTail = ImageIO.read(new File(System.getProperty("user.dir") + Configuration.getSnakeTailLocation()));
+			collision = ImageIO.read(new File(System.getProperty("user.dir") + Configuration.getCollisionLocation()));
+		} catch (IOException e) {
+			System.out.println("Encountered IOException: " + e.getMessage());
+			this.dispose();
+		}
 
 		final JPanel snakeGridContainer = new JPanel(new GridLayout(gridSize, gridSize,0,0));
 		// Creates Threads and its data and adds it to the arrayList
@@ -296,7 +314,6 @@ public class Window extends JFrame {
 		setJMenuBar(createMenuBar());
 		// TODO: Put all above to separate method
 
-		this.setSize(1000, 1000); // TODO: Have the user be able to set a permanent window size before beginning game
 		this.setVisible(true);
 		this.setResizable(false);
 		spawnFoodRandomly();
