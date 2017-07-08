@@ -4,7 +4,7 @@ package com.snake.main;
  * Runs game.
  */
 public class RunnableGame implements Runnable {
-    private final Window window;
+    private Window window;
 
     public RunnableGame() {
         window = new Window();
@@ -13,9 +13,15 @@ public class RunnableGame implements Runnable {
     @Override
     public void run() {
         boolean gameOver = false;
-        while(!gameOver) {
+        while (!gameOver) {
             gameOver = window.iterate();
         }
         window.dispose(); // Need to remove this later to go back to main menu
+//        window = new Window();
+//        gameOver = false;
+//        while (!gameOver) {
+//            gameOver = window.iterate();
+//        }
+//        window.dispose();
     }
 }

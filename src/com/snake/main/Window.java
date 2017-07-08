@@ -1,10 +1,15 @@
 package com.snake.main;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -15,12 +20,18 @@ import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
@@ -31,6 +42,10 @@ import com.google.common.collect.Sets;
  * New window for the snake game.
  * X position is position from the top, Y position is the position from the left.
  * TODO: Upon resizing window, we may have to reset all the image icons again in the game
+ * TODO: We may have to add another variable called "isCommitted", basically the idea is once the
+ * TODO: user changes direction of the snake, we may want to commit to the move and any extra moves will be considered next move
+ *
+ * TODO: We want to store the scores, also accumulate the points so that the user can "shop" for stuff (actually this is debatable if I want to do this, maybe for this simplicity of this game I won't implement this)
  */
 public class Window extends JFrame {
 
@@ -80,10 +95,9 @@ public class Window extends JFrame {
 		headSnakePosition = new Position(Configuration.getInitialSnakePosx(), Configuration.getInitialSnakePoxy());
 		snakePositions.add(new Position(headSnakePosition.getX(), headSnakePosition.getY()));
 
-
-
 		initializeGame(gridSize);
-		displayMenu();
+		displayMenu(this);
+		spawnFoodRandomly();
 	}
 
 	/**
@@ -103,19 +117,110 @@ public class Window extends JFrame {
 		return checkCollision();
 	}
 
-	// TODO: can we make this a JFrame?
-	private void displayMenu() {
-		Object[] options = {"Easy", "Normal", "Hard"};
-		int n = JOptionPane.showOptionDialog(this, "Select difficulty", "Difficulty",
-				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
 
-		if (n == JOptionPane.YES_OPTION) {
-			Configuration.setSpeed(50);
-		} else if (n == JOptionPane.NO_OPTION) {
-			Configuration.setSpeed(20);
-		} else {
-			Configuration.setSpeed(8);
+	private void displayMenu(JFrame jFrame) {
+		JPanel menuPanel = new JPanel();
+
+		JDialog menu = new JDialog(this, "Main Menu", true);
+		JPanel difficultyPanel = createDifficultyPanel(menu, jFrame);
+		difficultyPanel.setBorder(BorderFactory.createEmptyBorder(20,20,5,20));
+
+		JTabbedPane tabbedPane = new JTabbedPane();
+		tabbedPane.addTab("Difficulty", null,
+				difficultyPanel,
+				"Select the difficulty of the game");
+
+		menuPanel.add(tabbedPane);
+
+
+		menu.getContentPane().add(menuPanel);
+		menu.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				super.windowClosing(e);
+				System.exit(0);
+			}
+		});
+
+		menu.pack();
+		menu.setLocationRelativeTo(this);
+		menu.setVisible(true);
+	}
+
+	private JPanel createDifficultyPanel(JDialog jDialog, JFrame jFrame) {
+		final int numButtons = 4;
+		JRadioButton[] radioButtons = new JRadioButton[numButtons];
+		final ButtonGroup group = new ButtonGroup();
+
+		final String easy = "EASY";
+		final String normal = "NORMAL";
+		final String hard = "HARD";
+		final String veryHard = "VERY_HARD";
+
+		radioButtons[0] = new JRadioButton("Easy");
+		radioButtons[0].setActionCommand(easy);
+
+		radioButtons[1] = new JRadioButton("Normal");
+		radioButtons[1].setActionCommand(normal);
+
+		radioButtons[2] = new JRadioButton("Hard");
+		radioButtons[2].setActionCommand(hard);
+
+		radioButtons[3] = new JRadioButton("What the fuck");
+		radioButtons[3].setActionCommand(veryHard);
+
+		for (int i = 0; i < numButtons; i++) {
+			group.add(radioButtons[i]);
 		}
+		radioButtons[1].setSelected(true);
+
+		JButton playButton = new JButton("Play!");
+		playButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String command = group.getSelection().getActionCommand();
+
+				if (command.equals(easy)) {
+					Configuration.setSpeed(50);
+				} else if (command.equals(normal)) {
+					Configuration.setSpeed(35);
+				} else if (command.equals(hard)) {
+					Configuration.setSpeed(20);
+				} else if (command.equals(veryHard)) {
+					Configuration.setSpeed(2);
+				}
+				jDialog.dispose();
+			}
+		});
+
+		JButton exitButton = new JButton("Exit");
+		exitButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+
+		JPanel box = new JPanel();
+		JLabel label = new JLabel("Difficulty");
+
+		box.setLayout(new BoxLayout(box, BoxLayout.PAGE_AXIS));
+		box.add(label);
+
+		for (int i = 0; i < numButtons; i++) {
+			box.add(radioButtons[i]);
+		}
+
+		JPanel pane = new JPanel(new BorderLayout());
+		pane.add(box, BorderLayout.PAGE_START);
+
+		JPanel buttons = new JPanel(new BorderLayout());
+		buttons.add(playButton, BorderLayout.LINE_START);
+		buttons.add(exitButton, BorderLayout.LINE_END);
+
+
+		pane.add(buttons, BorderLayout.PAGE_END);
+
+		return pane;
 	}
 
 	/**
@@ -189,7 +294,7 @@ public class Window extends JFrame {
 			gameGrid.get(headSnakePosition.getX()).get(headSnakePosition.getY()).lightSquare(collision);
 			System.out.println(String.format("Game Over! Final Score: %s", score));
 
-			for (int i = 0 ; i < 20; i++) {
+			for (int i = 0 ; i < 3; i++) {
 				pause();
 			}
 			return true;
@@ -314,9 +419,13 @@ public class Window extends JFrame {
 		setJMenuBar(createMenuBar());
 		// TODO: Put all above to separate method
 
+		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+		int x = (int) ((dimension.getWidth() - getWidth()) / 2);
+		int y = (int) ((dimension.getHeight() - getHeight()) / 2);
+		this.setLocation(x, y);
 		this.setVisible(true);
 		this.setResizable(false);
-		spawnFoodRandomly();
+
 	}
 
 	/**

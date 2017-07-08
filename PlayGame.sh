@@ -1,1 +1,1 @@
-java -jar build/libs/SimpleSnakeGame.jar
+java -jar SimpleSnakeGame.jar
