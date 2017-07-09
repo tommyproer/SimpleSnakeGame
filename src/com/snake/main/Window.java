@@ -60,15 +60,15 @@ public class Window extends JFrame {
 	private int score = 0;
 	private JTextField scoreField;
 
-	private BufferedImage bgImage;
-	private BufferedImage food;
-	private BufferedImage snakeHeadRight;
-	private BufferedImage snakeHeadLeft;
-	private BufferedImage snakeHeadDown;
-	private BufferedImage snakeHeadUp;
-	private BufferedImage snake;
-	private BufferedImage snakeTail;
-	private BufferedImage collision;
+	private static BufferedImage bgImage;
+	private static BufferedImage food;
+	private static BufferedImage snakeHeadRight;
+	private static BufferedImage snakeHeadLeft;
+	private static BufferedImage snakeHeadDown;
+	private static BufferedImage snakeHeadUp;
+	private static BufferedImage snake;
+	private static BufferedImage snakeTail;
+	private static BufferedImage collision;
 
 	/**
 	 * Initialize window, set the title, gridSize, close operation and add key listener.
@@ -128,7 +128,7 @@ public class Window extends JFrame {
 	 * Initialize images used in the game.
 	 * TODO: We may need to reinitialize images if user selects a different pair of images
 	 */
-	private void initializeImages(final String imageOption) {
+	public static void initializeImages(final String imageOption) {
 
 		String userDir = System.getProperty("user.dir");
 		try {
@@ -143,7 +143,7 @@ public class Window extends JFrame {
 			collision = ImageIO.read(new File(userDir + Configuration.getBaseImageLocation() + imageOption + Configuration.getCollisionLocation()));
 		} catch (IOException e) {
 			System.out.println("Encountered IOException: " + e.getMessage());
-			this.dispose();
+			System.exit(1);
 		}
 	}
 
@@ -277,9 +277,12 @@ public class Window extends JFrame {
 			gameGrid.get(headSnakePosition.getX()).get(headSnakePosition.getY()).lightSquare(collision);
 			System.out.println(String.format("Game Over! Final Score: %s", score));
 
-			for (int i = 0 ; i < 3; i++) {
-				pause();
+			try {
+				Thread.sleep(1500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
+
 			return true;
 		}
 
