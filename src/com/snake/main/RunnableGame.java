@@ -17,6 +17,7 @@ public class RunnableGame implements Runnable {
             gameOver = window.iterate();
         }
         window.dispose(); // Need to remove this later to go back to main menu
+        
 //        window = new Window();
 //        gameOver = false;
 //        while (!gameOver) {

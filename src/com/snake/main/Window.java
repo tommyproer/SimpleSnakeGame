@@ -124,6 +124,14 @@ public class Window extends JFrame {
 		initializeFrame();
 	}
 
+	public void reinitializeColors() {
+		gameGrid.forEach(outerGrid -> {
+			outerGrid.forEach(square -> {
+				square.lightSquare(bgImage);
+			});
+		});
+	}
+
 	/**
 	 * Initialize images used in the game.
 	 * TODO: We may need to reinitialize images if user selects a different pair of images
@@ -145,6 +153,7 @@ public class Window extends JFrame {
 			System.out.println("Encountered IOException: " + e.getMessage());
 			System.exit(1);
 		}
+
 	}
 
 	/**

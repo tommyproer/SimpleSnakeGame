@@ -5,7 +5,6 @@ import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -15,34 +14,40 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 
 public class MainMenu extends JDialog {
 
+    // Difficulties
     private static final String EASY = "Easy";
     private static final String NORMAL = "Normal";
     private static final String HARD = "Hard";
     private static final String EXTREME = "Extreme";
 
+    // Themes
     private static final String DEFAULT = "default";
-    private static final String ORANGE = "orange";
+
+    private static final List<String> THEMES = Arrays.asList("default", "orange", "melancholy", "princess", "retro");
+    private static final List<String> THEMES_NAMES = Arrays.asList("Default", "Creamy Orange", "Melancholy", "Princess", "Retro");
 
     private static final String PLAY_BUTTON = "Play!";
     private static final String EXIT_BUTTON = "Exit";
 
     private static final Map<String, Integer> DIFFICULTY_TO_SPEED_MAP = ImmutableMap.<String, Integer>builder()
-            .put(EASY, 50)
-            .put(NORMAL, 35)
-            .put(HARD, 20)
-            .put(EXTREME, 2)
+            .put(EASY, 55)
+            .put(NORMAL, 45)
+            .put(HARD, 30)
+            .put(EXTREME, 10)
             .build();
 
     private ButtonGroup difficultyButtonGroup;
     private ButtonGroup themeButtonGroup;
 
-    public MainMenu(JFrame owner, final String title, final boolean modal) {
+    public MainMenu(Window owner, final String title, final boolean modal) {
         super(owner, title, modal);
 
         JPanel difficultyPanel = createDifficultyPanel();
@@ -61,7 +66,7 @@ public class MainMenu extends JDialog {
 
         JPanel menuPanel = new JPanel();
         menuPanel.add(tabbedPane);
-        menuPanel.add(createButtonsPanel(), BorderLayout.SOUTH);
+        menuPanel.add(createButtonsPanel(owner), BorderLayout.SOUTH);
 
         this.getContentPane().add(menuPanel);
         this.addWindowListener(new WindowAdapter() {
@@ -74,13 +79,13 @@ public class MainMenu extends JDialog {
 
         this.pack();
         this.setLocationRelativeTo(this);
-        this.setSize(200, 250);
+        this.setSize(200, 280);
         this.setResizable(false);
 
         this.setVisible(true);
     }
 
-    private JPanel createButtonsPanel() {
+    private JPanel createButtonsPanel(Window jFrame) {
         // Create play and exit buttons
         JButton playButton = new JButton(PLAY_BUTTON);
         playButton.addActionListener(new ActionListener() {
@@ -91,6 +96,10 @@ public class MainMenu extends JDialog {
                 String themeCommand = themeButtonGroup.getSelection().getActionCommand();
 
                 Window.initializeImages(themeCommand);
+
+                if (!themeCommand.equals(DEFAULT)) {
+                    jFrame.reinitializeColors();
+                }
 
                 Configuration.setSpeed(DIFFICULTY_TO_SPEED_MAP.get(difficultyCommand));
                 dispose();
@@ -148,27 +157,22 @@ public class MainMenu extends JDialog {
     }
 
     private JPanel createThemePanel() {
-        final int numThemes = 2;
-        JRadioButton[] radioButtons = new JRadioButton[numThemes];
-        themeButtonGroup = new ButtonGroup();
-
-        radioButtons[0] = new JRadioButton("Default");
-        radioButtons[0].setActionCommand(DEFAULT);
-
-        radioButtons[1] = new JRadioButton("Creamy Orange");
-        radioButtons[1].setActionCommand(ORANGE);
-
-        for (int i = 0; i < numThemes; i++) {
-            themeButtonGroup.add(radioButtons[i]);
-        }
-        radioButtons[0].setSelected(true);
-
         JPanel box = new JPanel();
         box.setLayout(new BoxLayout(box, BoxLayout.PAGE_AXIS));
         box.add(new JLabel("Choose Theme"));
 
-        for (int i = 0; i < numThemes; i++) {
-            box.add(radioButtons[i]);
+        themeButtonGroup = new ButtonGroup();
+
+        for (int i = 0; i < THEMES.size(); i++) {
+            JRadioButton radioButton = new JRadioButton(THEMES_NAMES.get(i));
+            radioButton.setActionCommand(THEMES.get(i));
+
+            themeButtonGroup.add(radioButton);
+            box.add(radioButton);
+
+            if (i == 0) {
+                radioButton.setSelected(true);
+            }
         }
 
         JPanel pane = new JPanel(new BorderLayout());
