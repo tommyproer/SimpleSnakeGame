@@ -22,7 +22,7 @@ public class RunnableGame implements Runnable {
             int score = window.getScore();
             int n = JOptionPane.showConfirmDialog(
                     window,
-                    String.format("Game over. Your score is %d.\nWould you like to play again?", score),
+                    String.format("Game over. Your score is %d.\n\nWould you like to play again?", score),
                     "Game Over",
                     JOptionPane.YES_NO_OPTION);
             if (n == JOptionPane.YES_OPTION) {

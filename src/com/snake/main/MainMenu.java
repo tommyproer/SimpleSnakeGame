@@ -38,10 +38,10 @@ public class MainMenu extends JDialog {
     private static final String EXIT_BUTTON = "Exit";
 
     private static final Map<String, Integer> DIFFICULTY_TO_SPEED_MAP = ImmutableMap.<String, Integer>builder()
-            .put(EASY, 55)
-            .put(NORMAL, 45)
-            .put(HARD, 30)
-            .put(EXTREME, 10)
+            .put(EASY, 100)
+            .put(NORMAL, 65)
+            .put(HARD, 40)
+            .put(EXTREME, 20)
             .build();
 
     private ButtonGroup difficultyButtonGroup;
