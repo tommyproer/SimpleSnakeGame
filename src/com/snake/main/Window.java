@@ -7,9 +7,6 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -20,18 +17,9 @@ import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
@@ -49,15 +37,21 @@ import com.google.common.collect.Sets;
  */
 public class Window extends JFrame {
 
-//	private static final long serialVersionUID = -2542001418764869760L;
+	private static final long serialVersionUID = -2542001418764869760L;
 	private static final int gridSize = Configuration.getGridSize();
+
+	private static final String UP_ACTION = "UP";
+	private static final String DOWN_ACTION = "DOWN";
+	private static final String RIGHT_ACTION = "RIGHT";
+	private static final String LEFT_ACTION = "LEFT";
 
 	private final ArrayList<Position> snakePositions;
 	private final Set<Position> allPossiblePositions;
-	private final ArrayList<ArrayList<DataOfSquare>> gameGrid;
+	private ArrayList<ArrayList<DataOfSquare>> gameGrid;
 
 	private GameDirection.Direction lastDirection;
 	private GameDirection.Direction currentDirection;
+	private boolean directionCommitted;
 
 	private int sizeSnake;
 	private Position foodPosition;
@@ -83,20 +77,20 @@ public class Window extends JFrame {
 		setTitle(Configuration.getGameTitle());
 		setSize(Configuration.getWindowWidth(), Configuration.getWindowHeight());
 		// TODO: Have the user be able to set a permanent window size before beginning game
-		// TODO: adjust image to be this scale once the window size is set so we don't haave to scale the image every time
+		// TODO: adjust image to be this scale once the window size is set so we don't have to scale the image every time
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		sizeSnake = Configuration.getInitialSnakeSize();
 		snakePositions = new ArrayList<>();
 		allPossiblePositions = new HashSet<>();
-		gameGrid = new ArrayList<>();
+
 		currentDirection = Configuration.getInitialSnakeDirection();
 		lastDirection = Configuration.getInitialSnakeDirection();
 		headSnakePosition = new Position(Configuration.getInitialSnakePosx(), Configuration.getInitialSnakePoxy());
 		snakePositions.add(new Position(headSnakePosition.getX(), headSnakePosition.getY()));
 
-		initializeGame(gridSize);
-		displayMenu(this);
+		initializeGame();
+		new MainMenu(this, "Main Menu", true);
 		spawnFoodRandomly();
 	}
 
@@ -117,110 +111,99 @@ public class Window extends JFrame {
 		return checkCollision();
 	}
 
+	/**
+	 * Initialize all arrays and menus, etc.
+	 */
+	private void initializeGame() {
+		initializeImages("default");
+		initializeAllPossiblePositions();
+		initializeGridAndGameData();
+		initializeScorePanel();
 
-	private void displayMenu(JFrame jFrame) {
-		JPanel menuPanel = new JPanel();
-
-		JDialog menu = new JDialog(this, "Main Menu", true);
-		JPanel difficultyPanel = createDifficultyPanel(menu, jFrame);
-		difficultyPanel.setBorder(BorderFactory.createEmptyBorder(20,20,5,20));
-
-		JTabbedPane tabbedPane = new JTabbedPane();
-		tabbedPane.addTab("Difficulty", null,
-				difficultyPanel,
-				"Select the difficulty of the game");
-
-		menuPanel.add(tabbedPane);
-
-
-		menu.getContentPane().add(menuPanel);
-		menu.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				super.windowClosing(e);
-				System.exit(0);
-			}
-		});
-
-		menu.pack();
-		menu.setLocationRelativeTo(this);
-		menu.setVisible(true);
+		setJMenuBar(new MenuBar());
+		initializeFrame();
 	}
 
-	private JPanel createDifficultyPanel(JDialog jDialog, JFrame jFrame) {
-		final int numButtons = 4;
-		JRadioButton[] radioButtons = new JRadioButton[numButtons];
-		final ButtonGroup group = new ButtonGroup();
+	/**
+	 * Initialize images used in the game.
+	 * TODO: We may need to reinitialize images if user selects a different pair of images
+	 */
+	private void initializeImages(final String imageOption) {
 
-		final String easy = "EASY";
-		final String normal = "NORMAL";
-		final String hard = "HARD";
-		final String veryHard = "VERY_HARD";
-
-		radioButtons[0] = new JRadioButton("Easy");
-		radioButtons[0].setActionCommand(easy);
-
-		radioButtons[1] = new JRadioButton("Normal");
-		radioButtons[1].setActionCommand(normal);
-
-		radioButtons[2] = new JRadioButton("Hard");
-		radioButtons[2].setActionCommand(hard);
-
-		radioButtons[3] = new JRadioButton("Extreme");
-		radioButtons[3].setActionCommand(veryHard);
-
-		for (int i = 0; i < numButtons; i++) {
-			group.add(radioButtons[i]);
+		String userDir = System.getProperty("user.dir");
+		try {
+			bgImage = ImageIO.read(new File(userDir + Configuration.getBaseImageLocation() + imageOption + Configuration.getBgLocation()));
+			food = ImageIO.read(new File(userDir + Configuration.getBaseImageLocation() + imageOption + Configuration.getFoodLocation()));
+			snakeHeadRight = ImageIO.read(new File(userDir + Configuration.getBaseImageLocation() + imageOption + Configuration.getSnakeHeadRightLocation()));
+			snakeHeadLeft = ImageIO.read(new File(userDir + Configuration.getBaseImageLocation() + imageOption + Configuration.getSnakeHeadLeftLocation()));
+			snakeHeadUp = ImageIO.read(new File(userDir + Configuration.getBaseImageLocation() + imageOption + Configuration.getSnakeHeadUpLocation()));
+			snakeHeadDown = ImageIO.read(new File(userDir + Configuration.getBaseImageLocation() + imageOption + Configuration.getSnakeHeadDownLocation()));
+			snake = ImageIO.read(new File(userDir + Configuration.getBaseImageLocation() + imageOption + Configuration.getSnakeBodyLocation()));
+			snakeTail = ImageIO.read(new File(userDir + Configuration.getBaseImageLocation() + imageOption + Configuration.getSnakeTailLocation()));
+			collision = ImageIO.read(new File(userDir + Configuration.getBaseImageLocation() + imageOption + Configuration.getCollisionLocation()));
+		} catch (IOException e) {
+			System.out.println("Encountered IOException: " + e.getMessage());
+			this.dispose();
 		}
-		radioButtons[1].setSelected(true);
+	}
 
-		JButton playButton = new JButton("Play!");
-		playButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String command = group.getSelection().getActionCommand();
-
-				if (command.equals(easy)) {
-					Configuration.setSpeed(50);
-				} else if (command.equals(normal)) {
-					Configuration.setSpeed(35);
-				} else if (command.equals(hard)) {
-					Configuration.setSpeed(20);
-				} else if (command.equals(veryHard)) {
-					Configuration.setSpeed(2);
-				}
-				jDialog.dispose();
+	/**
+	 * Initialize all possible positions, which is used to help spawn food
+	 */
+	private void initializeAllPossiblePositions() {
+		for (int i = 0; i < gridSize; i++) {
+			for (int j = 0; j < gridSize; j++) {
+				allPossiblePositions.add(new Position(i, j));
 			}
-		});
+		}
+	}
 
-		JButton exitButton = new JButton("Exit");
-		exitButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
+	/**
+	 * Initialize JPanel container and gameGrid. Both contain the same DataOfSquare objects,
+	 * but the gameGrid will be the object used to mutate the DataOfSquare objects,
+	 * while snakeGridContainer is used to display the objects.
+	 */
+	private void initializeGridAndGameData() {
+		// Creates Threads and its data and adds it to gameGrid, which represents the game grid locations
+		gameGrid = new ArrayList<>();
+		final JPanel snakeGridContainer = new JPanel(new GridLayout(gridSize, gridSize));
+		for (int i = 0; i < gridSize; i++) {
+			final ArrayList<DataOfSquare> data = new ArrayList<>();
+			for(int j = 0; j < gridSize; j++){
+				DataOfSquare dataOfSquare = new DataOfSquare(bgImage);
+				data.add(dataOfSquare);
+				snakeGridContainer.add(dataOfSquare.getSquare());
 			}
-		});
-
-		JPanel box = new JPanel();
-		JLabel label = new JLabel("Difficulty");
-
-		box.setLayout(new BoxLayout(box, BoxLayout.PAGE_AXIS));
-		box.add(label);
-
-		for (int i = 0; i < numButtons; i++) {
-			box.add(radioButtons[i]);
+			gameGrid.add(data);
 		}
 
-		JPanel pane = new JPanel(new BorderLayout());
-		pane.add(box, BorderLayout.PAGE_START);
+		// Initialize key strokes
+		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("UP"), UP_ACTION);
+		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("W"), UP_ACTION);
+		snakeGridContainer.getActionMap().put(UP_ACTION, new MoveUp());
 
-		JPanel buttons = new JPanel(new BorderLayout());
-		buttons.add(playButton, BorderLayout.LINE_START);
-		buttons.add(exitButton, BorderLayout.LINE_END);
+		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("DOWN"), DOWN_ACTION);
+		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("S"), DOWN_ACTION);
+		snakeGridContainer.getActionMap().put(DOWN_ACTION, new MoveDown());
 
+		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("LEFT"), LEFT_ACTION);
+		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("A"), LEFT_ACTION);
+		snakeGridContainer.getActionMap().put(LEFT_ACTION, new MoveLeft());
 
-		pane.add(buttons, BorderLayout.PAGE_END);
+		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("RIGHT"), RIGHT_ACTION);
+		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("D"), RIGHT_ACTION);
+		snakeGridContainer.getActionMap().put(RIGHT_ACTION, new MoveRight());
 
-		return pane;
+		getContentPane().add(snakeGridContainer);
+	}
+
+	private void initializeFrame() {
+		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+		int x = (int) ((dimension.getWidth() - getWidth()) / 2);
+		int y = (int) ((dimension.getHeight() - getHeight()) / 2);
+		this.setLocation(x, y);
+		this.setVisible(true);
+		this.setResizable(false);
 	}
 
 	/**
@@ -334,64 +317,7 @@ public class Window extends JFrame {
 		gameGrid.get(foodPosition.getX()).get(foodPosition.getY()).lightSquare(food);
 	}
 
-	/**
-	 * Initialize all arrays and menus, etc.
-	 */
-	private void initializeGame(final int gridSize) {
-
-		try {
-			bgImage = ImageIO.read(new File(System.getProperty("user.dir") + Configuration.getBgLocation()));
-			food = ImageIO.read(new File(System.getProperty("user.dir") + Configuration.getFoodLocation()));
-			snakeHeadRight = ImageIO.read(new File(System.getProperty("user.dir") + Configuration.getSnakeHeadRightLocation()));
-			snakeHeadLeft = ImageIO.read(new File(System.getProperty("user.dir") + Configuration.getSnakeHeadLeftLocation()));
-			snakeHeadUp = ImageIO.read(new File(System.getProperty("user.dir") + Configuration.getSnakeHeadUpLocation()));
-			snakeHeadDown = ImageIO.read(new File(System.getProperty("user.dir") + Configuration.getSnakeHeadDownLocation()));
-			snake = ImageIO.read(new File(System.getProperty("user.dir") + Configuration.getSnakeBodyLocation()));
-			snakeTail = ImageIO.read(new File(System.getProperty("user.dir") + Configuration.getSnakeTailLocation()));
-			collision = ImageIO.read(new File(System.getProperty("user.dir") + Configuration.getCollisionLocation()));
-		} catch (IOException e) {
-			System.out.println("Encountered IOException: " + e.getMessage());
-			this.dispose();
-		}
-
-		final JPanel snakeGridContainer = new JPanel(new GridLayout(gridSize, gridSize,0,0));
-		// Creates Threads and its data and adds it to the arrayList
-		for (int i = 0; i < gridSize; i++){
-			final ArrayList<DataOfSquare> data = new ArrayList<>();
-			for(int j = 0; j < gridSize; j++){
-				DataOfSquare dataOfSquare = new DataOfSquare(bgImage);
-				data.add(dataOfSquare);
-				snakeGridContainer.add(dataOfSquare.getSquare());
-			}
-			gameGrid.add(data);
-		}
-
-		// Initialize all positions
-		for (int i = 0; i < gridSize; i++) {
-			for (int j = 0; j < gridSize; j++) {
-				allPossiblePositions.add(new Position(i, j));
-			}
-		}
-
-		// TODO: Put all below of this into a separate method
-		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("UP"), "doSomething");
-		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("W"), "doSomething");
-		snakeGridContainer.getActionMap().put("doSomething", new MoveUp());
-
-		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("DOWN"), "doSomething2");
-		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("S"), "doSomething2");
-		snakeGridContainer.getActionMap().put("doSomething2", new MoveDown());
-
-		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("LEFT"), "doSomething3");
-		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("A"), "doSomething3");
-		snakeGridContainer.getActionMap().put("doSomething3", new MoveLeft());
-
-		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("RIGHT"), "doSomething4");
-		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("D"), "doSomething4");
-		snakeGridContainer.getActionMap().put("doSomething4", new MoveRight());
-
-
-
+	private void initializeScorePanel() {
 		scoreField = new JTextField(5);
 		scoreField.setEditable(false);
 		scoreField.setActionCommand("Score");
@@ -417,33 +343,7 @@ public class Window extends JFrame {
 
 		scorePanel.add(scoreField, constraints);
 
-
-		getContentPane().add(snakeGridContainer);
 		getContentPane().add(scorePanel, BorderLayout.SOUTH);
-		setJMenuBar(createMenuBar());
-		// TODO: Put all above to separate method
-
-		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-		int x = (int) ((dimension.getWidth() - getWidth()) / 2);
-		int y = (int) ((dimension.getHeight() - getHeight()) / 2);
-		this.setLocation(x, y);
-		this.setVisible(true);
-		this.setResizable(false);
-
-	}
-
-	/**
-	 * TODO: Make the menu actually do something
-	 */
-	private JMenuBar createMenuBar() {
-		JMenuBar jMenuBar = new JMenuBar();
-		jMenuBar.setOpaque(true);
-		jMenuBar.setSize(10, 30);
-		jMenuBar.setVisible(true);
-		jMenuBar.add(new JMenu("File"));
-		jMenuBar.add(new JMenu("Options"));
-
-		return jMenuBar;
 	}
 
 	private class MoveUp extends AbstractAction {

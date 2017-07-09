@@ -41,21 +41,23 @@ public class Configuration {
 
     public static String getGameTitle() { return GAME_TITLE; }
 
-    public static String getSnakeBodyLocation() { return "\\src\\resources\\snake.png"; }
+    public static String getBaseImageLocation() { return "\\src\\resources\\images\\"; }
 
-    public static String getSnakeHeadRightLocation() { return "\\src\\resources\\snake_head_right.png"; }
+    public static String getSnakeBodyLocation() { return "\\snake.png"; }
 
-    public static String getSnakeHeadLeftLocation() { return "\\src\\resources\\snake_head_left.png"; }
+    public static String getSnakeHeadRightLocation() { return "\\snake_head_right.png"; }
 
-    public static String getSnakeHeadUpLocation() { return "\\src\\resources\\snake_head_up.png"; }
+    public static String getSnakeHeadLeftLocation() { return "\\snake_head_left.png"; }
 
-    public static String getSnakeHeadDownLocation() { return "\\src\\resources\\snake_head_down.png"; }
+    public static String getSnakeHeadUpLocation() { return "\\snake_head_up.png"; }
 
-    public static String getSnakeTailLocation() { return "\\src\\resources\\snake_tail.png"; }
+    public static String getSnakeHeadDownLocation() { return "\\snake_head_down.png"; }
 
-    public static String getFoodLocation() { return "\\src\\resources\\food.png"; }
+    public static String getSnakeTailLocation() { return "\\snake_tail.png"; }
 
-    public static String getBgLocation() { return "\\src\\resources\\bg.png"; }
+    public static String getFoodLocation() { return "\\food.png"; }
 
-    public static String getCollisionLocation() { return "\\src\\resources\\collision.png"; }
+    public static String getBgLocation() { return "\\bg.png"; }
+
+    public static String getCollisionLocation() { return "\\collision.png"; }
 }
