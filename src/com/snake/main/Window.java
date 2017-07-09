@@ -94,6 +94,10 @@ public class Window extends JFrame {
 		spawnFoodRandomly();
 	}
 
+	public int getScore() {
+		return score;
+	}
+
 	/**
 	 * Get the grid size.
 	 */
