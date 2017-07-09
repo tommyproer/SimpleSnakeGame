@@ -166,7 +166,7 @@ public class Window extends JFrame {
 		radioButtons[2] = new JRadioButton("Hard");
 		radioButtons[2].setActionCommand(hard);
 
-		radioButtons[3] = new JRadioButton("What the fuck");
+		radioButtons[3] = new JRadioButton("Extreme");
 		radioButtons[3].setActionCommand(veryHard);
 
 		for (int i = 0; i < numButtons; i++) {
@@ -375,15 +375,19 @@ public class Window extends JFrame {
 
 		// TODO: Put all below of this into a separate method
 		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("UP"), "doSomething");
+		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("W"), "doSomething");
 		snakeGridContainer.getActionMap().put("doSomething", new MoveUp());
 
 		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("DOWN"), "doSomething2");
+		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("S"), "doSomething2");
 		snakeGridContainer.getActionMap().put("doSomething2", new MoveDown());
 
 		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("LEFT"), "doSomething3");
+		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("A"), "doSomething3");
 		snakeGridContainer.getActionMap().put("doSomething3", new MoveLeft());
 
 		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("RIGHT"), "doSomething4");
+		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("D"), "doSomething4");
 		snakeGridContainer.getActionMap().put("doSomething4", new MoveRight());
 
 
