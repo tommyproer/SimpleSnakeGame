@@ -13,6 +13,10 @@ sourceSets {
 		java {
 			srcDir 'src'
 		}
+		resources {
+			srcDir 'src/resources/images'
+//			includes ["**/*.png"]
+		}
 	}
 	test {
 		java {

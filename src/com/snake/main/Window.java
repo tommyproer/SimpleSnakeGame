@@ -2,11 +2,13 @@ package com.snake.main;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -141,26 +143,33 @@ public class Window extends JFrame {
 
 	/**
 	 * Initialize images used in the game.
-	 * TODO: We may need to reinitialize images if user selects a different pair of images
 	 */
 	public static void initializeImages(final String imageOption) {
-
-		String userDir = System.getProperty("user.dir");
 		try {
-			bgImage = ImageIO.read(new File(userDir + Configuration.getBaseImageLocation() + imageOption + Configuration.getBgLocation()));
-			food = ImageIO.read(new File(userDir + Configuration.getBaseImageLocation() + imageOption + Configuration.getFoodLocation()));
-			snakeHeadRight = ImageIO.read(new File(userDir + Configuration.getBaseImageLocation() + imageOption + Configuration.getSnakeHeadRightLocation()));
-			snakeHeadLeft = ImageIO.read(new File(userDir + Configuration.getBaseImageLocation() + imageOption + Configuration.getSnakeHeadLeftLocation()));
-			snakeHeadUp = ImageIO.read(new File(userDir + Configuration.getBaseImageLocation() + imageOption + Configuration.getSnakeHeadUpLocation()));
-			snakeHeadDown = ImageIO.read(new File(userDir + Configuration.getBaseImageLocation() + imageOption + Configuration.getSnakeHeadDownLocation()));
-			snake = ImageIO.read(new File(userDir + Configuration.getBaseImageLocation() + imageOption + Configuration.getSnakeBodyLocation()));
-			snakeTail = ImageIO.read(new File(userDir + Configuration.getBaseImageLocation() + imageOption + Configuration.getSnakeTailLocation()));
-			collision = ImageIO.read(new File(userDir + Configuration.getBaseImageLocation() + imageOption + Configuration.getCollisionLocation()));
-		} catch (IOException e) {
-			System.out.println("Encountered IOException: " + e.getMessage());
+			bgImage = ImageIO.read(Window.class.getResource("/" + imageOption + Configuration.getBgLocation()));
+			food = ImageIO.read(Window.class.getResource("/" + imageOption + Configuration.getFoodLocation()));
+
+			// TODO: Figure out how to rotate images
+//			Graphics2D g2D = (Graphics2D) food.getGraphics();
+//			AffineTransform r = new AffineTransform();
+////			r.translate(food.getWidth()/2, food.getHeight()/2);
+//			r.rotate(Math.toRadians(180), food.getWidth()/2, food.getHeight()/2);
+////			r.translate(-food.getWidth()/2, -food.getHeight()/2);
+//			g2D.drawImage(food, r, null);
+//			Thread.sleep(1000);
+
+			snakeHeadRight = ImageIO.read(Window.class.getResource("/" + imageOption + Configuration.getSnakeHeadRightLocation()));
+			snakeHeadLeft = ImageIO.read(Window.class.getResource("/" + imageOption + Configuration.getSnakeHeadLeftLocation()));
+			snakeHeadUp = ImageIO.read(Window.class.getResource("/" + imageOption + Configuration.getSnakeHeadUpLocation()));
+			snakeHeadDown = ImageIO.read(Window.class.getResource("/" + imageOption + Configuration.getSnakeHeadDownLocation()));
+			snake = ImageIO.read(Window.class.getResource("/" + imageOption + Configuration.getSnakeBodyLocation()));
+			snakeTail = ImageIO.read(Window.class.getResource("/" + imageOption + Configuration.getSnakeTailLocation()));
+			collision = ImageIO.read(Window.class.getResource("/" + imageOption + Configuration.getCollisionLocation()));
+		} catch (Exception e) {
+			System.out.println("Encountered Exception: " + e.getMessage());
+			e.printStackTrace();
 			System.exit(1);
 		}
-
 	}
 
 	/**
@@ -214,10 +223,7 @@ public class Window extends JFrame {
 	}
 
 	private void initializeFrame() {
-		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-		int x = (int) ((dimension.getWidth() - getWidth()) / 2);
-		int y = (int) ((dimension.getHeight() - getHeight()) / 2);
-		this.setLocation(x, y);
+		this.setLocationRelativeTo(null); // Set window in middle of screen
 		this.setVisible(true);
 		this.setResizable(false);
 	}

@@ -34,7 +34,6 @@ public class MainMenu extends JDialog {
     private static final String EXTREME = "Extreme";
 
     // Themes
-    private static final String DEFAULT = "default";
     private static final List<String> THEMES = Arrays.asList("default", "orange", "melancholy", "princess", "retro", "test");
     private static final List<String> THEMES_NAMES = Arrays.asList("Default", "Creamy Orange", "Melancholy", "Princess", "Retro", "Test");
 
@@ -106,9 +105,7 @@ public class MainMenu extends JDialog {
 
                 buttons.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
-                if (!themeCommand.equals(DEFAULT)) {
-                    jFrame.reinitializeColors();
-                }
+                jFrame.reinitializeColors();
 
                 Configuration.setSpeed(DIFFICULTY_TO_SPEED_MAP.get(difficultyCommand));
                 dispose();
