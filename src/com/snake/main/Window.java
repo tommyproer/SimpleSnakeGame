@@ -45,7 +45,7 @@ public class Window extends JFrame {
 	private static final String RIGHT_ACTION = "RIGHT";
 	private static final String LEFT_ACTION = "LEFT";
 
-	private final ArrayList<Position> snakePositions;
+	private ArrayList<Position> snakePositions;
 	private final Set<Position> allPossiblePositions;
 	private ArrayList<ArrayList<DataOfSquare>> gameGrid;
 
@@ -90,6 +90,19 @@ public class Window extends JFrame {
 		snakePositions.add(new Position(headSnakePosition.getX(), headSnakePosition.getY()));
 
 		initializeGame();
+		new MainMenu(this, "Main Menu", true);
+		spawnFoodRandomly();
+	}
+
+	public void reset() {
+		sizeSnake = Configuration.getInitialSnakeSize();
+		snakePositions = new ArrayList<>();
+
+		currentDirection = Configuration.getInitialSnakeDirection();
+		lastDirection = Configuration.getInitialSnakeDirection();
+		headSnakePosition = new Position(Configuration.getInitialSnakePosx(), Configuration.getInitialSnakePoxy());
+		snakePositions.add(new Position(headSnakePosition.getX(), headSnakePosition.getY()));
+
 		new MainMenu(this, "Main Menu", true);
 		spawnFoodRandomly();
 	}

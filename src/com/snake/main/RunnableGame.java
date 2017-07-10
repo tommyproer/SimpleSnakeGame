@@ -14,23 +14,23 @@ public class RunnableGame implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
+        int n = JOptionPane.YES_OPTION;
+        while (n == JOptionPane.YES_OPTION) {
             boolean gameOver = false;
             while (!gameOver) {
                 gameOver = window.iterate();
             }
-            int score = window.getScore();
-            int n = JOptionPane.showConfirmDialog(
+
+            n = JOptionPane.showConfirmDialog(
                     window,
-                    String.format("Game over. Your score is %d.\n\nWould you like to play again?", score),
+                    String.format("Game over. Your score is %d.\n\nWould you like to play again?", window.getScore()),
                     "Game Over",
                     JOptionPane.YES_NO_OPTION);
+
             if (n == JOptionPane.YES_OPTION) {
-                window.dispose();
-                window = new Window();
+                window.reset();
             } else {
                 window.dispose();
-                break;
             }
         }
     }

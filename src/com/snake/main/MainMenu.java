@@ -30,9 +30,8 @@ public class MainMenu extends JDialog {
 
     // Themes
     private static final String DEFAULT = "default";
-
-    private static final List<String> THEMES = Arrays.asList("default", "orange", "melancholy", "princess", "retro");
-    private static final List<String> THEMES_NAMES = Arrays.asList("Default", "Creamy Orange", "Melancholy", "Princess", "Retro");
+    private static final List<String> THEMES = Arrays.asList("default", "orange", "melancholy", "princess", "retro", "test");
+    private static final List<String> THEMES_NAMES = Arrays.asList("Default", "Creamy Orange", "Melancholy", "Princess", "Retro", "Test");
 
     private static final String PLAY_BUTTON = "Play!";
     private static final String EXIT_BUTTON = "Exit";
