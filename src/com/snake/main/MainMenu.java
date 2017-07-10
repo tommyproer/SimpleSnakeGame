@@ -6,10 +6,12 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTabbedPane;
 import java.awt.BorderLayout;
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -21,6 +23,9 @@ import java.util.Map;
 import com.google.common.collect.ImmutableMap;
 
 public class MainMenu extends JDialog {
+
+    private static final int HEIGHT = 310;
+    private static final int WIDTH = 200;
 
     // Difficulties
     private static final String EASY = "Easy";
@@ -72,20 +77,23 @@ public class MainMenu extends JDialog {
             @Override
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
-                System.exit(0);
+                owner.dispose();
+                RunnableGame.exitGame();
             }
         });
 
         this.pack();
         this.setLocationRelativeTo(this);
-        this.setSize(200, 280);
+        this.setSize(WIDTH, HEIGHT);
         this.setResizable(false);
 
         this.setVisible(true);
     }
 
     private JPanel createButtonsPanel(Window jFrame) {
-        // Create play and exit buttons
+        JPanel buttons = new JPanel(new BorderLayout());
+
+        // Create play buttons
         JButton playButton = new JButton(PLAY_BUTTON);
         playButton.addActionListener(new ActionListener() {
 
@@ -96,6 +104,8 @@ public class MainMenu extends JDialog {
 
                 Window.initializeImages(themeCommand);
 
+                buttons.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
                 if (!themeCommand.equals(DEFAULT)) {
                     jFrame.reinitializeColors();
                 }
@@ -105,15 +115,16 @@ public class MainMenu extends JDialog {
             }
         });
 
+        // Create exit button
         JButton exitButton = new JButton(EXIT_BUTTON);
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(0);
+                jFrame.dispose();
+                RunnableGame.exitGame();
             }
         });
 
-        JPanel buttons = new JPanel(new BorderLayout());
         buttons.add(playButton, BorderLayout.LINE_START);
         buttons.add(exitButton, BorderLayout.LINE_END);
 

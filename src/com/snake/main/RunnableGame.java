@@ -8,14 +8,20 @@ import javax.swing.JOptionPane;
 public class RunnableGame implements Runnable {
     private Window window;
 
+    private static boolean exitGame = false;
+
     public RunnableGame() {
         window = new Window();
+    }
+
+    public static void exitGame() {
+        exitGame = true;
     }
 
     @Override
     public void run() {
         int n = JOptionPane.YES_OPTION;
-        while (n == JOptionPane.YES_OPTION) {
+        while (n == JOptionPane.YES_OPTION && !exitGame) {
             boolean gameOver = false;
             while (!gameOver) {
                 gameOver = window.iterate();
@@ -23,7 +29,7 @@ public class RunnableGame implements Runnable {
 
             n = JOptionPane.showConfirmDialog(
                     window,
-                    String.format("Game over. Your score is %d.\n\nWould you like to play again?", window.getScore()),
+                    String.format("Your score is %d.\n\nWould you like to play again?", window.getScore()),
                     "Game Over",
                     JOptionPane.YES_NO_OPTION);
 

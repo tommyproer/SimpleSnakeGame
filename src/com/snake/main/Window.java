@@ -119,16 +119,6 @@ public class Window extends JFrame {
 	}
 
 	/**
-	 * This is each "step" in a game.
-	 * Move the snake and check for a collision.
-	 */
-	public boolean iterate() {
-		pause();
-		moveSnake();
-		return checkCollision();
-	}
-
-	/**
 	 * Initialize all arrays and menus, etc.
 	 */
 	private void initializeGame() {
@@ -233,6 +223,27 @@ public class Window extends JFrame {
 	}
 
 	/**
+	 * This is each "step" in a game.
+	 * Move the snake and check for a collision.
+	 */
+	public boolean iterate() {
+		pause();
+		moveSnake();
+		return checkCollision();
+	}
+
+	/**
+	 * Pause between each snake move.
+	 */
+	private void pause() {
+		try {
+			Thread.sleep(Configuration.getSpeed());
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
 	 * Moves the head of the snake, then deletes tail of snake.
 	 */
 	private void moveSnake() {
@@ -303,12 +314,6 @@ public class Window extends JFrame {
 			gameGrid.get(headSnakePosition.getX()).get(headSnakePosition.getY()).lightSquare(collision);
 			System.out.println(String.format("Game Over! Final Score: %s", score));
 
-			try {
-				Thread.sleep(1500);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-
 			return true;
 		}
 
@@ -322,17 +327,6 @@ public class Window extends JFrame {
 		}
 
 		return false;
-	}
-
-	/**
-	 * Pause between each snake move.
-	 */
-	private void pause() {
-		try {
-			Thread.sleep(Configuration.getSpeed());
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 
 	/**
