@@ -6,13 +6,16 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.AbstractAction;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -73,11 +76,22 @@ public class Window extends JFrame {
 	 */
 	public Window() {
 		try {
-			setIconImage(ImageIO.read(this.getClass().getResource("/default" + Configuration.getSnakeHeadRightLocation())));
-		} catch (IOException e) {
+			setIconImage(ImageIO.read(this.getClass().getResource("/images/default" + Configuration.getSnakeHeadRightLocation())));
+
+			URL url = Window.class.getResource("/music/Gee.wav");
+
+			AudioInputStream ais = AudioSystem.getAudioInputStream(url);
+			Clip clip = AudioSystem.getClip();
+			clip.open(ais);
+			clip.setMicrosecondPosition(20_000_000L);
+			clip.loop(Clip.LOOP_CONTINUOUSLY);
+
+		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
+
+
 
 		setTitle(Configuration.getGameTitle());
 		setSize(Configuration.getWindowWidth(), Configuration.getWindowHeight());
@@ -148,14 +162,15 @@ public class Window extends JFrame {
 	 * Initialize images used in the game.
 	 */
 	public static void initializeImages(final String imageOption) {
+		final String image_base = "/images/" + imageOption;
 		try {
-			bgImage = ImageIO.read(Window.class.getResource("/" + imageOption + Configuration.getBgLocation()));
-			food = ImageIO.read(Window.class.getResource("/" + imageOption + Configuration.getFoodLocation()));
-			snake = ImageIO.read(Window.class.getResource("/" + imageOption + Configuration.getSnakeBodyLocation()));
-			snakeTail = ImageIO.read(Window.class.getResource("/" + imageOption + Configuration.getSnakeTailLocation()));
-			collision = ImageIO.read(Window.class.getResource("/" + imageOption + Configuration.getCollisionLocation()));
+			bgImage = ImageIO.read(Window.class.getResource(image_base + Configuration.getBgLocation()));
+			food = ImageIO.read(Window.class.getResource(image_base + Configuration.getFoodLocation()));
+			snake = ImageIO.read(Window.class.getResource(image_base + Configuration.getSnakeBodyLocation()));
+			snakeTail = ImageIO.read(Window.class.getResource(image_base + Configuration.getSnakeTailLocation()));
+			collision = ImageIO.read(Window.class.getResource(image_base + Configuration.getCollisionLocation()));
 
-			snakeHeadRight = ImageIO.read(Window.class.getResource("/" + imageOption + Configuration.getSnakeHeadRightLocation()));
+			snakeHeadRight = ImageIO.read(Window.class.getResource(image_base + Configuration.getSnakeHeadRightLocation()));
 			snakeHeadLeft = imageUtil.getFlippedImage(imageUtil.getRotatedImage(snakeHeadRight, 180));
 			snakeHeadUp = imageUtil.getRotatedImage(snakeHeadRight, -90);
 			snakeHeadDown = imageUtil.getRotatedImage(snakeHeadRight, 90);

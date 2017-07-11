@@ -7,7 +7,6 @@ import java.awt.image.BufferedImage;
 public class ImageUtilSingleton {
 
     public BufferedImage getRotatedImage(BufferedImage bufferedImage, double angle) {
-
         AffineTransform r = new AffineTransform();
         r.rotate(Math.toRadians(angle), bufferedImage.getWidth()/2, bufferedImage.getHeight()/2);
 
@@ -21,6 +20,15 @@ public class ImageUtilSingleton {
         AffineTransform r = AffineTransform.getScaleInstance(1, -1);
         r.translate(0, -bufferedImage.getHeight());
         AffineTransformOp op = new AffineTransformOp(r, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+        return op.filter(bufferedImage, null);
+    }
+
+    public BufferedImage getScaledImage(int width, int height, BufferedImage bufferedImage) {
+        AffineTransform r = new AffineTransform();
+        r.scale(width, height);
+
+        AffineTransformOp op = new AffineTransformOp(r, AffineTransformOp.TYPE_BILINEAR);
+
         return op.filter(bufferedImage, null);
     }
 }

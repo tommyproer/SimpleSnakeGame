@@ -14,7 +14,7 @@ sourceSets {
 			srcDir 'src'
 		}
 		resources {
-			srcDir 'src/resources/images'
+			srcDir 'src/resources'
 //			includes ["**/*.png"]
 		}
 	}
