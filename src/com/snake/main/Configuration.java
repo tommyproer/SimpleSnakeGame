@@ -9,7 +9,7 @@ public class Configuration {
     private static int SPEED = 40; // TODO: Implement difficulty level (put in menu?) to adjust speed
     private static final int INITIAL_SNAKE_SIZE = 3;
     private static final GameDirection.Direction INITIAL_SNAKE_DIRECTION = GameDirection.Direction.RIGHT;
-    private static final int WINDOW_HEIGHT = 850;
+    private static final int WINDOW_HEIGHT = 930;
     private static final int WINDOW_WIDTH = 850;
     private static final int gridSize = 20;
     private static final int INITIAL_SNAKE_POSX = gridSize /2;
@@ -44,12 +44,6 @@ public class Configuration {
     public static String getSnakeBodyLocation() { return "/snake.png"; }
 
     public static String getSnakeHeadRightLocation() { return "/snake_head_right.png"; }
-
-    public static String getSnakeHeadLeftLocation() { return "/snake_head_left.png"; }
-
-    public static String getSnakeHeadUpLocation() { return "/snake_head_up.png"; }
-
-    public static String getSnakeHeadDownLocation() { return "/snake_head_down.png"; }
 
     public static String getSnakeTailLocation() { return "/snake_tail.png"; }
 

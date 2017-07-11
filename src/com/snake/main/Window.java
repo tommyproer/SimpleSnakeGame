@@ -1,16 +1,11 @@
 package com.snake.main;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -41,6 +36,7 @@ public class Window extends JFrame {
 
 	private static final long serialVersionUID = -2542001418764869760L;
 	private static final int gridSize = Configuration.getGridSize();
+	private static ImageUtilSingleton imageUtil = new ImageUtilSingleton();
 
 	private static final String UP_ACTION = "UP";
 	private static final String DOWN_ACTION = "DOWN";
@@ -76,6 +72,13 @@ public class Window extends JFrame {
 	 * Initialize window, set the title, gridSize, close operation and add key listener.
 	 */
 	public Window() {
+		try {
+			setIconImage(ImageIO.read(this.getClass().getResource("/default" + Configuration.getSnakeHeadRightLocation())));
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+
 		setTitle(Configuration.getGameTitle());
 		setSize(Configuration.getWindowWidth(), Configuration.getWindowHeight());
 		// TODO: Have the user be able to set a permanent window size before beginning game
@@ -148,23 +151,14 @@ public class Window extends JFrame {
 		try {
 			bgImage = ImageIO.read(Window.class.getResource("/" + imageOption + Configuration.getBgLocation()));
 			food = ImageIO.read(Window.class.getResource("/" + imageOption + Configuration.getFoodLocation()));
-
-			// TODO: Figure out how to rotate images
-//			Graphics2D g2D = (Graphics2D) food.getGraphics();
-//			AffineTransform r = new AffineTransform();
-////			r.translate(food.getWidth()/2, food.getHeight()/2);
-//			r.rotate(Math.toRadians(180), food.getWidth()/2, food.getHeight()/2);
-////			r.translate(-food.getWidth()/2, -food.getHeight()/2);
-//			g2D.drawImage(food, r, null);
-//			Thread.sleep(1000);
-
-			snakeHeadRight = ImageIO.read(Window.class.getResource("/" + imageOption + Configuration.getSnakeHeadRightLocation()));
-			snakeHeadLeft = ImageIO.read(Window.class.getResource("/" + imageOption + Configuration.getSnakeHeadLeftLocation()));
-			snakeHeadUp = ImageIO.read(Window.class.getResource("/" + imageOption + Configuration.getSnakeHeadUpLocation()));
-			snakeHeadDown = ImageIO.read(Window.class.getResource("/" + imageOption + Configuration.getSnakeHeadDownLocation()));
 			snake = ImageIO.read(Window.class.getResource("/" + imageOption + Configuration.getSnakeBodyLocation()));
 			snakeTail = ImageIO.read(Window.class.getResource("/" + imageOption + Configuration.getSnakeTailLocation()));
 			collision = ImageIO.read(Window.class.getResource("/" + imageOption + Configuration.getCollisionLocation()));
+
+			snakeHeadRight = ImageIO.read(Window.class.getResource("/" + imageOption + Configuration.getSnakeHeadRightLocation()));
+			snakeHeadLeft = imageUtil.getFlippedImage(imageUtil.getRotatedImage(snakeHeadRight, 180));
+			snakeHeadUp = imageUtil.getRotatedImage(snakeHeadRight, -90);
+			snakeHeadDown = imageUtil.getRotatedImage(snakeHeadRight, 90);
 		} catch (Exception e) {
 			System.out.println("Encountered Exception: " + e.getMessage());
 			e.printStackTrace();
