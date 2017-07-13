@@ -1,6 +1,8 @@
-package com.snake.main;
+package com.snake.main.frame.grid;
 
 import java.awt.Image;
+
+import com.snake.main.frame.grid.SquarePanel;
 
 public class DataOfSquare {
 	public enum GameColor {

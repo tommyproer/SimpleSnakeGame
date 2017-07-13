@@ -1,4 +1,4 @@
-package com.snake.main;
+package com.snake.main.controller;
 
 /**
  * This will encapsulate movement logic within Window

@@ -1,5 +1,7 @@
 package com.snake.main;
 
+import com.snake.main.controller.GameDirection;
+
 /**
  * Controls game configuration.
  */
@@ -45,7 +47,7 @@ public class Configuration {
 
     public static String getSnakeHeadRightLocation() { return "/snake_head_right.png"; }
 
-    public static String getSnakeTailLocation() { return "/snake_tail.png"; }
+    public static String getSnakeTailLocation() { return "/snake_tail_right.png"; }
 
     public static String getFoodLocation() { return "/food.png"; }
 

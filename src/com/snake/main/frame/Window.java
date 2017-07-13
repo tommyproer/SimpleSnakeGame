@@ -1,4 +1,4 @@
-package com.snake.main;
+package com.snake.main.frame;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -25,6 +25,11 @@ import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
 
 import com.google.common.collect.Sets;
+import com.snake.main.Configuration;
+import com.snake.main.frame.grid.DataOfSquare;
+import com.snake.main.controller.GameDirection;
+import com.snake.main.util.ImageUtilSingleton;
+import com.snake.main.frame.grid.Position;
 
 /**
  * New window for the snake game.
@@ -84,14 +89,12 @@ public class Window extends JFrame {
 			Clip clip = AudioSystem.getClip();
 			clip.open(ais);
 			clip.setMicrosecondPosition(20_000_000L);
-			clip.loop(Clip.LOOP_CONTINUOUSLY);
+			//clip.loop(Clip.LOOP_CONTINUOUSLY); TODO: play theme specific music, and put this in SoundController
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
-
-
 
 		setTitle(Configuration.getGameTitle());
 		setSize(Configuration.getWindowWidth(), Configuration.getWindowHeight());

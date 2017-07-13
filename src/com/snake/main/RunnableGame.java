@@ -2,6 +2,8 @@ package com.snake.main;
 
 import javax.swing.JOptionPane;
 
+import com.snake.main.frame.Window;
+
 /**
  * Runs game.
  */

@@ -1,4 +1,4 @@
-package com.snake.main;
+package com.snake.main.frame;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;

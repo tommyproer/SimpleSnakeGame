@@ -1,4 +1,4 @@
-package com.snake.main;
+package com.snake.main.controller;
 
 /**
  * Defines the directions of the game

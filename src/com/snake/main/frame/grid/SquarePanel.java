@@ -1,4 +1,4 @@
-package com.snake.main;
+package com.snake.main.frame.grid;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;

@@ -1,4 +1,6 @@
-package com.snake.main;
+package com.snake.main.frame.grid;
+
+import com.snake.main.frame.Window;
 
 /**
  * Position on the game grid.
