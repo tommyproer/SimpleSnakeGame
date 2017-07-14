@@ -26,6 +26,7 @@ import javax.swing.WindowConstants;
 
 import com.google.common.collect.Sets;
 import com.snake.main.Configuration;
+import com.snake.main.controller.SoundController;
 import com.snake.main.frame.grid.DataOfSquare;
 import com.snake.main.controller.GameDirection;
 import com.snake.main.util.ImageUtilSingleton;
@@ -83,14 +84,6 @@ public class Window extends JFrame {
 		try {
 			setIconImage(ImageIO.read(this.getClass().getResource("/images/default" + Configuration.getSnakeHeadRightLocation())));
 
-			URL url = Window.class.getResource("/music/Gee.wav");
-
-			AudioInputStream ais = AudioSystem.getAudioInputStream(url);
-			Clip clip = AudioSystem.getClip();
-			clip.open(ais);
-			clip.setMicrosecondPosition(20_000_000L);
-			//clip.loop(Clip.LOOP_CONTINUOUSLY); TODO: play theme specific music, and put this in SoundController
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);
@@ -114,6 +107,7 @@ public class Window extends JFrame {
 		initializeGame();
 		new MainMenu(this, "Main Menu", true);
 		spawnFoodRandomly();
+		SoundController.getInstance().playThemeMusic();
 	}
 
 	public void reset() {
@@ -127,6 +121,7 @@ public class Window extends JFrame {
 
 		new MainMenu(this, "Main Menu", true);
 		spawnFoodRandomly();
+		SoundController.getInstance().playThemeMusic();
 	}
 
 	public int getScore() {
@@ -332,6 +327,8 @@ public class Window extends JFrame {
 			gameGrid.get(headSnakePosition.getX()).get(headSnakePosition.getY()).lightSquare(collision);
 			System.out.println(String.format("Game Over! Final Score: %s", score));
 
+			SoundController.getInstance().playGameOver();
+			SoundController.getInstance().stopThemeMusic();
 			return true;
 		}
 
@@ -341,6 +338,7 @@ public class Window extends JFrame {
 			scoreField.setText(Integer.toString(score));
 
 			sizeSnake = sizeSnake + 1;
+			SoundController.getInstance().playEatClip();
 			spawnFoodRandomly();
 		}
 
