@@ -22,6 +22,8 @@ import java.util.Map;
 import com.google.common.collect.ImmutableMap;
 import com.snake.main.Configuration;
 import com.snake.main.RunnableGame;
+import com.snake.main.controller.ImageController;
+import com.snake.main.controller.SoundController;
 
 public class MainMenu extends JDialog {
 
@@ -102,7 +104,7 @@ public class MainMenu extends JDialog {
                 String difficultyCommand = difficultyButtonGroup.getSelection().getActionCommand();
                 String themeCommand = themeButtonGroup.getSelection().getActionCommand();
 
-                Window.initializeImages(themeCommand);
+                ImageController.getInstance().initializeImages(themeCommand);
 
                 buttons.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
@@ -110,6 +112,7 @@ public class MainMenu extends JDialog {
 
                 Configuration.setSpeed(DIFFICULTY_TO_SPEED_MAP.get(difficultyCommand));
                 dispose();
+                SoundController.getInstance().playThemeMusic();
             }
         });
 

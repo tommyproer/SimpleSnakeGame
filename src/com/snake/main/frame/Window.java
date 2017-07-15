@@ -5,7 +5,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -68,16 +67,6 @@ public class Window extends JFrame {
 	private SoundController soundController = SoundController.getInstance();
 	private ImageController imageController = ImageController.getInstance();
 
-	private static BufferedImage bgImage;
-	private static BufferedImage food;
-	private static BufferedImage snakeHeadRight;
-	private static BufferedImage snakeHeadLeft;
-	private static BufferedImage snakeHeadDown;
-	private static BufferedImage snakeHeadUp;
-	private static BufferedImage snake;
-	private static BufferedImage snakeTail;
-	private static BufferedImage collision;
-
 	/**
 	 * Initialize window, set the title, gridSize, close operation and add key listener.
 	 */
@@ -103,7 +92,6 @@ public class Window extends JFrame {
 	}
 
 	public void reset() {
-		score = 0;
 		sizeSnake = Configuration.getInitialSnakeSize();
 		snakePositions = new ArrayList<>();
 
@@ -114,7 +102,9 @@ public class Window extends JFrame {
 
 		new MainMenu(this, "Main Menu", true);
 		spawnFoodRandomly();
-		soundController.playThemeMusic();
+
+		score = 0;
+		scoreField.setText(Integer.toString(score));
 	}
 
 	public int getScore() {
@@ -132,7 +122,7 @@ public class Window extends JFrame {
 	 * Initialize all arrays and menus, etc.
 	 */
 	private void initializeGame() {
-		initializeImages("default");
+		imageController.initializeImages("default");
 		initializeAllPossiblePositions();
 		initializeGridAndGameData();
 		initializeScorePanel();
@@ -144,32 +134,9 @@ public class Window extends JFrame {
 	public void reinitializeColors() {
 		gameGrid.forEach(outerGrid -> {
 			outerGrid.forEach(square -> {
-				square.lightSquare(bgImage);
+				square.lightSquare(imageController.getBgImage());
 			});
 		});
-	}
-
-	/**
-	 * Initialize images used in the game.
-	 */
-	public static void initializeImages(final String imageOption) {
-		final String image_base = "/images/" + imageOption;
-		try {
-			bgImage = ImageIO.read(Window.class.getResource(image_base + Configuration.getBgLocation()));
-			food = ImageIO.read(Window.class.getResource(image_base + Configuration.getFoodLocation()));
-			snake = ImageIO.read(Window.class.getResource(image_base + Configuration.getSnakeBodyLocation()));
-			snakeTail = ImageIO.read(Window.class.getResource(image_base + Configuration.getSnakeTailLocation()));
-			collision = ImageIO.read(Window.class.getResource(image_base + Configuration.getCollisionLocation()));
-
-			snakeHeadRight = ImageIO.read(Window.class.getResource(image_base + Configuration.getSnakeHeadRightLocation()));
-			snakeHeadLeft = imageUtil.getFlippedImage(imageUtil.getRotatedImage(snakeHeadRight, 180));
-			snakeHeadUp = imageUtil.getRotatedImage(snakeHeadRight, -90);
-			snakeHeadDown = imageUtil.getRotatedImage(snakeHeadRight, 90);
-		} catch (Exception e) {
-			System.out.println("Encountered Exception: " + e.getMessage());
-			e.printStackTrace();
-			System.exit(1);
-		}
 	}
 
 	/**
@@ -195,7 +162,7 @@ public class Window extends JFrame {
 		for (int i = 0; i < gridSize; i++) {
 			final ArrayList<DataOfSquare> data = new ArrayList<>();
 			for(int j = 0; j < gridSize; j++){
-				DataOfSquare dataOfSquare = new DataOfSquare(bgImage);
+				DataOfSquare dataOfSquare = new DataOfSquare(imageController.getBgImage());
 				data.add(dataOfSquare);
 				snakeGridContainer.add(dataOfSquare.getSquare());
 			}
@@ -276,34 +243,34 @@ public class Window extends JFrame {
 		// Remove tail
 		while (snakePositions.size() > sizeSnake) {
 			Position tail = snakePositions.get(0);
-			gameGrid.get(tail.getX()).get(tail.getY()).lightSquare(bgImage);
+			gameGrid.get(tail.getX()).get(tail.getY()).lightSquare(imageController.getBgImage());
 			snakePositions.remove(0);
 		}
 
 		// Change snake head to snake body
 		if (snakePositions.size() > 1) {
 			Position previousHead = snakePositions.get(snakePositions.size() - 2);
-			gameGrid.get(previousHead.getX()).get(previousHead.getY()).lightSquare(snake);
+			gameGrid.get(previousHead.getX()).get(previousHead.getY()).lightSquare(imageController.getSnake());
 		}
 
 		// Put snake head
 		switch (currentDirection) {
-			case LEFT: gameGrid.get(headSnakePosition.getX()).get(headSnakePosition.getY()).lightSquare(snakeHeadLeft);
+			case LEFT: gameGrid.get(headSnakePosition.getX()).get(headSnakePosition.getY()).lightSquare(imageController.getSnakeHeadLeft());
 				break;
 			case DOWN:
-				gameGrid.get(headSnakePosition.getX()).get(headSnakePosition.getY()).lightSquare(snakeHeadDown);
+				gameGrid.get(headSnakePosition.getX()).get(headSnakePosition.getY()).lightSquare(imageController.getSnakeHeadDown());
 				break;
 			case UP:
-				gameGrid.get(headSnakePosition.getX()).get(headSnakePosition.getY()).lightSquare(snakeHeadUp);
+				gameGrid.get(headSnakePosition.getX()).get(headSnakePosition.getY()).lightSquare(imageController.getSnakeHeadUp());
 				break;
 			case RIGHT:
 			default:
-				gameGrid.get(headSnakePosition.getX()).get(headSnakePosition.getY()).lightSquare(snakeHeadRight);
+				gameGrid.get(headSnakePosition.getX()).get(headSnakePosition.getY()).lightSquare(imageController.getSnakeHeadRight());
 				break;
 		}
 
 		// Add tail
-		gameGrid.get(snakePositions.get(0).getX()).get(snakePositions.get(0).getY()).lightSquare(snakeTail);
+		gameGrid.get(snakePositions.get(0).getX()).get(snakePositions.get(0).getY()).lightSquare(imageController.getSnakeTail());
 	}
 
 	/**
@@ -317,7 +284,7 @@ public class Window extends JFrame {
 				.filter(headSnakePosition::equals)
 				.findAny()
 				.isPresent()) {
-			gameGrid.get(headSnakePosition.getX()).get(headSnakePosition.getY()).lightSquare(collision);
+			gameGrid.get(headSnakePosition.getX()).get(headSnakePosition.getY()).lightSquare(imageController.getCollision());
 			System.out.println(String.format("Game Over! Final Score: %s", score));
 
 			soundController.playGameOver();
@@ -346,7 +313,7 @@ public class Window extends JFrame {
 		this.foodPosition = nonSnakePositions.get(((int) (Math.random()*1000)) % nonSnakePositions.size());
 
 		System.out.println(String.format("New food spawn: %d, %d", foodPosition.getX(), foodPosition.getY(), sizeSnake));
-		gameGrid.get(foodPosition.getX()).get(foodPosition.getY()).lightSquare(food);
+		gameGrid.get(foodPosition.getX()).get(foodPosition.getY()).lightSquare(imageController.getFood());
 	}
 
 	private void initializeScorePanel() {

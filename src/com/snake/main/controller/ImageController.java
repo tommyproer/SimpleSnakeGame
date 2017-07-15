@@ -51,4 +51,14 @@ public class ImageController {
             System.exit(1);
         }
     }
+
+    public BufferedImage getBgImage() { return bgImage; }
+    public BufferedImage getFood() { return food; }
+    public BufferedImage getSnakeHeadRight() { return snakeHeadRight; }
+    public BufferedImage getSnakeHeadLeft() { return snakeHeadLeft; }
+    public BufferedImage getSnakeHeadDown() { return snakeHeadDown; }
+    public BufferedImage getSnakeHeadUp() { return snakeHeadUp; }
+    public BufferedImage getSnake() { return snake; }
+    public BufferedImage getSnakeTail() { return snakeTail; }
+    public BufferedImage getCollision() { return collision; }
 }
