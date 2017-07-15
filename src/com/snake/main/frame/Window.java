@@ -1,8 +1,6 @@
 package com.snake.main.frame;
 
 import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
@@ -14,9 +12,7 @@ import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
 
@@ -57,12 +53,12 @@ public class Window extends JFrame {
 	private Position foodPosition;
 	private Position headSnakePosition;
 
-	private int score = 0;
-	private JTextField scoreField;
-
 	// Controllers
-	private SoundController soundController = SoundController.getInstance();
-	private ImageController imageController = ImageController.getInstance();
+	private static SoundController soundController = SoundController.getInstance();
+	private static ImageController imageController = ImageController.getInstance();
+
+	// Panels
+	private static ScorePanel scorePanel = ScorePanel.getInstance();
 
 	/**
 	 * Initialize window, set the title, gridSize, close operation and add key listener.
@@ -100,12 +96,7 @@ public class Window extends JFrame {
 		new MainMenu(this, "Main Menu", true);
 		spawnFoodRandomly();
 
-		score = 0;
-		scoreField.setText(Integer.toString(score));
-	}
-
-	public int getScore() {
-		return score;
+		scorePanel.resetScore();
 	}
 
 	/**
@@ -122,7 +113,7 @@ public class Window extends JFrame {
 		imageController.initializeImages("default");
 		initializeAllPossiblePositions();
 		initializeGridAndGameData();
-		initializeScorePanel();
+		getContentPane().add(scorePanel, BorderLayout.SOUTH);
 
 		setJMenuBar(new MenuBar());
 		initializeFrame();
@@ -292,7 +283,7 @@ public class Window extends JFrame {
 				.findAny()
 				.isPresent()) {
 			gameGrid.get(headSnakePosition.getX()).get(headSnakePosition.getY()).lightSquare(imageController.getCollision());
-			System.out.println(String.format("Game Over! Final Score: %s", score));
+			System.out.println(String.format("Game Over! Final Score: %s", scorePanel.getScore()));
 
 			soundController.playGameOver();
 			soundController.stopThemeMusic();
@@ -301,8 +292,7 @@ public class Window extends JFrame {
 
 		// Check to see if snake ate the food
 		if (headSnakePosition.equals(foodPosition)) {
-			score += 20;
-			scoreField.setText(Integer.toString(score));
+			scorePanel.increaseScore();
 
 			sizeSnake = sizeSnake + 1;
 			soundController.playEatClip();
@@ -321,35 +311,6 @@ public class Window extends JFrame {
 
 		System.out.println(String.format("New food spawn: %d, %d", foodPosition.getX(), foodPosition.getY(), sizeSnake));
 		gameGrid.get(foodPosition.getX()).get(foodPosition.getY()).lightSquare(imageController.getFood());
-	}
-
-	private void initializeScorePanel() {
-		scoreField = new JTextField(5);
-		scoreField.setEditable(false);
-		scoreField.setActionCommand("Score");
-		scoreField.setFocusable(false);
-		scoreField.setText(Integer.toString(score));
-
-		JLabel scoreLabel = new JLabel("Score: ");
-		scoreLabel.setLabelFor(scoreField);
-
-		JPanel scorePanel = new JPanel();
-		scorePanel.setLayout(new GridBagLayout());
-		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.anchor = GridBagConstraints.WEST;
-		constraints.gridwidth = GridBagConstraints.RELATIVE;
-		constraints.fill = GridBagConstraints.NONE;
-		constraints.weightx = 0.0;
-
-		scorePanel.add(scoreLabel, constraints);
-
-		constraints.gridwidth = GridBagConstraints.REMAINDER;
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.weightx = 1.0;
-
-		scorePanel.add(scoreField, constraints);
-
-		getContentPane().add(scorePanel, BorderLayout.SOUTH);
 	}
 
 	private class MoveUp extends AbstractAction {

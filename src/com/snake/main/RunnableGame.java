@@ -2,6 +2,7 @@ package com.snake.main;
 
 import javax.swing.JOptionPane;
 
+import com.snake.main.frame.ScorePanel;
 import com.snake.main.frame.Window;
 
 /**
@@ -31,7 +32,7 @@ public class RunnableGame implements Runnable {
 
             n = JOptionPane.showConfirmDialog(
                     window,
-                    String.format("Your score is %d.\n\nWould you like to play again?", window.getScore()),
+                    String.format("Your score is %d.\n\nWould you like to play again?", ScorePanel.getInstance().getScore()),
                     "Game Over",
                     JOptionPane.YES_NO_OPTION);
 
