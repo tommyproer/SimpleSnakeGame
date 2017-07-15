@@ -32,9 +32,6 @@ import com.snake.main.frame.grid.Position;
  * New window for the snake game.
  * X position is position from the top, Y position is the position from the left.
  * TODO: Upon resizing window, we may have to reset all the image icons again in the game
- * TODO: We may have to add another variable called "isCommitted", basically the idea is once the
- * TODO: user changes direction of the snake, we may want to commit to the move and any extra moves will be considered next move
- *
  * TODO: We want to store the scores, also accumulate the points so that the user can "shop" for stuff (actually this is debatable if I want to do this, maybe for this simplicity of this game I won't implement this)
  */
 public class Window extends JFrame {
@@ -53,7 +50,8 @@ public class Window extends JFrame {
 
 	private GameDirection.Direction lastDirection;
 	private GameDirection.Direction currentDirection;
-	private boolean directionCommitted;
+	private GameDirection.Direction nextDirectionGuess;
+	private boolean directionCommitted = false;
 
 	private int sizeSnake;
 	private Position foodPosition;
@@ -219,6 +217,13 @@ public class Window extends JFrame {
 	 * Moves the head of the snake, then deletes tail of snake.
 	 */
 	private void moveSnake() {
+		// Check next guess
+		if (nextDirectionGuess != null && !directionCommitted) {
+			currentDirection = nextDirectionGuess;
+			nextDirectionGuess = null;
+		}
+
+		// Move snake head position
 		switch(currentDirection) {
 			case RIGHT:
 				headSnakePosition.moveRight();
@@ -237,6 +242,9 @@ public class Window extends JFrame {
 				lastDirection = GameDirection.Direction.DOWN;
 				break;
 		}
+		directionCommitted = false;
+
+		// Update snake positions
 		snakePositions.add(new Position(headSnakePosition.getX(), headSnakePosition.getY()));
 
 		// Remove tail
@@ -347,9 +355,14 @@ public class Window extends JFrame {
 	private class MoveUp extends AbstractAction {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (lastDirection != GameDirection.Direction.DOWN) {
+			if (directionCommitted) {
+				if (!currentDirection.equals(GameDirection.Direction.DOWN) && !currentDirection.equals(GameDirection.Direction.UP)) {
+					nextDirectionGuess = GameDirection.Direction.UP;
+				}
+			} else if (lastDirection != GameDirection.Direction.DOWN) {
 				currentDirection = GameDirection.Direction.UP;
 				directionCommitted = true;
+				nextDirectionGuess = null;
 			}
 		}
 	}
@@ -357,9 +370,14 @@ public class Window extends JFrame {
 	private class MoveDown extends AbstractAction {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (lastDirection != GameDirection.Direction.UP) {
+			if (directionCommitted) {
+				if (!currentDirection.equals(GameDirection.Direction.UP) && !currentDirection.equals(GameDirection.Direction.DOWN)) {
+					nextDirectionGuess = GameDirection.Direction.DOWN;
+				}
+			} else if (lastDirection != GameDirection.Direction.UP) {
 				currentDirection = GameDirection.Direction.DOWN;
 				directionCommitted = true;
+				nextDirectionGuess = null;
 			}
 		}
 	}
@@ -367,9 +385,14 @@ public class Window extends JFrame {
 	private class MoveRight extends AbstractAction {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (lastDirection != GameDirection.Direction.LEFT) {
+			if (directionCommitted) {
+				if (!currentDirection.equals(GameDirection.Direction.LEFT) && !currentDirection.equals(GameDirection.Direction.RIGHT)) {
+					nextDirectionGuess = GameDirection.Direction.RIGHT;
+				}
+			} else if (lastDirection != GameDirection.Direction.LEFT) {
 				currentDirection = GameDirection.Direction.RIGHT;
 				directionCommitted = true;
+				nextDirectionGuess = null;
 			}
 		}
 	}
@@ -377,9 +400,14 @@ public class Window extends JFrame {
 	private class MoveLeft extends AbstractAction {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (lastDirection != GameDirection.Direction.RIGHT) {
+			if (directionCommitted) {
+				if (!currentDirection.equals(GameDirection.Direction.RIGHT) && !currentDirection.equals(GameDirection.Direction.LEFT)) {
+					nextDirectionGuess = GameDirection.Direction.LEFT;
+				}
+			} else if (lastDirection != GameDirection.Direction.RIGHT) {
 				currentDirection = GameDirection.Direction.LEFT;
 				directionCommitted = true;
+				nextDirectionGuess = null;
 			}
 		}
 	}

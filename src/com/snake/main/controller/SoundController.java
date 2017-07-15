@@ -44,8 +44,6 @@ public class SoundController {
         }
     }
 
-
-
     public void playEatClip() {
         eatClip.loop(1);
     }
