@@ -11,6 +11,8 @@ public class ImageController {
 
     private static ImageController imageController;
 
+    private static final int SIZE = 42;
+
     public static ImageController getInstance() {
         if (imageController == null) {
             imageController = new ImageController();
@@ -40,7 +42,6 @@ public class ImageController {
             snake = ImageIO.read(Window.class.getResource(image_base + Configuration.getSnakeBodyLocation()));
             snakeTail = ImageIO.read(Window.class.getResource(image_base + Configuration.getSnakeTailLocation()));
             collision = ImageIO.read(Window.class.getResource(image_base + Configuration.getCollisionLocation()));
-
             snakeHeadRight = ImageIO.read(Window.class.getResource(image_base + Configuration.getSnakeHeadRightLocation()));
             snakeHeadLeft = imageUtil.getFlippedImage(imageUtil.getRotatedImage(snakeHeadRight, 180));
             snakeHeadUp = imageUtil.getRotatedImage(snakeHeadRight, -90);

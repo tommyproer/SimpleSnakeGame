@@ -37,18 +37,18 @@ public class MainMenu extends JDialog {
     private static final String EXTREME = "Extreme";
 
     // Themes
-    private static final List<String> THEMES = Arrays.asList("default", "orange", "melancholy", "princess", "retro", "test");
-    private static final List<String> THEMES_NAMES = Arrays.asList("Default", "Creamy Orange", "Melancholy", "Princess", "Retro", "Test");
+    private static final List<String> THEMES = Arrays.asList("default", "princess", "retro");
+    private static final List<String> THEMES_NAMES = Arrays.asList("Default", "Princess", "Retro");
 
     private static final String PLAY_BUTTON = "Play!";
     private static final String EXIT_BUTTON = "Exit";
 
     private static final Map<String, Integer> DIFFICULTY_TO_SPEED_MAP = ImmutableMap.<String, Integer>builder()
-            .put(EASY, 100)
-            .put(NORMAL, 65)
-            .put(HARD, 40)
-            .put(EXTREME, 20)
-            .build();
+            .put(EASY, 160)
+            .put(NORMAL, 115)
+            .put(HARD, 90)
+            .put(EXTREME, 70)
+            .build(); // TODO: get this into configuration
 
     private ButtonGroup difficultyButtonGroup;
     private ButtonGroup themeButtonGroup;

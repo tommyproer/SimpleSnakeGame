@@ -5,6 +5,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -25,7 +26,6 @@ import com.snake.main.controller.ImageController;
 import com.snake.main.controller.SoundController;
 import com.snake.main.frame.grid.DataOfSquare;
 import com.snake.main.controller.GameDirection;
-import com.snake.main.util.ImageUtilSingleton;
 import com.snake.main.frame.grid.Position;
 
 /**
@@ -41,7 +41,6 @@ public class Window extends JFrame {
 
 	private static final long serialVersionUID = -2542001418764869760L;
 	private static final int gridSize = Configuration.getGridSize();
-	private static ImageUtilSingleton imageUtil = ImageUtilSingleton.getInstance();
 
 	private static final String UP_ACTION = "UP";
 	private static final String DOWN_ACTION = "DOWN";
@@ -73,8 +72,8 @@ public class Window extends JFrame {
 	public Window() {
 		try {
 			setIconImage(ImageIO.read(this.getClass().getResource("/images/default" + Configuration.getSnakeHeadRightLocation())));
-
-		} catch (Exception e) {
+		} catch (IOException e) {
+			System.err.println("Could not read file.");
 			e.printStackTrace();
 			System.exit(1);
 		}
@@ -350,8 +349,8 @@ public class Window extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			if (lastDirection != GameDirection.Direction.DOWN) {
 				currentDirection = GameDirection.Direction.UP;
+				directionCommitted = true;
 			}
-
 		}
 	}
 
@@ -360,8 +359,8 @@ public class Window extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			if (lastDirection != GameDirection.Direction.UP) {
 				currentDirection = GameDirection.Direction.DOWN;
+				directionCommitted = true;
 			}
-
 		}
 	}
 
@@ -370,8 +369,8 @@ public class Window extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			if (lastDirection != GameDirection.Direction.LEFT) {
 				currentDirection = GameDirection.Direction.RIGHT;
+				directionCommitted = true;
 			}
-
 		}
 	}
 
@@ -380,8 +379,8 @@ public class Window extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			if (lastDirection != GameDirection.Direction.RIGHT) {
 				currentDirection = GameDirection.Direction.LEFT;
+				directionCommitted = true;
 			}
-
 		}
 	}
 }

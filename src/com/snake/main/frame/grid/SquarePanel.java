@@ -18,12 +18,8 @@ public class SquarePanel extends JLabel {
 	}
 	
 	public void changeImage(final Image image) {
-		changeImage(image, getWidth(), getHeight());
-	}
-
-	public void changeImage(final Image image, int width, int height) {
 		ImageIcon imageIcon =
-				new ImageIcon(image.getScaledInstance(width, height, Image.SCALE_DEFAULT));
+				new ImageIcon(image);
 
 		this.setIcon(imageIcon);
 	}

@@ -55,7 +55,7 @@ public class SoundController {
     }
 
     public void playThemeMusic() {
-        themeMusic.loop(Clip.LOOP_CONTINUOUSLY);
+//        themeMusic.loop(Clip.LOOP_CONTINUOUSLY);
     }
 
     public void stopThemeMusic() {
