@@ -7,6 +7,9 @@ import com.snake.main.Configuration;
 import com.snake.main.frame.Window;
 import com.snake.main.util.ImageUtilSingleton;
 
+/**
+ * TODO: Right now the images are perfectly 42 by 42 pixels... will this always be true?
+ */
 public class ImageController {
 
     private static ImageController imageController;

@@ -18,33 +18,35 @@ public class ScorePanel extends JPanel {
     }
 
     private final JTextField scoreField;
+    private final JTextField difficultyField;
     private int score = 0;
-    private final int increaseScoreValue = 20;
+    private final int increaseScoreValue = 50;
 
     private ScorePanel() {
-        scoreField = new JTextField(5);
+        setLayout(new GridBagLayout());
+        GridBagConstraints labelConstraints = createLabelConstraint();
+        GridBagConstraints fieldConstraints = createFieldConstraint();
+
+        scoreField = new JTextField();
         scoreField.setEditable(false);
-        scoreField.setActionCommand("Score");
         scoreField.setFocusable(false);
         scoreField.setText(Integer.toString(score));
 
         JLabel scoreLabel = new JLabel("Score: ");
         scoreLabel.setLabelFor(scoreField);
 
-        setLayout(new GridBagLayout());
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.anchor = GridBagConstraints.WEST;
-        constraints.gridwidth = GridBagConstraints.RELATIVE;
-        constraints.fill = GridBagConstraints.NONE;
-        constraints.weightx = 0.0;
+        add(scoreLabel, labelConstraints);
+        add(scoreField, fieldConstraints);
 
-        add(scoreLabel, constraints);
+        difficultyField = new JTextField();
+        difficultyField.setEditable(false);
+        difficultyField.setFocusable(false);
 
-        constraints.gridwidth = GridBagConstraints.REMAINDER;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.weightx = 1.0;
+        JLabel difficultyLabel = new JLabel("Difficulty: ");
+        difficultyLabel.setLabelFor(difficultyField);
 
-        add(scoreField, constraints);
+        add(difficultyLabel, labelConstraints);
+        add(difficultyField, fieldConstraints);
     }
 
     public void increaseScore() {
@@ -59,5 +61,29 @@ public class ScorePanel extends JPanel {
 
     public int getScore() {
         return score;
+    }
+
+    public void setDifficulty(final String difficulty) {
+        difficultyField.setText(difficulty);
+    }
+
+    private GridBagConstraints createLabelConstraint() {
+        GridBagConstraints labelConstraints = new GridBagConstraints();
+        labelConstraints.anchor = GridBagConstraints.WEST;
+        labelConstraints.gridwidth = GridBagConstraints.RELATIVE;
+        labelConstraints.fill = GridBagConstraints.NONE;
+        labelConstraints.weightx = 0.0;
+
+        return labelConstraints;
+    }
+
+    private GridBagConstraints createFieldConstraint() {
+        GridBagConstraints fieldConstraints = new GridBagConstraints();
+        fieldConstraints.anchor = GridBagConstraints.WEST;
+        fieldConstraints.gridwidth = GridBagConstraints.REMAINDER;
+        fieldConstraints.fill = GridBagConstraints.HORIZONTAL;
+        fieldConstraints.weightx = 1.0;
+
+        return fieldConstraints;
     }
 }

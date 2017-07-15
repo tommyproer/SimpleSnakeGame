@@ -44,10 +44,10 @@ public class MainMenu extends JDialog {
     private static final String EXIT_BUTTON = "Exit";
 
     private static final Map<String, Integer> DIFFICULTY_TO_SPEED_MAP = ImmutableMap.<String, Integer>builder()
-            .put(EASY, 160)
-            .put(NORMAL, 115)
-            .put(HARD, 90)
-            .put(EXTREME, 70)
+            .put(EASY, 140)
+            .put(NORMAL, 90)
+            .put(HARD, 70)
+            .put(EXTREME, 50)
             .build(); // TODO: get this into configuration
 
     private ButtonGroup difficultyButtonGroup;
@@ -111,6 +111,7 @@ public class MainMenu extends JDialog {
                 jFrame.reinitializeColors();
 
                 Configuration.setSpeed(DIFFICULTY_TO_SPEED_MAP.get(difficultyCommand));
+                ScorePanel.getInstance().setDifficulty(difficultyCommand);
                 dispose();
                 SoundController.getInstance().playThemeMusic();
             }

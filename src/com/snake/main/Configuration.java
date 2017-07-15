@@ -57,7 +57,7 @@ public class Configuration {
 
     public static String getEatClipLocation() { return "/music/eat.wav"; }
 
-    public static String getThemeClipLocation() { return "/music/Gee.wav"; }
+    public static String getThemeClipLocation() { return "/music/themes/Mountain Downhill 1.wav"; }
 
     public static String getGameOverClipLocation() { return "/music/GameOver.wav"; }
 }
