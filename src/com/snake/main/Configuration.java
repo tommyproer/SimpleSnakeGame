@@ -54,4 +54,10 @@ public class Configuration {
     public static String getBgLocation() { return "/bg.png"; }
 
     public static String getCollisionLocation() { return "/collision.png"; }
+
+    public static String getEatClipLocation() { return "/music/eat.wav"; }
+
+    public static String getThemeClipLocation() { return "/music/Gee.wav"; }
+
+    public static String getGameOverClipLocation() { return "/music/GameOver.wav"; }
 }

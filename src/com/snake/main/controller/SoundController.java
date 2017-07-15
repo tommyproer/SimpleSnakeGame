@@ -3,6 +3,7 @@ package com.snake.main.controller;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
+import com.snake.main.Configuration;
 import com.snake.main.frame.Window;
 
 /**
@@ -12,6 +13,13 @@ public class SoundController {
 
     private static SoundController soundController;
 
+    public static SoundController getInstance() {
+        if (soundController == null) {
+            soundController = new SoundController();
+        }
+        return soundController;
+    }
+
     private Clip eatClip;
     private Clip gameOver;
     private Clip themeMusic;
@@ -19,15 +27,15 @@ public class SoundController {
     private SoundController () {
         try {
             eatClip = AudioSystem.getClip();
-            eatClip.open(AudioSystem.getAudioInputStream(this.getClass().getResource("/music/eat.wav")));
+            eatClip.open(AudioSystem.getAudioInputStream(this.getClass().getResource(Configuration.getEatClipLocation())));
             eatClip.setFramePosition(eatClip.getFrameLength()); // For some reason this prevents the first loop from executing twice
 
             gameOver = AudioSystem.getClip();
-            gameOver.open(AudioSystem.getAudioInputStream(this.getClass().getResource("/music/GameOver.wav")));
+            gameOver.open(AudioSystem.getAudioInputStream(this.getClass().getResource(Configuration.getGameOverClipLocation())));
             gameOver.setFramePosition(gameOver.getFrameLength());
 
             themeMusic = AudioSystem.getClip();
-            themeMusic.open(AudioSystem.getAudioInputStream(Window.class.getResource("/music/Gee.wav")));
+            themeMusic.open(AudioSystem.getAudioInputStream(Window.class.getResource(Configuration.getThemeClipLocation())));
             themeMusic.setMicrosecondPosition(20_000_000L);
 
         } catch (Exception e) {
@@ -36,16 +44,10 @@ public class SoundController {
         }
     }
 
-    public static SoundController getInstance() {
-        if (soundController == null) {
-            soundController = new SoundController();
-        }
-        return soundController;
-    }
+
 
     public void playEatClip() {
         eatClip.loop(1);
-
     }
 
     public void playGameOver() {
@@ -53,11 +55,11 @@ public class SoundController {
     }
 
     public void playThemeMusic() {
-//        themeMusic.loop(Clip.LOOP_CONTINUOUSLY);
+        themeMusic.loop(Clip.LOOP_CONTINUOUSLY);
     }
 
     public void stopThemeMusic() {
         themeMusic.stop();
-        themeMusic.setFramePosition(0);
+        themeMusic.setMicrosecondPosition(20_000_000L);
     }
 }

@@ -6,6 +6,17 @@ import java.awt.image.BufferedImage;
 
 public class ImageUtilSingleton {
 
+    private static ImageUtilSingleton imageUtilSingleton;
+
+    public static ImageUtilSingleton getInstance() {
+        if (imageUtilSingleton == null) {
+            imageUtilSingleton = new ImageUtilSingleton();
+        }
+        return imageUtilSingleton;
+    }
+
+    private ImageUtilSingleton(){}
+
     public BufferedImage getRotatedImage(BufferedImage bufferedImage, double angle) {
         AffineTransform r = new AffineTransform();
         r.rotate(Math.toRadians(angle), bufferedImage.getWidth()/2, bufferedImage.getHeight()/2);

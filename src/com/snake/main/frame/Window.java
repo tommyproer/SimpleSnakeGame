@@ -6,16 +6,12 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 import javax.swing.AbstractAction;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -26,6 +22,7 @@ import javax.swing.WindowConstants;
 
 import com.google.common.collect.Sets;
 import com.snake.main.Configuration;
+import com.snake.main.controller.ImageController;
 import com.snake.main.controller.SoundController;
 import com.snake.main.frame.grid.DataOfSquare;
 import com.snake.main.controller.GameDirection;
@@ -45,7 +42,7 @@ public class Window extends JFrame {
 
 	private static final long serialVersionUID = -2542001418764869760L;
 	private static final int gridSize = Configuration.getGridSize();
-	private static ImageUtilSingleton imageUtil = new ImageUtilSingleton();
+	private static ImageUtilSingleton imageUtil = ImageUtilSingleton.getInstance();
 
 	private static final String UP_ACTION = "UP";
 	private static final String DOWN_ACTION = "DOWN";
@@ -66,6 +63,10 @@ public class Window extends JFrame {
 
 	private int score = 0;
 	private JTextField scoreField;
+
+	// Controllers
+	private SoundController soundController = SoundController.getInstance();
+	private ImageController imageController = ImageController.getInstance();
 
 	private static BufferedImage bgImage;
 	private static BufferedImage food;
@@ -95,22 +96,14 @@ public class Window extends JFrame {
 		// TODO: adjust image to be this scale once the window size is set so we don't have to scale the image every time
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-		sizeSnake = Configuration.getInitialSnakeSize();
-		snakePositions = new ArrayList<>();
 		allPossiblePositions = new HashSet<>();
 
-		currentDirection = Configuration.getInitialSnakeDirection();
-		lastDirection = Configuration.getInitialSnakeDirection();
-		headSnakePosition = new Position(Configuration.getInitialSnakePosx(), Configuration.getInitialSnakePoxy());
-		snakePositions.add(new Position(headSnakePosition.getX(), headSnakePosition.getY()));
-
 		initializeGame();
-		new MainMenu(this, "Main Menu", true);
-		spawnFoodRandomly();
-		SoundController.getInstance().playThemeMusic();
+		reset();
 	}
 
 	public void reset() {
+		score = 0;
 		sizeSnake = Configuration.getInitialSnakeSize();
 		snakePositions = new ArrayList<>();
 
@@ -121,7 +114,7 @@ public class Window extends JFrame {
 
 		new MainMenu(this, "Main Menu", true);
 		spawnFoodRandomly();
-		SoundController.getInstance().playThemeMusic();
+		soundController.playThemeMusic();
 	}
 
 	public int getScore() {
@@ -327,8 +320,8 @@ public class Window extends JFrame {
 			gameGrid.get(headSnakePosition.getX()).get(headSnakePosition.getY()).lightSquare(collision);
 			System.out.println(String.format("Game Over! Final Score: %s", score));
 
-			SoundController.getInstance().playGameOver();
-			SoundController.getInstance().stopThemeMusic();
+			soundController.playGameOver();
+			soundController.stopThemeMusic();
 			return true;
 		}
 
@@ -338,7 +331,7 @@ public class Window extends JFrame {
 			scoreField.setText(Integer.toString(score));
 
 			sizeSnake = sizeSnake + 1;
-			SoundController.getInstance().playEatClip();
+			soundController.playEatClip();
 			spawnFoodRandomly();
 		}
 
