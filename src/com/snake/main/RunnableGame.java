@@ -26,14 +26,23 @@ public class RunnableGame implements Runnable {
 
         int n = JOptionPane.YES_OPTION;
         while (n == JOptionPane.YES_OPTION && !exitGame) {
+            int highscore = window.getHighscore();
+
             boolean gameOver = false;
             while (!gameOver) {
                 gameOver = window.iterate();
             }
 
+            String message;
+            if (window.getHighscore() > highscore) {
+                message = String.format("Congrats, your new high score is %d!!\n\nWould you like to play again?", window.getHighscore());
+            } else {
+                message = String.format("Your score is %d.\nHighscore is %d.\nWould you like to play again?", ScorePanel.getInstance().getScore(), window.getHighscore());
+            }
+
             n = JOptionPane.showConfirmDialog(
                     window,
-                    String.format("Your score is %d.\n\nWould you like to play again?", ScorePanel.getInstance().getScore()),
+                    message,
                     "Game Over",
                     JOptionPane.YES_NO_OPTION);
 

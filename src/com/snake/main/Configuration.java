@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import com.google.common.collect.ImmutableMap;
-import com.snake.main.controller.GameDirection;
+import com.snake.main.enums.GameDirection;
 
 /**
  * Controls game configuration.

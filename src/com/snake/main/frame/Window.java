@@ -20,9 +20,11 @@ import com.google.common.collect.Sets;
 import com.snake.main.Configuration;
 import com.snake.main.controller.ImageController;
 import com.snake.main.controller.SoundController;
+import com.snake.main.exception.CryptoException;
 import com.snake.main.frame.grid.DataOfSquare;
-import com.snake.main.controller.GameDirection;
+import com.snake.main.enums.GameDirection;
 import com.snake.main.frame.grid.Position;
+import com.snake.main.handler.HighscoreHandler;
 
 /**
  * New window for the snake game.
@@ -51,6 +53,7 @@ public class Window extends JFrame {
 	private int sizeSnake;
 	private Position foodPosition;
 	private Position headSnakePosition;
+	private int highscore;
 
 	// Controllers
 	private static SoundController soundController = SoundController.getInstance();
@@ -111,6 +114,8 @@ public class Window extends JFrame {
 		return gridSize;
 	}
 
+	public int getHighscore() { return highscore; }
+
 	/**
 	 * Initialize all arrays and menus, etc.
 	 */
@@ -150,6 +155,11 @@ public class Window extends JFrame {
 	 * while snakeGridContainer is used to display the objects.
 	 */
 	private void initializeGridAndGameData() {
+		try {
+			highscore = HighscoreHandler.getHighscore("AIELCXDFSWOVIDKS");
+		} catch (CryptoException e) {
+			e.printStackTrace();
+		}
 		// Creates Threads and its data and adds it to gameGrid, which represents the game grid locations
 		gameGrid = new ArrayList<>();
 		final JPanel snakeGridContainer = new JPanel(new GridLayout(gridSize, gridSize));
@@ -181,7 +191,7 @@ public class Window extends JFrame {
 		snakeGridContainer.getActionMap().put(RIGHT_ACTION, new MoveRight());
 
 		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("P"), "PAUSE");
-		snakeGridContainer.getActionMap().put("PAUSE", new Pause());
+		snakeGridContainer.getActionMap().put("PAUSE", new Pause()); // TODO: have instructions somewhere
 
 		getContentPane().add(snakeGridContainer);
 	}
@@ -302,6 +312,15 @@ public class Window extends JFrame {
 			System.out.println(String.format("Game Over! Final Score: %s", scorePanel.getScore()));
 
 			soundController.playGameOver();
+			try {
+
+				if (scorePanel.getScore() > highscore) {
+					HighscoreHandler.writeHighscore(scorePanel.getScore(), "AIELCXDFSWOVIDKS");
+					highscore = scorePanel.getScore();
+				}
+			} catch (CryptoException e) {
+				e.printStackTrace();
+			}
 			return true;
 		}
 
