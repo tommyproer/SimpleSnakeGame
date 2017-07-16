@@ -12,7 +12,7 @@ import com.snake.main.util.ImageUtilSingleton;
  */
 public class ImageController {
 
-    private static ImageController imageController;
+    private static volatile ImageController imageController;
 
     private static final int SIZE = 42;
 

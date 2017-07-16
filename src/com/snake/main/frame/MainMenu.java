@@ -113,7 +113,7 @@ public class MainMenu extends JDialog {
                 Configuration.setSpeed(DIFFICULTY_TO_SPEED_MAP.get(difficultyCommand));
                 ScorePanel.getInstance().setDifficulty(difficultyCommand);
                 dispose();
-                SoundController.getInstance().playThemeMusic();
+
             }
         });
 

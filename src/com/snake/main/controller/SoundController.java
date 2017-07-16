@@ -11,7 +11,7 @@ import com.snake.main.frame.Window;
  */
 public class SoundController {
 
-    private static SoundController soundController;
+    private static volatile SoundController soundController;
 
     public static SoundController getInstance() {
         if (soundController == null) {

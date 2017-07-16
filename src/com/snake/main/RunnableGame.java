@@ -23,6 +23,7 @@ public class RunnableGame implements Runnable {
 
     @Override
     public void run() {
+
         int n = JOptionPane.YES_OPTION;
         while (n == JOptionPane.YES_OPTION && !exitGame) {
             boolean gameOver = false;

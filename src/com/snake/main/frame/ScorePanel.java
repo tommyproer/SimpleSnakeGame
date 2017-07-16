@@ -8,7 +8,7 @@ import java.awt.GridBagLayout;
 
 public class ScorePanel extends JPanel {
 
-    private static ScorePanel scorePanel;
+    private static volatile ScorePanel scorePanel;
 
     public static ScorePanel getInstance() {
         if (scorePanel == null) {

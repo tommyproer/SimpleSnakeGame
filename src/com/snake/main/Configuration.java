@@ -7,8 +7,17 @@ import com.snake.main.controller.GameDirection;
  */
 public class Configuration {
 
+    private static volatile Configuration configuration;
+
+    public Configuration getInstance() {
+        if (configuration == null) {
+            configuration = new Configuration();
+        }
+        return configuration;
+    }
+
     private static final String GAME_TITLE = "Simple Snake Game";
-    private static int SPEED = 40; // TODO: Implement difficulty level (put in menu?) to adjust speed
+    private static int SPEED = 100;
     private static final int INITIAL_SNAKE_SIZE = 3;
     private static final GameDirection.Direction INITIAL_SNAKE_DIRECTION = GameDirection.Direction.RIGHT;
     private static final int WINDOW_HEIGHT = 930;

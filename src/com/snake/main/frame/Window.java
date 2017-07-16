@@ -41,7 +41,7 @@ public class Window extends JFrame {
 	private static final String LEFT_ACTION = "LEFT";
 
 	private ArrayList<Position> snakePositions;
-	private final Set<Position> allPossiblePositions;
+	private final Set<Position> allPossiblePositions = new HashSet<>();
 	private ArrayList<ArrayList<DataOfSquare>> gameGrid;
 
 	private GameDirection.Direction lastDirection;
@@ -77,10 +77,9 @@ public class Window extends JFrame {
 		// TODO: Have the user be able to set a permanent window size before beginning game
 		// TODO: adjust image to be this scale once the window size is set so we don't have to scale the image every time
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		SoundController.getInstance().playThemeMusic();
 
-		allPossiblePositions = new HashSet<>();
-
-		initializeGame();
+		initializeGameWindow();
 		reset();
 	}
 
@@ -93,7 +92,7 @@ public class Window extends JFrame {
 		headSnakePosition = new Position(Configuration.getInitialSnakePosx(), Configuration.getInitialSnakePoxy());
 		snakePositions.add(new Position(headSnakePosition.getX(), headSnakePosition.getY()));
 
-		new MainMenu(this, "Main Menu", true);
+		new MainMenu(this, "Game Menu", true);
 		spawnFoodRandomly();
 
 		scorePanel.resetScore();
@@ -109,13 +108,14 @@ public class Window extends JFrame {
 	/**
 	 * Initialize all arrays and menus, etc.
 	 */
-	private void initializeGame() {
+	private void initializeGameWindow() {
 		imageController.initializeImages("default");
 		initializeAllPossiblePositions();
 		initializeGridAndGameData();
-		getContentPane().add(scorePanel, BorderLayout.SOUTH);
 
+		getContentPane().add(scorePanel, BorderLayout.SOUTH);
 		setJMenuBar(new MenuBar());
+
 		initializeFrame();
 	}
 
@@ -286,7 +286,6 @@ public class Window extends JFrame {
 			System.out.println(String.format("Game Over! Final Score: %s", scorePanel.getScore()));
 
 			soundController.playGameOver();
-			soundController.stopThemeMusic();
 			return true;
 		}
 
