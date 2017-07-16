@@ -11,7 +11,6 @@ class Main {
 		try {
 			thread.start();
 		} catch (Exception e) {
-			System.out.println("Encountered error: ");
 			e.printStackTrace();
 			System.exit(1);
 		}

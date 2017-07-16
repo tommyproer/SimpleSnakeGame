@@ -2,6 +2,7 @@ package com.snake.main.controller;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 
 import com.snake.main.Configuration;
 import com.snake.main.frame.Window;
@@ -35,8 +36,10 @@ public class SoundController {
             gameOver.setFramePosition(gameOver.getFrameLength());
 
             themeMusic = AudioSystem.getClip();
-            themeMusic.open(AudioSystem.getAudioInputStream(Window.class.getResource(Configuration.getThemeClipLocation())));
+            themeMusic.open(AudioSystem.getAudioInputStream(Window.class.getResource(Configuration.getInstance().getThemeClipLocation())));
             themeMusic.setMicrosecondPosition(20_000_000L);
+            FloatControl gainControl = (FloatControl) themeMusic.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(-4.0f);
 
         } catch (Exception e) {
             e.printStackTrace();

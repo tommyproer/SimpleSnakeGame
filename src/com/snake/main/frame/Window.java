@@ -33,7 +33,6 @@ import com.snake.main.frame.grid.Position;
 public class Window extends JFrame {
 
 	private static final long serialVersionUID = -2542001418764869760L;
-	private static final int gridSize = Configuration.getGridSize();
 
 	private static final String UP_ACTION = "UP";
 	private static final String DOWN_ACTION = "DOWN";
@@ -60,6 +59,12 @@ public class Window extends JFrame {
 	// Panels
 	private static ScorePanel scorePanel = ScorePanel.getInstance();
 
+	// Configuration
+	private static Configuration configuration = Configuration.getInstance();
+
+	private static final int gridSize = configuration.getGridSize();
+	private static boolean paused = false;
+
 	/**
 	 * Initialize window, set the title, gridSize, close operation and add key listener.
 	 */
@@ -72,8 +77,8 @@ public class Window extends JFrame {
 			System.exit(1);
 		}
 
-		setTitle(Configuration.getGameTitle());
-		setSize(Configuration.getWindowWidth(), Configuration.getWindowHeight());
+		setTitle(configuration.getGameTitle());
+		setSize(configuration.getWindowWidth(), configuration.getWindowHeight());
 		// TODO: Have the user be able to set a permanent window size before beginning game
 		// TODO: adjust image to be this scale once the window size is set so we don't have to scale the image every time
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -84,12 +89,13 @@ public class Window extends JFrame {
 	}
 
 	public void reset() {
-		sizeSnake = Configuration.getInitialSnakeSize();
+		sizeSnake = configuration.getInitialSnakeSize();
 		snakePositions = new ArrayList<>();
 
-		currentDirection = Configuration.getInitialSnakeDirection();
-		lastDirection = Configuration.getInitialSnakeDirection();
-		headSnakePosition = new Position(Configuration.getInitialSnakePosx(), Configuration.getInitialSnakePoxy());
+		currentDirection = configuration.getInitialSnakeDirection();
+		lastDirection = configuration.getInitialSnakeDirection();
+
+		headSnakePosition = new Position(configuration.getInitialSnakePosx(), configuration.getInitialSnakePoxy());
 		snakePositions.add(new Position(headSnakePosition.getX(), headSnakePosition.getY()));
 
 		new MainMenu(this, "Game Menu", true);
@@ -174,6 +180,9 @@ public class Window extends JFrame {
 		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("D"), RIGHT_ACTION);
 		snakeGridContainer.getActionMap().put(RIGHT_ACTION, new MoveRight());
 
+		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("P"), "PAUSE");
+		snakeGridContainer.getActionMap().put("PAUSE", new Pause());
+
 		getContentPane().add(snakeGridContainer);
 	}
 
@@ -183,11 +192,18 @@ public class Window extends JFrame {
 		this.setResizable(false);
 	}
 
+	public void togglePause() {
+		paused = !paused;
+	}
+
 	/**
 	 * This is each "step" in a game.
 	 * Move the snake and check for a collision.
 	 */
 	public boolean iterate() {
+		while (paused) {
+			pause();
+		}
 		pause();
 		moveSnake();
 		return checkCollision();
@@ -198,7 +214,7 @@ public class Window extends JFrame {
 	 */
 	private void pause() {
 		try {
-			Thread.sleep(Configuration.getSpeed());
+			Thread.sleep(configuration.getSpeed());
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -369,6 +385,13 @@ public class Window extends JFrame {
 				directionCommitted = true;
 				nextDirectionGuess = null;
 			}
+		}
+	}
+
+	private class Pause extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			togglePause();
 		}
 	}
 }

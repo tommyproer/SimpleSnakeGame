@@ -9,6 +9,7 @@ import com.snake.main.util.ImageUtilSingleton;
 
 /**
  * TODO: Right now the images are perfectly 42 by 42 pixels... will this always be true?
+ * TODO: The answer is no, we have to find a way to scale
  */
 public class ImageController {
 

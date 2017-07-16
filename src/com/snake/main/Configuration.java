@@ -1,5 +1,12 @@
 package com.snake.main;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Map;
+import java.util.Properties;
+
+import com.google.common.collect.ImmutableMap;
 import com.snake.main.controller.GameDirection;
 
 /**
@@ -9,48 +16,79 @@ public class Configuration {
 
     private static volatile Configuration configuration;
 
-    public Configuration getInstance() {
+    public static Configuration getInstance() {
         if (configuration == null) {
             configuration = new Configuration();
         }
         return configuration;
     }
 
-    private static final String GAME_TITLE = "Simple Snake Game";
-    private static int SPEED = 100;
-    private static final int INITIAL_SNAKE_SIZE = 3;
-    private static final GameDirection.Direction INITIAL_SNAKE_DIRECTION = GameDirection.Direction.RIGHT;
-    private static final int WINDOW_HEIGHT = 930;
-    private static final int WINDOW_WIDTH = 850;
-    private static final int gridSize = 20;
-    private static final int INITIAL_SNAKE_POSX = gridSize /2;
-    private static final int INITIAL_SNAKE_POXY = gridSize /2;
+    private final Properties properties;
+    private static final String GAME_CFG_LOCATION = "cfg/game.cfg";
+    private static final Map<String, String> immutableProperties = ImmutableMap.<String, String>builder()
+            .put("initial_snake_size", "4")
+            .build();
 
-    public static int getSpeed() { return SPEED; }
+    private Configuration() {
+        InputStream input = null;
+        properties = new Properties();
+        try {
+            input = new FileInputStream(GAME_CFG_LOCATION);
+            properties.load(input);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        } finally {
+            if (input != null) {
+                try {
+                    input.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    System.exit(1);
+                }
+            }
+        }
 
-    public static void setSpeed(final int speed) {
+        properties.putAll(immutableProperties);
+    }
+
+    private int SPEED = 80;
+
+    public int getSpeed() { return SPEED; }
+
+    public void setSpeed(final int speed) {
         SPEED = speed;
     }
 
-    public static int getInitialSnakeSize() {
-        return INITIAL_SNAKE_SIZE;
+    public int getInitialSnakeSize() {
+        return Integer.parseInt(properties.getProperty("initial_snake_size", "4"));
     }
 
-    public static GameDirection.Direction getInitialSnakeDirection() {
-        return INITIAL_SNAKE_DIRECTION;
+    public GameDirection.Direction getInitialSnakeDirection() {
+        String direction = properties.getProperty("initial_game_direction", "RIGHT");
+        try {
+            return GameDirection.Direction.valueOf(direction);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Illegal direction: " + direction);
+            return GameDirection.Direction.valueOf("RIGHT");
+        }
     }
 
-    public static int getWindowHeight() { return WINDOW_HEIGHT; }
+    public int getWindowHeight() { return Integer.parseInt(properties.getProperty("window_height", "930")); }
 
-    public static int getWindowWidth() { return WINDOW_WIDTH; }
+    public int getWindowWidth() { return Integer.parseInt(properties.getProperty("window_width", "850")); }
 
-    public static int getInitialSnakePosx() { return INITIAL_SNAKE_POSX; }
+    public int getInitialSnakePosx() { return Integer.parseInt(properties.getProperty("grid_size", "20"))/2; }
 
-    public static int getInitialSnakePoxy() { return INITIAL_SNAKE_POXY; }
+    public int getInitialSnakePoxy() { return Integer.parseInt(properties.getProperty("grid_size", "20"))/2; }
 
-    public static int getGridSize() { return gridSize; }
+    public int getGridSize() { return Integer.parseInt(properties.getProperty("grid_size", "20")); }
 
-    public static String getGameTitle() { return GAME_TITLE; }
+    public String getGameTitle() { return properties.getProperty("game_title", "Simple Snake Game"); }
+
+    public String getThemeClipLocation() { return properties.getProperty("theme_music", "/music/themes/Mountain Downhill 1.wav"); }
+
+    public static String getGameOverClipLocation() { return "/music/GameOver.wav"; }
 
     public static String getSnakeBodyLocation() { return "/snake.png"; }
 
@@ -65,8 +103,4 @@ public class Configuration {
     public static String getCollisionLocation() { return "/collision.png"; }
 
     public static String getEatClipLocation() { return "/music/eat.wav"; }
-
-    public static String getThemeClipLocation() { return "/music/themes/Mountain Downhill 1.wav"; }
-
-    public static String getGameOverClipLocation() { return "/music/GameOver.wav"; }
 }

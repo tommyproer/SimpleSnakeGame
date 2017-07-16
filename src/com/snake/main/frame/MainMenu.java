@@ -110,7 +110,7 @@ public class MainMenu extends JDialog {
 
                 jFrame.reinitializeColors();
 
-                Configuration.setSpeed(DIFFICULTY_TO_SPEED_MAP.get(difficultyCommand));
+                Configuration.getInstance().setSpeed(DIFFICULTY_TO_SPEED_MAP.get(difficultyCommand));
                 ScorePanel.getInstance().setDifficulty(difficultyCommand);
                 dispose();
 
