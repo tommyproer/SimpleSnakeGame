@@ -1,5 +1,6 @@
 package com.snake.main.frame;
 
+import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -24,6 +25,7 @@ import com.snake.main.exception.CryptoException;
 import com.snake.main.frame.grid.DataOfSquare;
 import com.snake.main.enums.GameDirection;
 import com.snake.main.frame.grid.Position;
+import com.snake.main.frame.listener.WindowListener;
 import com.snake.main.handler.HighscoreHandler;
 
 /**
@@ -58,6 +60,7 @@ public class Window extends JFrame {
 	// Controllers
 	private static SoundController soundController = SoundController.getInstance();
 	private static ImageController imageController = ImageController.getInstance();
+	private static WindowListener windowListener = WindowListener.getInstance();
 
 	// Panels
 	private static ScorePanel scorePanel = ScorePanel.getInstance();
@@ -192,6 +195,8 @@ public class Window extends JFrame {
 
 		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("P"), "PAUSE");
 		snakeGridContainer.getActionMap().put("PAUSE", new Pause()); // TODO: have instructions somewhere
+
+		this.getToolkit().addAWTEventListener(windowListener, AWTEvent.KEY_EVENT_MASK);
 
 		getContentPane().add(snakeGridContainer);
 	}

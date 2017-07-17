@@ -63,4 +63,12 @@ public class SoundController {
         themeMusic.stop();
         themeMusic.setMicrosecondPosition(20_000_000L);
     }
+
+    public void toggleThemeMusic() {
+        if (themeMusic.isRunning()) {
+            themeMusic.stop();
+        } else {
+            themeMusic.start();
+        }
+    }
 }
