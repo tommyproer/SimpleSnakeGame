@@ -36,8 +36,8 @@ public class Configuration {
             input = new FileInputStream(GAME_CFG_LOCATION);
             properties.load(input);
         } catch (IOException e) {
+            System.out.println(String.format("File %s not found, cannot load custom settings", GAME_CFG_LOCATION));
             e.printStackTrace();
-            System.exit(1);
         } finally {
             if (input != null) {
                 try {
