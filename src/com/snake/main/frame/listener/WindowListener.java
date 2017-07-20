@@ -25,8 +25,13 @@ public class WindowListener implements AWTEventListener {
     public void eventDispatched(AWTEvent event) {
         if (event instanceof KeyEvent) {
             KeyEvent key = (KeyEvent) event;
-            if (key.getID() == KeyEvent.KEY_PRESSED && (key.getKeyChar() == 'm' || key.getKeyChar() == 'M')) {
-                soundController.toggleThemeMusic();
+            if (key.getID() == KeyEvent.KEY_PRESSED) {
+                if (key.getKeyChar() == 'm' || key.getKeyChar() == 'M') {
+                    soundController.toggleThemeMusic();
+                } else if (key.getKeyChar() == 'l' || key.getKeyChar() == 'L') {
+                    soundController.toggleMute();
+                }
+
             }
         }
     }

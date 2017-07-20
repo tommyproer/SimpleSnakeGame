@@ -3,6 +3,7 @@ package com.snake.main.controller;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.LineUnavailableException;
 
 import com.snake.main.Configuration;
 import com.snake.main.frame.Window;
@@ -24,6 +25,7 @@ public class SoundController {
     private Clip eatClip;
     private Clip gameOver;
     private Clip themeMusic;
+    private boolean mute = false;
 
     private SoundController () {
         try {
@@ -37,7 +39,6 @@ public class SoundController {
 
             themeMusic = AudioSystem.getClip();
             themeMusic.open(AudioSystem.getAudioInputStream(Window.class.getResource(Configuration.getInstance().getThemeClipLocation())));
-            themeMusic.setMicrosecondPosition(20_000_000L);
             FloatControl gainControl = (FloatControl) themeMusic.getControl(FloatControl.Type.MASTER_GAIN);
             gainControl.setValue(-4.0f);
 
@@ -48,20 +49,22 @@ public class SoundController {
     }
 
     public void playEatClip() {
-        eatClip.loop(1);
+        if (!mute)
+            eatClip.loop(1);
     }
 
     public void playGameOver() {
-        gameOver.loop(1);
+        if (!mute)
+            gameOver.loop(1);
     }
 
     public void playThemeMusic() {
-        themeMusic.loop(Clip.LOOP_CONTINUOUSLY);
+        if (!mute)
+            themeMusic.loop(Clip.LOOP_CONTINUOUSLY);
     }
 
     public void stopThemeMusic() {
         themeMusic.stop();
-        themeMusic.setMicrosecondPosition(20_000_000L);
     }
 
     public void toggleThemeMusic() {
@@ -70,5 +73,18 @@ public class SoundController {
         } else {
             themeMusic.start();
         }
+    }
+
+    public void toggleMute() {
+        mute = !mute;
+
+        if (mute) {
+            themeMusic.stop();
+            themeMusic.setMicrosecondPosition(0);
+        } else {
+            themeMusic.start();
+        }
+
+
     }
 }
