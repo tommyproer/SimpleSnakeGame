@@ -174,7 +174,7 @@ public class Window extends JFrame {
 		for (int i = 0; i < gridSize; i++) {
 			final ArrayList<DataOfSquare> data = new ArrayList<>();
 			for(int j = 0; j < gridSize; j++){
-				DataOfSquare dataOfSquare = new DataOfSquare(imageController.getBgImage());
+				DataOfSquare dataOfSquare = new DataOfSquare();
 				data.add(dataOfSquare);
 				snakeGridContainer.add(dataOfSquare.getSquare());
 			}
@@ -204,6 +204,7 @@ public class Window extends JFrame {
 		this.getToolkit().addAWTEventListener(windowListener, AWTEvent.KEY_EVENT_MASK);
 
 		getContentPane().add(snakeGridContainer);
+		snakeGridContainer.requestFocusInWindow();
 	}
 
 	private void initializeFrame() {

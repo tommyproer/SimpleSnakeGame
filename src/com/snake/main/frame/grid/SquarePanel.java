@@ -10,12 +10,6 @@ import java.awt.Image;
 public class SquarePanel extends JLabel {
 	
 	private static final long serialVersionUID = 1L;
-
-	public SquarePanel(final Image image){
-		ImageIcon imageIcon = new ImageIcon(image);
-
-		this.setIcon(imageIcon);
-	}
 	
 	public void changeImage(final Image image) {
 		ImageIcon imageIcon =

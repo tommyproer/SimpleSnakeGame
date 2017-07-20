@@ -11,8 +11,8 @@ public class DataOfSquare {
 
 	private SquarePanel square;
 
-	public DataOfSquare(final Image image){
-		square = new SquarePanel(image);
+	public DataOfSquare(){
+		square = new SquarePanel();
 	}
 	public void lightSquare(final Image image){
 		square.changeImage(image);

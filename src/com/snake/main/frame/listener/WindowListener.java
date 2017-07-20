@@ -30,6 +30,8 @@ public class WindowListener implements AWTEventListener {
                     soundController.toggleThemeMusic();
                 } else if (key.getKeyChar() == 'l' || key.getKeyChar() == 'L') {
                     soundController.toggleMute();
+                } else if (key.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    System.exit(0);
                 }
 
             }
