@@ -88,6 +88,10 @@ public class Configuration {
 
     public String getThemeClipLocation() { return properties.getProperty("theme_music", "/music/themes/Mountain Downhill 1.wav"); }
 
+    public boolean isMusicOn() {
+        return Boolean.valueOf(properties.getProperty("sound", "true"));
+    }
+
     public static String getGameOverClipLocation() { return "/music/GameOver.wav"; }
 
     public static String getSnakeBodyLocation() { return "/snake.png"; }
@@ -103,4 +107,13 @@ public class Configuration {
     public static String getCollisionLocation() { return "/collision.png"; }
 
     public static String getEatClipLocation() { return "/music/eat.wav"; }
+
+    public static Map<String, Integer> getDifficultyMap() {
+        return ImmutableMap.<String, Integer>builder()
+                .put("Easy", 140)
+                .put("Normal", 90)
+                .put("Hard", 70)
+                .put("Extreme", 50)
+                .build();
+    }
 }

@@ -19,11 +19,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.ImmutableMap;
 import com.snake.main.Configuration;
 import com.snake.main.RunnableGame;
 import com.snake.main.controller.ImageController;
-import com.snake.main.controller.SoundController;
 
 public class MainMenu extends JDialog {
 
@@ -34,7 +32,7 @@ public class MainMenu extends JDialog {
     private static final String EASY = "Easy";
     private static final String NORMAL = "Normal";
     private static final String HARD = "Hard";
-    private static final String EXTREME = "Extreme";
+    private static final String EXTREME = "Extreme"; // TODO: this also needs to be in configuration
 
     // Themes
     private static final List<String> THEMES = Arrays.asList("default", "princess", "retro");
@@ -43,12 +41,7 @@ public class MainMenu extends JDialog {
     private static final String PLAY_BUTTON = "Play!";
     private static final String EXIT_BUTTON = "Exit";
 
-    private static final Map<String, Integer> DIFFICULTY_TO_SPEED_MAP = ImmutableMap.<String, Integer>builder()
-            .put(EASY, 140)
-            .put(NORMAL, 90)
-            .put(HARD, 70)
-            .put(EXTREME, 50)
-            .build(); // TODO: get this into configuration
+    private static final Map<String, Integer> DIFFICULTY_TO_SPEED_MAP = Configuration.getDifficultyMap();
 
     private ButtonGroup difficultyButtonGroup;
     private ButtonGroup themeButtonGroup;

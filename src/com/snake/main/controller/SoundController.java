@@ -49,18 +49,24 @@ public class SoundController {
     }
 
     public void playEatClip() {
-        if (!mute)
+        if (!mute) {
             eatClip.loop(1);
+        }
+
     }
 
     public void playGameOver() {
-        if (!mute)
+        if (!mute) {
             gameOver.loop(1);
+        }
+
     }
 
     public void playThemeMusic() {
-        if (!mute)
+        if (!mute) {
             themeMusic.loop(Clip.LOOP_CONTINUOUSLY);
+        }
+
     }
 
     public void stopThemeMusic() {
@@ -70,7 +76,7 @@ public class SoundController {
     public void toggleThemeMusic() {
         if (themeMusic.isRunning()) {
             themeMusic.stop();
-        } else {
+        } else if (!mute) {
             themeMusic.start();
         }
     }
@@ -84,7 +90,5 @@ public class SoundController {
         } else {
             themeMusic.start();
         }
-
-
     }
 }

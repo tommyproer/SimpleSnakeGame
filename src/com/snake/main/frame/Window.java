@@ -88,7 +88,12 @@ public class Window extends JFrame {
 		// TODO: Have the user be able to set a permanent window size before beginning game
 		// TODO: adjust image to be this scale once the window size is set so we don't have to scale the image every time
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		SoundController.getInstance().playThemeMusic();
+
+		if (!configuration.isMusicOn()) {
+			System.out.println("it got here");
+			soundController.toggleMute();
+		}
+		soundController.playThemeMusic();
 
 		initializeGameWindow();
 		reset();
