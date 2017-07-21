@@ -34,9 +34,9 @@ public class ImageUtilSingleton {
         return op.filter(bufferedImage, null);
     }
 
-    public BufferedImage getScaledImage(BufferedImage bufferedImage, int width, int height) {
+    public BufferedImage getScaledImage(BufferedImage bufferedImage, double widthScale, double heightScale) {
         AffineTransform r = new AffineTransform();
-        r.scale(width, height);
+        r.scale(widthScale, heightScale);
 
         AffineTransformOp op = new AffineTransformOp(r, AffineTransformOp.TYPE_BILINEAR);
 

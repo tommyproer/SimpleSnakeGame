@@ -45,7 +45,7 @@ public class Window extends JFrame {
 
 	private ArrayList<Position> snakePositions;
 	private final Set<Position> allPossiblePositions = new HashSet<>();
-	private ArrayList<ArrayList<DataOfSquare>> gameGrid;
+	private static ArrayList<ArrayList<DataOfSquare>> gameGrid;
 
 	private GameDirection.Direction lastDirection;
 	private GameDirection.Direction currentDirection;
@@ -76,21 +76,19 @@ public class Window extends JFrame {
 	 */
 	public Window() {
 		try {
-			setIconImage(ImageIO.read(this.getClass().getResource("/images/default" + Configuration.getSnakeHeadRightLocation())));
+			setIconImage(
+					ImageIO.read(this.getClass()
+							.getResource("/images/default" + Configuration.getSnakeHeadRightLocation())));
 		} catch (IOException e) {
 			System.err.println("Could not read file.");
 			e.printStackTrace();
-			System.exit(1);
 		}
 
 		setTitle(configuration.getGameTitle());
 		setSize(configuration.getWindowWidth(), configuration.getWindowHeight());
-		// TODO: Have the user be able to set a permanent window size before beginning game
-		// TODO: adjust image to be this scale once the window size is set so we don't have to scale the image every time
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		if (!configuration.isMusicOn()) {
-			System.out.println("it got here");
 			soundController.toggleMute();
 		}
 		soundController.playThemeMusic();
@@ -129,19 +127,26 @@ public class Window extends JFrame {
 	 */
 	private void initializeGameWindow() {
 		imageController.initializeImages("default");
+		initializeFrame();
 		initializeAllPossiblePositions();
 		initializeGridAndGameData();
 
 		getContentPane().add(scorePanel, BorderLayout.SOUTH);
 		setJMenuBar(new MenuBar());
-
-		initializeFrame();
 	}
 
 	public void reinitializeColors() {
 		gameGrid.forEach(outerGrid -> {
 			outerGrid.forEach(square -> {
 				square.lightSquare(imageController.getBgImage());
+			});
+		});
+	}
+
+	public static void rescaleAllSquares(int width, int height) {
+		gameGrid.forEach(outerGrid -> {
+			outerGrid.forEach(square -> {
+				square.resizeImage(width, height);
 			});
 		});
 	}
@@ -210,7 +215,6 @@ public class Window extends JFrame {
 	private void initializeFrame() {
 		this.setLocationRelativeTo(null); // Set window in middle of screen
 		this.setVisible(true);
-		this.setResizable(false);
 	}
 
 	public void togglePause() {
@@ -316,9 +320,7 @@ public class Window extends JFrame {
 	private boolean checkCollision() {
 		if (snakePositions.subList(0, snakePositions.size()-1)
 				.stream()
-				.filter(headSnakePosition::equals)
-				.findAny()
-				.isPresent()) {
+				.anyMatch(headSnakePosition::equals)) {
 			gameGrid.get(headSnakePosition.getX()).get(headSnakePosition.getY()).lightSquare(imageController.getCollision());
 			System.out.println(String.format("Game Over! Final Score: %s", scorePanel.getScore()));
 

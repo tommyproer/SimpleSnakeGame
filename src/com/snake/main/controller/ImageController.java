@@ -66,4 +66,16 @@ public class ImageController {
     public BufferedImage getSnake() { return snake; }
     public BufferedImage getSnakeTail() { return snakeTail; }
     public BufferedImage getCollision() { return collision; }
+
+    public void rescaleImages(double widthScale, double heightScale) {
+        bgImage = imageUtil.getScaledImage(bgImage, widthScale, heightScale);
+        food = imageUtil.getScaledImage(food, widthScale, heightScale);
+        snake = imageUtil.getScaledImage(snake, widthScale, heightScale);
+        snakeTail = imageUtil.getScaledImage(snakeTail, widthScale, heightScale);
+        collision = imageUtil.getScaledImage(collision, widthScale, heightScale);
+        snakeHeadRight = imageUtil.getScaledImage(snakeHeadRight, widthScale, heightScale);
+        snakeHeadLeft = imageUtil.getScaledImage(snakeHeadLeft, widthScale, heightScale);
+        snakeHeadDown = imageUtil.getScaledImage(snakeHeadDown, widthScale, heightScale);
+        snakeHeadUp = imageUtil.getScaledImage(snakeHeadUp, widthScale, heightScale);
+    }
 }

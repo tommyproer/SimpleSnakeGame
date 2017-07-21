@@ -17,6 +17,11 @@ public class DataOfSquare {
 	public void lightSquare(final Image image){
 		square.changeImage(image);
 	}
+
+	public void resizeImage(int width, int height) {
+		square.resizeSquare(width, height);
+	}
+
 	public SquarePanel getSquare() {
 		return square;
 	}
