@@ -93,10 +93,21 @@ public class Window extends JFrame {
 		}
 		soundController.playThemeMusic();
 
+		// Initialize variables
+		for (int i = 0; i < gridSize; i++) {
+			for (int j = 0; j < gridSize; j++) {
+				allPossiblePositions.add(new Position(i, j));
+			}
+		}
+
+		// Initialize Game Window
 		initializeGameWindow();
 		reset();
 	}
 
+	/**
+	 * Reset the game.
+	 */
 	public void reset() {
 		sizeSnake = configuration.getInitialSnakeSize();
 		snakePositions = new ArrayList<>();
@@ -126,10 +137,9 @@ public class Window extends JFrame {
 	 * Initialize all arrays and menus, etc.
 	 */
 	private void initializeGameWindow() {
-		imageController.initializeImages("default");
 		initializeFrame();
-		initializeAllPossiblePositions();
-		initializeGridAndGameData();
+
+		initializeGrid();
 
 		getContentPane().add(scorePanel, BorderLayout.SOUTH);
 		setJMenuBar(new MenuBar());
@@ -152,22 +162,11 @@ public class Window extends JFrame {
 	}
 
 	/**
-	 * Initialize all possible positions, which is used to help spawn food
-	 */
-	private void initializeAllPossiblePositions() {
-		for (int i = 0; i < gridSize; i++) {
-			for (int j = 0; j < gridSize; j++) {
-				allPossiblePositions.add(new Position(i, j));
-			}
-		}
-	}
-
-	/**
 	 * Initialize JPanel container and gameGrid. Both contain the same DataOfSquare objects,
 	 * but the gameGrid will be the object used to mutate the DataOfSquare objects,
 	 * while snakeGridContainer is used to display the objects.
 	 */
-	private void initializeGridAndGameData() {
+	private void initializeGrid() {
 		try {
 			highscore = HighscoreHandler.getHighscore("AIELCXDFSWOVIDKS");
 		} catch (CryptoException e) {
@@ -217,7 +216,7 @@ public class Window extends JFrame {
 		this.setVisible(true);
 	}
 
-	public void togglePause() {
+	public static void togglePause() {
 		paused = !paused;
 	}
 
@@ -354,6 +353,10 @@ public class Window extends JFrame {
 	 */
 	private void spawnFoodRandomly() {
 		final List<Position> nonSnakePositions = new ArrayList<>(Sets.filter(allPossiblePositions, (input) -> !snakePositions.contains(input)));
+		if (nonSnakePositions.size() == 0) {
+			System.out.println("YOU WIN!");
+			System.exit(0);
+		}
 		this.foodPosition = nonSnakePositions.get(((int) (Math.random()*1000)) % nonSnakePositions.size());
 
 		System.out.println(String.format("New food spawn: %d, %d", foodPosition.getX(), foodPosition.getY(), sizeSnake));

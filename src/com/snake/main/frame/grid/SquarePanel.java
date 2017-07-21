@@ -31,6 +31,7 @@ public class SquarePanel extends JLabel {
 				new ImageIcon(this.image);
 
 		this.setIcon(imageIcon);
+
 	}
 
 	public void resizeSquare(int width, int height) {
