@@ -118,7 +118,7 @@ public class Window extends JFrame {
 		headSnakePosition = new Position(configuration.getInitialSnakePosx(), configuration.getInitialSnakePoxy());
 		snakePositions.add(new Position(headSnakePosition.getX(), headSnakePosition.getY()));
 
-		new MainMenu(this, "Game Menu", true);
+		new MainMenu(this, "Game Menu", true); // TODO: pause the game instead and set modal to false
 		spawnFoodRandomly();
 
 		scorePanel.resetScore();
@@ -142,7 +142,7 @@ public class Window extends JFrame {
 		initializeGrid();
 
 		getContentPane().add(scorePanel, BorderLayout.SOUTH);
-		setJMenuBar(new MenuBar());
+		setJMenuBar(new MainMenuBar(this));
 	}
 
 	public void reinitializeColors() {
@@ -218,6 +218,10 @@ public class Window extends JFrame {
 
 	public static void togglePause() {
 		paused = !paused;
+	}
+
+	public static void pauseGame() {
+		paused = true;
 	}
 
 	/**

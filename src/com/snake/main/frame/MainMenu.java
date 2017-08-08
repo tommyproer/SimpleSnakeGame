@@ -23,6 +23,9 @@ import com.snake.main.Configuration;
 import com.snake.main.RunnableGame;
 import com.snake.main.controller.ImageController;
 
+/**
+ * Main menu of the game.
+ */
 public class MainMenu extends JDialog {
 
     private static final int HEIGHT = 310;
