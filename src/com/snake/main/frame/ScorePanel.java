@@ -6,6 +6,9 @@ import javax.swing.JTextField;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
+/**
+ * Displays the score and difficulty level.
+ */
 public class ScorePanel extends JPanel {
 
     private static volatile ScorePanel scorePanel;

@@ -8,7 +8,7 @@ import com.snake.main.Configuration;
 import com.snake.main.frame.GameWindow;
 
 /**
- * Controls sounds of the game
+ * Controls sounds of the game.
  */
 public class SoundController {
 
@@ -64,14 +64,10 @@ public class SoundController {
         themeMusic.loop(Clip.LOOP_CONTINUOUSLY);
     }
 
-    public void stopThemeMusic() {
-        themeMusic.stop();
-    }
-
     public void toggleThemeMusic() {
         if (themeMusic.isRunning()) {
             themeMusic.stop();
-        } else if (!muteSoundEffects) {
+        } else {
             themeMusic.start();
         }
     }

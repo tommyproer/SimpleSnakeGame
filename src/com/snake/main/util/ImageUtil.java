@@ -4,18 +4,22 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 
-public class ImageUtilSingleton {
+/**
+ * Helps handle image transformation.
+ * Flipping, rotating, etc.
+ */
+public class ImageUtil {
 
-    private static ImageUtilSingleton imageUtilSingleton;
+    private static ImageUtil imageUtil;
 
-    public static ImageUtilSingleton getInstance() {
-        if (imageUtilSingleton == null) {
-            imageUtilSingleton = new ImageUtilSingleton();
+    public static ImageUtil getInstance() {
+        if (imageUtil == null) {
+            imageUtil = new ImageUtil();
         }
-        return imageUtilSingleton;
+        return imageUtil;
     }
 
-    private ImageUtilSingleton(){}
+    private ImageUtil(){}
 
     public BufferedImage getRotatedImage(BufferedImage bufferedImage, double angle) {
         AffineTransform r = new AffineTransform();

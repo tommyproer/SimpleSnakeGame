@@ -93,9 +93,15 @@ public class Configuration {
 
     public String getThemeClipLocation() { return properties.getProperty("theme_music", "/music/themes/Mountain Downhill 1.wav"); }
 
-    public boolean isMusicOn() {
-        return Boolean.valueOf(properties.getProperty("sound", "true"));
+    public boolean defaultPlaySoundEffects() {
+        return Boolean.valueOf(properties.getProperty("sound_effects", "true"));
     }
+
+    public boolean defaultPlayMusic() {
+        return Boolean.valueOf(properties.getProperty("music", "true"));
+    }
+
+    public static String getDefaultThemeLocation() { return "/images/default"; }
 
     public static String getGameOverClipLocation() { return "/music/GameOver.wav"; }
 

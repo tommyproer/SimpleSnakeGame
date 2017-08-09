@@ -28,7 +28,7 @@ public class HighscoreHandler {
         }
 
         try {
-            File outputFile = new File("hs-encry");
+            File outputFile = new File("SimpleSnakeGame-hs-encry");
             outputFile.createNewFile();
 
             Key secretKey = new SecretKeySpec(KEY.getBytes(), ALGORITHM);
@@ -54,7 +54,7 @@ public class HighscoreHandler {
         }
 
         try {
-            File inputFile = new File("hs-encry");
+            File inputFile = new File("SimpleSnakeGame-hs-encry");
             if (!inputFile.exists()) {
                 return 0;
             }

@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 
 import com.snake.main.Configuration;
 import com.snake.main.frame.GameWindow;
-import com.snake.main.util.ImageUtilSingleton;
+import com.snake.main.util.ImageUtil;
 
 /**
  * TODO: Right now the images are perfectly 42 by 42 pixels... will this always be true?
@@ -24,7 +24,7 @@ public class ImageController {
         return imageController;
     }
 
-    private static ImageUtilSingleton imageUtil = ImageUtilSingleton.getInstance();
+    private static ImageUtil imageUtil = ImageUtil.getInstance();
 
     private static BufferedImage bgImage;
     private static BufferedImage food;

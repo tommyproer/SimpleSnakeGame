@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -40,68 +41,171 @@ public class GameWindow extends JFrame {
 	private static final String DOWN_ACTION = "DOWN";
 	private static final String RIGHT_ACTION = "RIGHT";
 	private static final String LEFT_ACTION = "LEFT";
+	private static final String PAUSE_ACTION = "PAUSE";
 
+	private static final List<KeyStroke> LEFT_KEY_STROKES = Arrays.asList(KeyStroke.getKeyStroke("LEFT"), KeyStroke.getKeyStroke("A"));
+	private static final List<KeyStroke> RIGHT_KEY_STROKES = Arrays.asList(KeyStroke.getKeyStroke("RIGHT"), KeyStroke.getKeyStroke("D"));
+	private static final List<KeyStroke> DOWN_KEY_STROKES = Arrays.asList(KeyStroke.getKeyStroke("DOWN"), KeyStroke.getKeyStroke("S"));
+	private static final List<KeyStroke> UP_KEY_STROKES = Arrays.asList(KeyStroke.getKeyStroke("UP"), KeyStroke.getKeyStroke("W"));
+	private static final List<KeyStroke> PAUSE_KEY_STROKES = Arrays.asList(KeyStroke.getKeyStroke("P"));
+
+	/**
+	 * List of positions the snake is occupying
+	 */
 	private ArrayList<Position> snakePositions;
+
+	/**
+	 * All possible positions on the grid,
+	 * used as a helper to spawn food.
+	 */
 	private final Set<Position> allPossiblePositions = new HashSet<>();
+
+	/**
+	 * Actual representation of the game
+	 */
 	private static ArrayList<ArrayList<DataOfSquare>> gameGrid;
 
+	/**
+	 * Previous direction that the snake moved.
+	 */
 	private GameDirection.Direction lastDirection;
+
+	/**
+	 * The current direction that the snake will move
+	 */
 	private GameDirection.Direction currentDirection;
+
+	/**
+	 * Often the user may press two keys in the single turn.
+	 * We do not want to penalize the user in this case
+	 * and want to do our best guess of what the user intends.
+	 * nextDirectionGuess will store the user input if the
+	 * user has already pressed a key in the same turn.
+	 *
+	 * E.g. Pressing left then up in the same turn means
+	 * the snake should go left for one turn then go up the next turn,
+	 * and nextDirectionGuess will store the UP direction.
+	 */
 	private GameDirection.Direction nextDirectionGuess;
+
+	/**
+	 * Indicates the user has already pressed a key
+	 * in this turn.
+	 */
 	private boolean directionCommitted = false;
 
+	/**
+	 * Current size of the snake.
+	 */
 	private int sizeSnake;
+
+	/**
+	 * Current position of the food.
+	 */
 	private Position foodPosition;
+
+	/**
+	 * Position of the head of the snake
+	 */
 	private Position headSnakePosition;
+
+	/**
+	 * Highscore of the game.
+	 */
 	private int highscore;
 
-	// Controllers
+	// Define controllers
 	private static SoundController soundController = SoundController.getInstance();
 	private static ImageController imageController = ImageController.getInstance();
 	private static WindowListener windowListener = WindowListener.getInstance();
 
-	// Panels
 	private static ScorePanel scorePanel = ScorePanel.getInstance();
 
-	// Configuration
 	private static Configuration configuration = Configuration.getInstance();
 
+	/**
+	 * Get grid size.
+	 * E.g. a grid size of 20 means the grid is 20x20
+	 */
 	private static final int gridSize = configuration.getGridSize();
+
+	/**
+	 * Used to pause the game.
+	 */
 	private static boolean paused = false;
 
 	/**
 	 * Initialize window, set the title, gridSize, close operation and add key listener.
 	 */
 	public GameWindow() {
+		setIcon();
+		configureWindow();
+		getDefaultSoundSettings();
+		initializeAllPossiblePositions();
+		initializeGameWindow();
+		new GameInstructions(this, true); // Display game instructions
+		reset();
+	}
+
+	/**
+	 * Set window icon.
+	 */
+	private void setIcon() {
 		try {
 			setIconImage(
 					ImageIO.read(this.getClass()
-							.getResource("/images/default" + Configuration.getSnakeHeadRightLocation())));
+							.getResource(Configuration.getDefaultThemeLocation() +
+									Configuration.getSnakeHeadRightLocation())));
 		} catch (IOException e) {
 			System.err.println("Could not read file.");
 			e.printStackTrace();
 		}
+	}
 
+	/**
+	 * Set the window title, size and default close operation.
+	 */
+	private void configureWindow() {
 		setTitle(configuration.getGameTitle());
 		setSize(configuration.getWindowWidth(), configuration.getWindowHeight());
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+	}
 
-		if (!configuration.isMusicOn()) {
+	/**
+	 * Decide whether to play music and sound effects
+	 * in the game based on the configuration in
+	 * game.cfg
+	 */
+	private void getDefaultSoundSettings() {
+		if (!configuration.defaultPlaySoundEffects()) {
 			soundController.toggleMuteSoundEffects();
 		}
-		soundController.playThemeMusic();
+		if (configuration.defaultPlayMusic()) {
+			soundController.playThemeMusic();
+		}
+	}
 
-		// Initialize variables
+	/**
+	 * Initialize allPossiblePositions on the game grid.
+	 * This will be used to help spawn food.
+	 */
+	private void initializeAllPossiblePositions() {
 		for (int i = 0; i < gridSize; i++) {
 			for (int j = 0; j < gridSize; j++) {
 				allPossiblePositions.add(new Position(i, j));
 			}
 		}
+	}
 
-		// Initialize Game GameWindow
-		initializeGameWindow();
-		new GameInstructions(this, true);
-		reset();
+	/**
+	 * Initialize all arrays and menus, etc.
+	 */
+	private void initializeGameWindow() {
+		displayFrame();
+		initializeGrid();
+
+		getContentPane().add(scorePanel, BorderLayout.SOUTH);
+		setJMenuBar(new MainMenuBar(this));
 	}
 
 	/**
@@ -132,18 +236,6 @@ public class GameWindow extends JFrame {
 	}
 
 	public int getHighscore() { return highscore; }
-
-	/**
-	 * Initialize all arrays and menus, etc.
-	 */
-	private void initializeGameWindow() {
-		initializeFrame();
-
-		initializeGrid();
-
-		getContentPane().add(scorePanel, BorderLayout.SOUTH);
-		setJMenuBar(new MainMenuBar(this));
-	}
 
 	public void reinitializeColors() {
 		gameGrid.forEach(outerGrid -> {
@@ -185,33 +277,49 @@ public class GameWindow extends JFrame {
 			gameGrid.add(data);
 		}
 
-		// Initialize key strokes
-		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("UP"), UP_ACTION);
-		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("W"), UP_ACTION);
-		snakeGridContainer.getActionMap().put(UP_ACTION, new MoveUp());
+		// Initialize key strokes for snake movement
+		initializeMovementKeyStrokes(snakeGridContainer);
 
-		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("DOWN"), DOWN_ACTION);
-		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("S"), DOWN_ACTION);
-		snakeGridContainer.getActionMap().put(DOWN_ACTION, new MoveDown());
-
-		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("LEFT"), LEFT_ACTION);
-		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("A"), LEFT_ACTION);
-		snakeGridContainer.getActionMap().put(LEFT_ACTION, new MoveLeft());
-
-		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("RIGHT"), RIGHT_ACTION);
-		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("D"), RIGHT_ACTION);
-		snakeGridContainer.getActionMap().put(RIGHT_ACTION, new MoveRight());
-
-		snakeGridContainer.getInputMap().put(KeyStroke.getKeyStroke("P"), "PAUSE");
-		snakeGridContainer.getActionMap().put("PAUSE", new Pause()); // TODO: have instructions somewhere
-
+		// Initialize key strokes for sound toggling
 		this.getToolkit().addAWTEventListener(windowListener, AWTEvent.KEY_EVENT_MASK);
 
 		getContentPane().add(snakeGridContainer);
 		snakeGridContainer.requestFocusInWindow();
 	}
 
-	private void initializeFrame() {
+	/**
+	 * Initialize movement actions and pause action.
+	 *
+	 * @param snakeGridContainer jpanel container to add the actions to
+	 */
+	private void initializeMovementKeyStrokes(final JPanel snakeGridContainer) {
+		UP_KEY_STROKES.forEach(stroke -> {
+			snakeGridContainer.getInputMap().put(stroke, UP_ACTION);
+		});
+		snakeGridContainer.getActionMap().put(UP_ACTION, new MoveUpAction());
+
+		DOWN_KEY_STROKES.forEach(stroke -> {
+			snakeGridContainer.getInputMap().put(stroke, DOWN_ACTION);
+		});
+		snakeGridContainer.getActionMap().put(DOWN_ACTION, new MoveDownAction());
+
+		LEFT_KEY_STROKES.forEach(stroke -> {
+			snakeGridContainer.getInputMap().put(stroke, LEFT_ACTION);
+		});
+		snakeGridContainer.getActionMap().put(LEFT_ACTION, new MoveLeftAction());
+
+		RIGHT_KEY_STROKES.forEach(stroke -> {
+			snakeGridContainer.getInputMap().put(stroke, RIGHT_ACTION);
+		});
+		snakeGridContainer.getActionMap().put(RIGHT_ACTION, new MoveRightAction());
+
+		PAUSE_KEY_STROKES.forEach(stroke -> {
+			snakeGridContainer.getInputMap().put(stroke, PAUSE_ACTION);
+		});
+		snakeGridContainer.getActionMap().put(PAUSE_ACTION, new PauseAction());
+	}
+
+	private void displayFrame() {
 		this.setLocationRelativeTo(null); // Set window in middle of screen
 		this.setVisible(true);
 	}
@@ -229,7 +337,7 @@ public class GameWindow extends JFrame {
 	}
 
 	/**
-	 * This is each "step" in a game.
+	 * This is each "step" in the game.
 	 * Move the snake and check for a collision.
 	 */
 	public boolean iterate() {
@@ -243,6 +351,7 @@ public class GameWindow extends JFrame {
 
 	/**
 	 * Pause between each snake move.
+	 * Determines the speed of the game.
 	 */
 	private void pause() {
 		try {
@@ -358,24 +467,31 @@ public class GameWindow extends JFrame {
 
 	/**
 	 * Spawns food in a random location that is not occupied by the snake.
+	 * Does this by getting all the positions that isn't occupied by the snake
+	 * then pick a random location.
 	 */
 	private void spawnFoodRandomly() {
 		if (imageController.getFood() == null) {
-			return;
+			return; // This is needed in the case that the user selects exit.
 		}
 		final List<Position> nonSnakePositions = new ArrayList<>(Sets.filter(allPossiblePositions, (input) -> !snakePositions.contains(input)));
 		if (nonSnakePositions.size() == 0) {
 			System.out.println("YOU WIN!");
 			System.exit(0);
 		}
-		this.foodPosition = nonSnakePositions.get(((int) (Math.random()*1000)) % nonSnakePositions.size());
+		this.foodPosition = nonSnakePositions.get((int) (Math.random()*nonSnakePositions.size()));
 
 		System.out.println(String.format("New food spawn: %d, %d", foodPosition.getX(), foodPosition.getY(), sizeSnake));
 
 		gameGrid.get(foodPosition.getX()).get(foodPosition.getY()).lightSquare(imageController.getFood());
 	}
 
-	private class MoveUp extends AbstractAction {
+	/**
+	 * Action objects that will help the
+	 * snake move different directions and pause the game
+	 */
+
+	private class MoveUpAction extends AbstractAction {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (directionCommitted) {
@@ -390,7 +506,7 @@ public class GameWindow extends JFrame {
 		}
 	}
 
-	private class MoveDown extends AbstractAction {
+	private class MoveDownAction extends AbstractAction {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (directionCommitted) {
@@ -405,7 +521,7 @@ public class GameWindow extends JFrame {
 		}
 	}
 
-	private class MoveRight extends AbstractAction {
+	private class MoveRightAction extends AbstractAction {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (directionCommitted) {
@@ -420,7 +536,7 @@ public class GameWindow extends JFrame {
 		}
 	}
 
-	private class MoveLeft extends AbstractAction {
+	private class MoveLeftAction extends AbstractAction {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (directionCommitted) {
@@ -435,7 +551,7 @@ public class GameWindow extends JFrame {
 		}
 	}
 
-	private class Pause extends AbstractAction {
+	private class PauseAction extends AbstractAction {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			togglePause();
