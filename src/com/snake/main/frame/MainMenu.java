@@ -97,12 +97,12 @@ public class MainMenu extends JDialog {
 
             @Override
             public void actionPerformed(ActionEvent e) {
+                buttons.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
                 String difficultyCommand = difficultyButtonGroup.getSelection().getActionCommand();
                 String themeCommand = themeButtonGroup.getSelection().getActionCommand();
 
                 ImageController.getInstance().initializeImages(themeCommand);
-
-                buttons.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
                 jFrame.reinitializeColors();
 

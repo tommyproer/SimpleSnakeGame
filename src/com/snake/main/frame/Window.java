@@ -224,6 +224,10 @@ public class Window extends JFrame {
 		paused = true;
 	}
 
+	public static void unpauseGame() {
+		paused = false;
+	}
+
 	/**
 	 * This is each "step" in a game.
 	 * Move the snake and check for a collision.

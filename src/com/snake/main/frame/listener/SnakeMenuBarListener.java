@@ -34,6 +34,13 @@ public class SnakeMenuBarListener implements ActionListener {
         } else if (event.getActionCommand().equals(INSTRUCTIONS)) {
             Window.pauseGame();
             new GameInstructions(frame, true);
+            try {
+                Thread.sleep(400);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+            Window.unpauseGame();
         }
     }
 }
