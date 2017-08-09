@@ -31,8 +31,6 @@ import com.snake.main.handler.HighscoreHandler;
 /**
  * New window for the snake game.
  * X position is position from the top, Y position is the position from the left.
- * TODO: Upon resizing window, we may have to reset all the image icons again in the game
- * TODO: We want to store the scores, also accumulate the points so that the user can "shop" for stuff (actually this is debatable if I want to do this, maybe for this simplicity of this game I won't implement this)
  */
 public class Window extends JFrame {
 
@@ -118,7 +116,7 @@ public class Window extends JFrame {
 		headSnakePosition = new Position(configuration.getInitialSnakePosx(), configuration.getInitialSnakePoxy());
 		snakePositions.add(new Position(headSnakePosition.getX(), headSnakePosition.getY()));
 
-		new MainMenu(this, "Game Menu", true); // TODO: pause the game instead and set modal to false
+		new MainMenu(this, "Game Menu", true);
 
 		spawnFoodRandomly();
 
@@ -361,6 +359,9 @@ public class Window extends JFrame {
 	 * Spawns food in a random location that is not occupied by the snake.
 	 */
 	private void spawnFoodRandomly() {
+		if (imageController.getFood() == null) {
+			return;
+		}
 		final List<Position> nonSnakePositions = new ArrayList<>(Sets.filter(allPossiblePositions, (input) -> !snakePositions.contains(input)));
 		if (nonSnakePositions.size() == 0) {
 			System.out.println("YOU WIN!");
@@ -369,6 +370,7 @@ public class Window extends JFrame {
 		this.foodPosition = nonSnakePositions.get(((int) (Math.random()*1000)) % nonSnakePositions.size());
 
 		System.out.println(String.format("New food spawn: %d, %d", foodPosition.getX(), foodPosition.getY(), sizeSnake));
+
 		gameGrid.get(foodPosition.getX()).get(foodPosition.getY()).lightSquare(imageController.getFood());
 	}
 
