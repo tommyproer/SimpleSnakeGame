@@ -11,11 +11,16 @@ import com.snake.main.enums.GameDirection;
 
 /**
  * Controls game configuration.
+ * Reads optional configuration from cfg/game.cfg file,
+ * otherwise uses default configurations.
  */
 public class Configuration {
 
     private static volatile Configuration configuration;
 
+    /**
+     * Enforce singleton pattern.
+     */
     public static Configuration getInstance() {
         if (configuration == null) {
             configuration = new Configuration();

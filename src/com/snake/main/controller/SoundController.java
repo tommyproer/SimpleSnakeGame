@@ -3,10 +3,9 @@ package com.snake.main.controller;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
-import javax.sound.sampled.LineUnavailableException;
 
 import com.snake.main.Configuration;
-import com.snake.main.frame.Window;
+import com.snake.main.frame.GameWindow;
 
 /**
  * Controls sounds of the game
@@ -38,7 +37,7 @@ public class SoundController {
             gameOver.setFramePosition(gameOver.getFrameLength());
 
             themeMusic = AudioSystem.getClip();
-            themeMusic.open(AudioSystem.getAudioInputStream(Window.class.getResource(Configuration.getInstance().getThemeClipLocation())));
+            themeMusic.open(AudioSystem.getAudioInputStream(GameWindow.class.getResource(Configuration.getInstance().getThemeClipLocation())));
             FloatControl gainControl = (FloatControl) themeMusic.getControl(FloatControl.Type.MASTER_GAIN);
             gainControl.setValue(-4.0f);
 

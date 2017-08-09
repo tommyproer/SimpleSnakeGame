@@ -1,18 +1,13 @@
 package com.snake.main;
 
 /**
- * Begins application, invoked through gradle.
+ * Starting point for SimpleSnakeGame application.
  */
 class Main {
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		final Thread thread = new Thread(
 				new RunnableGame());
 
-		try {
-			thread.start();
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
+		thread.start();
 	}
 }

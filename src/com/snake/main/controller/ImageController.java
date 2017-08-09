@@ -4,7 +4,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 
 import com.snake.main.Configuration;
-import com.snake.main.frame.Window;
+import com.snake.main.frame.GameWindow;
 import com.snake.main.util.ImageUtilSingleton;
 
 /**
@@ -41,12 +41,12 @@ public class ImageController {
     public void initializeImages(final String imageOption) {
         final String image_base = "/images/" + imageOption;
         try {
-            bgImage = ImageIO.read(Window.class.getResource(image_base + Configuration.getBgLocation()));
-            food = ImageIO.read(Window.class.getResource(image_base + Configuration.getFoodLocation()));
-            snake = ImageIO.read(Window.class.getResource(image_base + Configuration.getSnakeBodyLocation()));
-            snakeTail = ImageIO.read(Window.class.getResource(image_base + Configuration.getSnakeTailLocation()));
-            collision = ImageIO.read(Window.class.getResource(image_base + Configuration.getCollisionLocation()));
-            snakeHeadRight = ImageIO.read(Window.class.getResource(image_base + Configuration.getSnakeHeadRightLocation()));
+            bgImage = ImageIO.read(GameWindow.class.getResource(image_base + Configuration.getBgLocation()));
+            food = ImageIO.read(GameWindow.class.getResource(image_base + Configuration.getFoodLocation()));
+            snake = ImageIO.read(GameWindow.class.getResource(image_base + Configuration.getSnakeBodyLocation()));
+            snakeTail = ImageIO.read(GameWindow.class.getResource(image_base + Configuration.getSnakeTailLocation()));
+            collision = ImageIO.read(GameWindow.class.getResource(image_base + Configuration.getCollisionLocation()));
+            snakeHeadRight = ImageIO.read(GameWindow.class.getResource(image_base + Configuration.getSnakeHeadRightLocation()));
             snakeHeadLeft = imageUtil.getFlippedImage(imageUtil.getRotatedImage(snakeHeadRight, 180));
             snakeHeadUp = imageUtil.getRotatedImage(snakeHeadRight, -90);
             snakeHeadDown = imageUtil.getRotatedImage(snakeHeadRight, 90);

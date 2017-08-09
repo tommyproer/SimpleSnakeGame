@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 
 import com.snake.main.controller.SoundController;
 import com.snake.main.frame.GameInstructions;
-import com.snake.main.frame.Window;
+import com.snake.main.frame.GameWindow;
 
 public class SnakeMenuBarListener implements ActionListener {
 
@@ -28,11 +28,11 @@ public class SnakeMenuBarListener implements ActionListener {
         if (event.getActionCommand().equals(MUTE)) {
             soundController.toggleMute();
         } else if (event.getActionCommand().equals(PAUSE)) {
-            Window.togglePause();
+            GameWindow.togglePause();
         } else if (event.getActionCommand().equals(PAUSE_MUSIC)) {
             soundController.toggleThemeMusic();
         } else if (event.getActionCommand().equals(INSTRUCTIONS)) {
-            Window.pauseGame();
+            GameWindow.pauseGame();
             new GameInstructions(frame, true);
             try {
                 Thread.sleep(400);
@@ -40,7 +40,7 @@ public class SnakeMenuBarListener implements ActionListener {
                 throw new RuntimeException(e);
             }
 
-            Window.unpauseGame();
+            GameWindow.unpauseGame();
         }
     }
 }

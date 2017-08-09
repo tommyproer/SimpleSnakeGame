@@ -7,9 +7,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.Frame;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -17,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Shows instructions to users on how to play the game
+ * Shows instructions to users on how to play the game.
  */
 public class GameInstructions extends JDialog implements ActionListener {
 
@@ -26,8 +23,8 @@ public class GameInstructions extends JDialog implements ActionListener {
     public GameInstructions(final Frame owner, final boolean modal) {
         super(owner, "Instructions", modal);
 
-        this.setLayout(new GridBagLayout());
-        this.add(createInstructions(
+        this.setLayout(new BorderLayout(10, 10));
+        this.add(createInstructionsPanel(
                 Arrays.asList(
                         "Use WASD or Arrow Keys to move snake\n",
                         "Press P to pause game\n",
@@ -35,9 +32,16 @@ public class GameInstructions extends JDialog implements ActionListener {
                         "Press T to pause music\n"
                 )
         ));
+        this.add(createButtonsPanel(), BorderLayout.SOUTH);
 
+        this.setSize(300,150);
+        this.setLocationRelativeTo(this);
+        this.setVisible(true);
+    }
+
+    private JPanel createButtonsPanel() {
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new BorderLayout());
+        buttonPanel.setLayout(new BorderLayout(10, 10));
 
         JButton okButton = new JButton();
         okButton.setText("Got It");
@@ -47,15 +51,10 @@ public class GameInstructions extends JDialog implements ActionListener {
         okButton.setSize(10,10);
         buttonPanel.add(okButton);
 
-        this.add(buttonPanel, GridBagConstraints.RELATIVE);
-
-        this.setSize(300,130);
-        this.setLocationRelativeTo(this);
-        this.pack();
-        this.setVisible(true);
+        return buttonPanel;
     }
 
-    private JPanel createInstructions(final List<String> instructions) {
+    private JPanel createInstructionsPanel(final List<String> instructions) {
         JPanel jPanel = new JPanel();
         jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.PAGE_AXIS));
 

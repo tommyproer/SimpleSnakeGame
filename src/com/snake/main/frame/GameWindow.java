@@ -32,7 +32,7 @@ import com.snake.main.handler.HighscoreHandler;
  * New window for the snake game.
  * X position is position from the top, Y position is the position from the left.
  */
-public class Window extends JFrame {
+public class GameWindow extends JFrame {
 
 	private static final long serialVersionUID = -2542001418764869760L;
 
@@ -72,7 +72,7 @@ public class Window extends JFrame {
 	/**
 	 * Initialize window, set the title, gridSize, close operation and add key listener.
 	 */
-	public Window() {
+	public GameWindow() {
 		try {
 			setIconImage(
 					ImageIO.read(this.getClass()
@@ -98,8 +98,9 @@ public class Window extends JFrame {
 			}
 		}
 
-		// Initialize Game Window
+		// Initialize Game GameWindow
 		initializeGameWindow();
+		new GameInstructions(this, true);
 		reset();
 	}
 

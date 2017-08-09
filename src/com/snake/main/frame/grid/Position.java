@@ -1,6 +1,6 @@
 package com.snake.main.frame.grid;
 
-import com.snake.main.frame.Window;
+import com.snake.main.frame.GameWindow;
 
 /**
  * Position on the game grid.
@@ -13,13 +13,13 @@ public class Position {
 		this.x = x;
 		this.y = y;
 	}
-	public void moveLeft() { y = (y + Window.getGridSize() - 1) % Window.getGridSize(); }
+	public void moveLeft() { y = (y + GameWindow.getGridSize() - 1) % GameWindow.getGridSize(); }
 	public void moveRight() {
-		 y = (y+1) % Window.getGridSize();
+		 y = (y+1) % GameWindow.getGridSize();
 	}
-	public void moveUp() { x = (x + Window.getGridSize() - 1) % Window.getGridSize(); }
+	public void moveUp() { x = (x + GameWindow.getGridSize() - 1) % GameWindow.getGridSize(); }
 	public void moveDown() {
-		x = (x+1) % Window.getGridSize();
+		x = (x+1) % GameWindow.getGridSize();
 	}
 
 	public int getX(){

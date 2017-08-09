@@ -2,25 +2,31 @@ package com.snake.main;
 
 import javax.swing.JOptionPane;
 
+import com.snake.main.frame.GameWindow;
 import com.snake.main.frame.ScorePanel;
-import com.snake.main.frame.Window;
 
 /**
- * Runs game.
+ * Runs Simple Snake Game.
  */
 public class RunnableGame implements Runnable {
-    private Window window;
+    private GameWindow window;
 
     private static boolean exitGame = false;
 
     public RunnableGame() {
-        window = new Window();
+        window = new GameWindow();
     }
 
+    /**
+     * Called when we want to exit the game
+     */
     public static void exitGame() {
         exitGame = true;
     }
 
+    /**
+     * Run the game
+     */
     @Override
     public void run() {
 

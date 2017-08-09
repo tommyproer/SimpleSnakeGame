@@ -5,7 +5,7 @@ import javax.swing.JLabel;
 import java.awt.Image;
 
 import com.snake.main.controller.ImageController;
-import com.snake.main.frame.Window;
+import com.snake.main.frame.GameWindow;
 
 /**
  * TODO: Have multiple icons of possible snakes/animals
@@ -23,7 +23,7 @@ public class SquarePanel extends JLabel {
 			if (getWidth() != image.getWidth(null) || getHeight() != image.getHeight(null)) {
 				ImageController.getInstance().rescaleImages((double) getWidth()/image.getWidth(null),
 						(double) getHeight()/image.getHeight(null));
-				Window.rescaleAllSquares(getWidth(), getHeight());
+				GameWindow.rescaleAllSquares(getWidth(), getHeight());
 			}
 		}
 

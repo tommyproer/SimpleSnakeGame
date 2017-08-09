@@ -49,7 +49,7 @@ public class MainMenu extends JDialog {
     private ButtonGroup difficultyButtonGroup;
     private ButtonGroup themeButtonGroup;
 
-    public MainMenu(Window owner, final String title, final boolean modal) {
+    public MainMenu(GameWindow owner, final String title, final boolean modal) {
         super(owner, title, modal);
 
         JPanel difficultyPanel = createDifficultyPanel();
@@ -89,7 +89,7 @@ public class MainMenu extends JDialog {
 
     }
 
-    private JPanel createButtonsPanel(Window jFrame) {
+    private JPanel createButtonsPanel(GameWindow jFrame) {
         JPanel buttons = new JPanel(new BorderLayout());
 
         // Create play buttons
