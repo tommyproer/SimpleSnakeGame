@@ -86,6 +86,7 @@ public class MainMenu extends JDialog {
         this.setResizable(false);
 
         this.setVisible(true);
+
     }
 
     private JPanel createButtonsPanel(Window jFrame) {

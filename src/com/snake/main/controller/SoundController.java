@@ -86,7 +86,6 @@ public class SoundController {
 
         if (mute) {
             themeMusic.stop();
-            themeMusic.setMicrosecondPosition(0);
         } else {
             themeMusic.start();
         }

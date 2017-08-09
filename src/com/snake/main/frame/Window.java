@@ -119,6 +119,7 @@ public class Window extends JFrame {
 		snakePositions.add(new Position(headSnakePosition.getX(), headSnakePosition.getY()));
 
 		new MainMenu(this, "Game Menu", true); // TODO: pause the game instead and set modal to false
+
 		spawnFoodRandomly();
 
 		scorePanel.resetScore();
