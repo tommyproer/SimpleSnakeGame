@@ -26,7 +26,7 @@ public class SnakeMenuBarListener implements ActionListener {
     @Override
     public void actionPerformed(final ActionEvent event) {
         if (event.getActionCommand().equals(MUTE)) {
-            soundController.toggleMute();
+            soundController.toggleMuteSoundEffects();
         } else if (event.getActionCommand().equals(PAUSE)) {
             GameWindow.togglePause();
         } else if (event.getActionCommand().equals(PAUSE_MUSIC)) {

@@ -30,7 +30,7 @@ public class MainMenuBar extends JMenuBar {
         JMenu fileMenu = new JMenu("File");
         fileMenu.setMnemonic(KeyEvent.VK_O);
 
-        JMenuItem muteItem = new JMenuItem("Toggle Mute");
+        JMenuItem muteItem = new JMenuItem("Toggle Mute Sound Effects");
         muteItem.setMnemonic(KeyEvent.VK_M);
         muteItem.setActionCommand(SnakeMenuBarListener.MUTE);
         muteItem.addActionListener(snakeMenuBarListener);

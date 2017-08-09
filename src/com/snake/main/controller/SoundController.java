@@ -24,7 +24,7 @@ public class SoundController {
     private Clip eatClip;
     private Clip gameOver;
     private Clip themeMusic;
-    private boolean mute = false;
+    private boolean muteSoundEffects = false;
 
     private SoundController () {
         try {
@@ -48,24 +48,20 @@ public class SoundController {
     }
 
     public void playEatClip() {
-        if (!mute) {
+        if (!muteSoundEffects) {
             eatClip.loop(1);
         }
 
     }
 
     public void playGameOver() {
-        if (!mute) {
+        if (!muteSoundEffects) {
             gameOver.loop(1);
         }
-
     }
 
     public void playThemeMusic() {
-        if (!mute) {
-            themeMusic.loop(Clip.LOOP_CONTINUOUSLY);
-        }
-
+        themeMusic.loop(Clip.LOOP_CONTINUOUSLY);
     }
 
     public void stopThemeMusic() {
@@ -75,18 +71,12 @@ public class SoundController {
     public void toggleThemeMusic() {
         if (themeMusic.isRunning()) {
             themeMusic.stop();
-        } else if (!mute) {
+        } else if (!muteSoundEffects) {
             themeMusic.start();
         }
     }
 
-    public void toggleMute() {
-        mute = !mute;
-
-        if (mute) {
-            themeMusic.stop();
-        } else {
-            themeMusic.start();
-        }
+    public void toggleMuteSoundEffects() {
+        muteSoundEffects = !muteSoundEffects;
     }
 }

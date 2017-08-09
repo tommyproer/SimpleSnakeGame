@@ -26,10 +26,10 @@ public class WindowListener implements AWTEventListener {
         if (event instanceof KeyEvent) {
             KeyEvent key = (KeyEvent) event;
             if (key.getID() == KeyEvent.KEY_PRESSED) {
-                if (key.getKeyChar() == 't' || key.getKeyChar() == 'T') {
+                if (key.getKeyChar() == 'm' || key.getKeyChar() == 'M') {
                     soundController.toggleThemeMusic();
-                } else if (key.getKeyChar() == 'm' || key.getKeyChar() == 'M') {
-                    soundController.toggleMute();
+                } else if (key.getKeyChar() == 'n' || key.getKeyChar() == 'n') {
+                    soundController.toggleMuteSoundEffects();
                 } else if (key.getKeyCode() == KeyEvent.VK_ESCAPE) {
                     System.exit(0);
                 }

@@ -87,7 +87,7 @@ public class GameWindow extends JFrame {
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		if (!configuration.isMusicOn()) {
-			soundController.toggleMute();
+			soundController.toggleMuteSoundEffects();
 		}
 		soundController.playThemeMusic();
 

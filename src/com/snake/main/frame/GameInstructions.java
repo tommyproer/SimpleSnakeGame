@@ -28,8 +28,8 @@ public class GameInstructions extends JDialog implements ActionListener {
                 Arrays.asList(
                         "Use WASD or Arrow Keys to move snake\n",
                         "Press P to pause game\n",
-                        "Press M to mute\n",
-                        "Press T to pause music\n"
+                        "Press N to toggle sound effects\n",
+                        "Press M to toggle music\n"
                 )
         ));
         this.add(createButtonsPanel(), BorderLayout.SOUTH);
