@@ -1,20 +1,20 @@
-##JAVA SNAKE GAME
+Simple Snake Game
 
-A simple snake game in java.
+A simple snake game made in Java using swing.
+Built using gradle.
 
-##Preview:
+Preview:
 
-![alt tag](https://imgur.com/a/lDaOa)
-![alt tag](https://imgur.com/a/a2lq1)
+![alt tag](http://imgur.com/O5qfR85)
+![alt tag](http://imgur.com/O5qfR85)
 
-##How to run the game:
+How to run the game:
 * Double click PlayGame.bat (for windows) or PlayGame.sh to play the game
 
-###Requirements:
-* Java runtime installed
+Requirements:
+* Java runtime
 
-###Features:
+Features:
 * Different themes and difficulty levels
 * Music and sound effects
 * Stores and displays high score
-* Can pause the game

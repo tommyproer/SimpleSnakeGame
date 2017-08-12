@@ -35,7 +35,7 @@ public class Configuration {
             .build();
 
     /**
-     * Loads up game properties from cfg/game.cfg
+     * Loads up game properties from GAME_CFG_LOCATION.
      */
     private Configuration() {
         InputStream input = null;

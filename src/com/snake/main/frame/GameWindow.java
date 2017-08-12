@@ -30,7 +30,7 @@ import com.snake.main.frame.listener.WindowListener;
 import com.snake.main.handler.HighscoreHandler;
 
 /**
- * New window for the snake game.
+ * Container frame for the entire snake game.
  * X position is position from the top, Y position is the position from the left.
  */
 public class GameWindow extends JFrame {
@@ -114,13 +114,21 @@ public class GameWindow extends JFrame {
 	 */
 	private int highscore;
 
-	// Define controllers
+	/**
+	 * Controllers.
+	 */
 	private static SoundController soundController = SoundController.getInstance();
 	private static ImageController imageController = ImageController.getInstance();
 	private static WindowListener windowListener = WindowListener.getInstance();
 
+	/**
+	 * Score panel displays the score and difficulty level.
+	 */
 	private static ScorePanel scorePanel = ScorePanel.getInstance();
 
+	/**
+	 * Stores game configuration.
+	 */
 	private static Configuration configuration = Configuration.getInstance();
 
 	/**
@@ -135,21 +143,19 @@ public class GameWindow extends JFrame {
 	private static boolean paused = false;
 
 	/**
-	 * 1. Initialize window icon
-	 * 2. Configure window size
-	 * 3. Set default sound settings
-	 * 4. Initialize all possible positions, used for spawning food
-	 * 5. Initialize game window frame
-	 * 6. Show game instructions
+	 * 1. Initialize window icon.
+	 * 3. Set default sound settings.
+	 * 4. Initialize all possible positions, used for spawning food.
+	 * 5. Initialize game window frame.
+	 * 6. Display game instructions.
 	 * 7. Reset score and snake.
 	 */
 	public GameWindow() {
 		setIcon();
-		configureWindow();
 		getDefaultSoundSettings();
 		initializeAllPossiblePositions();
 		initializeGameWindow();
-		new GameInstructions(this, true); // Display game instructions
+		new GameInstructions(this, true);
 		reset();
 	}
 
@@ -204,9 +210,11 @@ public class GameWindow extends JFrame {
 	}
 
 	/**
-	 * Initialize all arrays and menus, etc.
+	 * Configure and display game window.
+	 * Initialize all arrays and menus.
 	 */
 	private void initializeGameWindow() {
+		configureWindow();
 		displayFrame();
 		initializeGrid();
 
