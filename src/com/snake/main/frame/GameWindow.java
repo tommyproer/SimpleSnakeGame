@@ -135,7 +135,13 @@ public class GameWindow extends JFrame {
 	private static boolean paused = false;
 
 	/**
-	 * Initialize window, set the title, gridSize, close operation and add key listener.
+	 * 1. Initialize window icon
+	 * 2. Configure window size
+	 * 3. Set default sound settings
+	 * 4. Initialize all possible positions, used for spawning food
+	 * 5. Initialize game window frame
+	 * 6. Show game instructions
+	 * 7. Reset score and snake.
 	 */
 	public GameWindow() {
 		setIcon();

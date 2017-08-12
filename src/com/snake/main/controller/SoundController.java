@@ -68,7 +68,7 @@ public class SoundController {
         if (themeMusic.isRunning()) {
             themeMusic.stop();
         } else {
-            themeMusic.start();
+            playThemeMusic();
         }
     }
 

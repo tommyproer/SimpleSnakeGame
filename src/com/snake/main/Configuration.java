@@ -34,6 +34,9 @@ public class Configuration {
             .put("initial_snake_size", "4")
             .build();
 
+    /**
+     * Loads up game properties from cfg/game.cfg
+     */
     private Configuration() {
         InputStream input = null;
         properties = new Properties();
@@ -57,7 +60,7 @@ public class Configuration {
         properties.putAll(immutableProperties);
     }
 
-    private int SPEED = 80;
+    private int SPEED = 80; // This is misleading, this is actually initialized through the game's difficulty.
 
     public int getSpeed() { return SPEED; }
 
