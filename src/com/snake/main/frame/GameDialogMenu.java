@@ -26,7 +26,7 @@ import com.snake.main.controller.ImageController;
 /**
  * Main menu of the game.
  */
-public class MainMenu extends JDialog {
+class GameDialogMenu extends JDialog {
 
     private static final int HEIGHT = 310;
     private static final int WIDTH = 200;
@@ -49,7 +49,7 @@ public class MainMenu extends JDialog {
     private ButtonGroup difficultyButtonGroup;
     private ButtonGroup themeButtonGroup;
 
-    public MainMenu(GameWindow owner, final String title, final boolean modal) {
+    GameDialogMenu(GameWindow owner, final String title, final boolean modal) {
         super(owner, title, modal);
 
         JPanel difficultyPanel = createDifficultyPanel();
@@ -108,7 +108,7 @@ public class MainMenu extends JDialog {
                 jFrame.reinitializeColors();
 
                 Configuration.getInstance().setSpeed(DIFFICULTY_TO_SPEED_MAP.get(difficultyCommand));
-                ScorePanel.getInstance().setDifficulty(difficultyCommand);
+                GameScorePanel.getInstance().setDifficulty(difficultyCommand);
                 dispose();
 
             }

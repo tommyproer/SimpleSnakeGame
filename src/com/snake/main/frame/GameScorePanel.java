@@ -9,15 +9,15 @@ import java.awt.GridBagLayout;
 /**
  * Displays the score and difficulty level.
  */
-public class ScorePanel extends JPanel {
+public class GameScorePanel extends JPanel {
 
-    private static volatile ScorePanel scorePanel;
+    private static volatile GameScorePanel gameScorePanel;
 
-    public static ScorePanel getInstance() {
-        if (scorePanel == null) {
-            scorePanel = new ScorePanel();
+    public static GameScorePanel getInstance() {
+        if (gameScorePanel == null) {
+            gameScorePanel = new GameScorePanel();
         }
-        return scorePanel;
+        return gameScorePanel;
     }
 
     private final JTextField scoreField;
@@ -25,7 +25,7 @@ public class ScorePanel extends JPanel {
     private int score = 0;
     private final int increaseScoreValue = 50;
 
-    private ScorePanel() {
+    private GameScorePanel() {
         setLayout(new GridBagLayout());
         GridBagConstraints labelConstraints = createLabelConstraint();
         GridBagConstraints fieldConstraints = createFieldConstraint();

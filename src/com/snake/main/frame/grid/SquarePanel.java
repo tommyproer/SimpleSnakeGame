@@ -8,15 +8,15 @@ import com.snake.main.controller.ImageController;
 import com.snake.main.frame.GameWindow;
 
 /**
- * TODO: Have multiple icons of possible snakes/animals
+ * Square unit in the game panel.
  */
-public class SquarePanel extends JLabel {
+class SquarePanel extends JLabel {
 	
 	private static final long serialVersionUID = 1L;
 
 	private Image image;
 	
-	public void changeImage(final Image image) {
+	void changeImage(final Image image) {
 		this.image = image;
 
 		if (getWidth() != 0 || getHeight() != 0) {
@@ -34,7 +34,7 @@ public class SquarePanel extends JLabel {
 
 	}
 
-	public void resizeSquare(int width, int height) {
+	void resizeSquare(int width, int height) {
 		image = image.getScaledInstance(width, height, Image.SCALE_DEFAULT);
 		this.setIcon(new ImageIcon(image));
 	}

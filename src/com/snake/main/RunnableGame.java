@@ -3,7 +3,7 @@ package com.snake.main;
 import javax.swing.JOptionPane;
 
 import com.snake.main.frame.GameWindow;
-import com.snake.main.frame.ScorePanel;
+import com.snake.main.frame.GameScorePanel;
 
 /**
  * Runs Simple Snake Game.
@@ -60,7 +60,7 @@ public class RunnableGame implements Runnable {
         if (gameWindow.getHighscore() > highscore) {
             return String.format("Congrats, your new high score is %d!!\n\nWould you like to play again?", gameWindow.getHighscore());
         }
-        return String.format("Your score is %d.\nHighscore is %d.\nWould you like to play again?", ScorePanel.getInstance().getScore(), gameWindow.getHighscore());
+        return String.format("Your score is %d.\nHighscore is %d.\nWould you like to play again?", GameScorePanel.getInstance().getScore(), gameWindow.getHighscore());
     }
 
 

@@ -124,7 +124,7 @@ public class GameWindow extends JFrame {
 	/**
 	 * Score panel displays the score and difficulty level.
 	 */
-	private static ScorePanel scorePanel = ScorePanel.getInstance();
+	private static GameScorePanel gameScorePanel = GameScorePanel.getInstance();
 
 	/**
 	 * Stores game configuration.
@@ -143,20 +143,69 @@ public class GameWindow extends JFrame {
 	private static boolean paused = false;
 
 	/**
-	 * 1. Initialize window icon.
-	 * 3. Set default sound settings.
-	 * 4. Initialize all possible positions, used for spawning food.
-	 * 5. Initialize game window frame.
-	 * 6. Display game instructions.
-	 * 7. Reset score and snake.
+	 * 1. Initialize game window frame.
+	 * 2. Set default sound settings.
+	 * 3. Initialize all possible positions, used for spawning food.
+	 * 4. Display game instructions.
+	 * 5. Reset score and snake.
 	 */
 	public GameWindow() {
-		setIcon();
-		getDefaultSoundSettings();
-		initializeAllPossiblePositions();
 		initializeGameWindow();
+		getDefaultSoundSettings();
 		new GameInstructions(this, true);
 		reset();
+	}
+
+	/**
+	 * Configure and display game window.
+	 * Initialize all arrays and menus.
+	 */
+	private void initializeGameWindow() {
+		setIcon();
+		configureWindow();
+		initializeGrid();
+
+		// Initialize score panel
+		getContentPane().add(gameScorePanel, BorderLayout.SOUTH);
+
+		// Initialize MenuBar
+		setJMenuBar(new GameMainMenuBar(this));
+
+		initializeAllPossiblePositions();
+	}
+
+	/**
+	 * Decide whether to play music and sound effects
+	 * in the game based on the configuration in
+	 * game.cfg
+	 */
+	private void getDefaultSoundSettings() {
+		if (!configuration.defaultPlaySoundEffects()) {
+			soundController.toggleMuteSoundEffects();
+		}
+		if (configuration.defaultPlayMusic()) {
+			soundController.playThemeMusic();
+		}
+	}
+
+	/**
+	 * Reset the game.
+	 */
+	public void reset() {
+		sizeSnake = configuration.getInitialSnakeSize();
+		snakePositions = new ArrayList<>();
+
+		currentDirection = configuration.getInitialSnakeDirection();
+		lastDirection = configuration.getInitialSnakeDirection();
+
+		headSnakePosition = new Position(configuration.getInitialSnakePosx(), configuration.getInitialSnakePoxy());
+		snakePositions.add(new Position(headSnakePosition.getX(), headSnakePosition.getY()));
+
+		new GameDialogMenu(this, "Game Menu", true);
+
+		spawnFoodRandomly();
+
+		gameScorePanel.resetScore();
 	}
 
 	/**
@@ -181,20 +230,8 @@ public class GameWindow extends JFrame {
 		setTitle(configuration.getGameTitle());
 		setSize(configuration.getWindowWidth(), configuration.getWindowHeight());
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-	}
 
-	/**
-	 * Decide whether to play music and sound effects
-	 * in the game based on the configuration in
-	 * game.cfg
-	 */
-	private void getDefaultSoundSettings() {
-		if (!configuration.defaultPlaySoundEffects()) {
-			soundController.toggleMuteSoundEffects();
-		}
-		if (configuration.defaultPlayMusic()) {
-			soundController.playThemeMusic();
-		}
+		displayFrame();
 	}
 
 	/**
@@ -207,39 +244,6 @@ public class GameWindow extends JFrame {
 				allPossiblePositions.add(new Position(i, j));
 			}
 		}
-	}
-
-	/**
-	 * Configure and display game window.
-	 * Initialize all arrays and menus.
-	 */
-	private void initializeGameWindow() {
-		configureWindow();
-		displayFrame();
-		initializeGrid();
-
-		getContentPane().add(scorePanel, BorderLayout.SOUTH);
-		setJMenuBar(new MainMenuBar(this));
-	}
-
-	/**
-	 * Reset the game.
-	 */
-	public void reset() {
-		sizeSnake = configuration.getInitialSnakeSize();
-		snakePositions = new ArrayList<>();
-
-		currentDirection = configuration.getInitialSnakeDirection();
-		lastDirection = configuration.getInitialSnakeDirection();
-
-		headSnakePosition = new Position(configuration.getInitialSnakePosx(), configuration.getInitialSnakePoxy());
-		snakePositions.add(new Position(headSnakePosition.getX(), headSnakePosition.getY()));
-
-		new MainMenu(this, "Game Menu", true);
-
-		spawnFoodRandomly();
-
-		scorePanel.resetScore();
 	}
 
 	/**
@@ -277,6 +281,7 @@ public class GameWindow extends JFrame {
 			highscore = HighscoreHandler.getHighscore("AIELCXDFSWOVIDKS");
 		} catch (CryptoException e) {
 			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		// Creates Threads and its data and adds it to gameGrid, which represents the game grid locations
 		gameGrid = new ArrayList<>();
@@ -452,14 +457,14 @@ public class GameWindow extends JFrame {
 				.stream()
 				.anyMatch(headSnakePosition::equals)) {
 			gameGrid.get(headSnakePosition.getX()).get(headSnakePosition.getY()).lightSquare(imageController.getCollision());
-			System.out.println(String.format("Game Over! Final Score: %s", scorePanel.getScore()));
+			System.out.println(String.format("Game Over! Final Score: %s", gameScorePanel.getScore()));
 
 			soundController.playGameOver();
 			try {
 
-				if (scorePanel.getScore() > highscore) {
-					HighscoreHandler.writeHighscore(scorePanel.getScore(), "AIELCXDFSWOVIDKS");
-					highscore = scorePanel.getScore();
+				if (gameScorePanel.getScore() > highscore) {
+					HighscoreHandler.writeHighscore(gameScorePanel.getScore(), "AIELCXDFSWOVIDKS");
+					highscore = gameScorePanel.getScore();
 				}
 			} catch (CryptoException e) {
 				e.printStackTrace();
@@ -469,7 +474,7 @@ public class GameWindow extends JFrame {
 
 		// Check to see if snake ate the food
 		if (headSnakePosition.equals(foodPosition)) {
-			scorePanel.increaseScore();
+			gameScorePanel.increaseScore();
 
 			sizeSnake = sizeSnake + 1;
 			soundController.playEatClip();

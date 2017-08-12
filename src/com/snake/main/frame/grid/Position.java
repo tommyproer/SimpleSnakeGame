@@ -3,7 +3,7 @@ package com.snake.main.frame.grid;
 import com.snake.main.frame.GameWindow;
 
 /**
- * Position on the game grid.
+ * Position of the game.
  */
 public class Position {
 	private int x;

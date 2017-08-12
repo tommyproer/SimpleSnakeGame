@@ -11,11 +11,11 @@ import com.snake.main.frame.listener.SnakeMenuBarListener;
 /**
  * Menu bar at the top of the page.
  */
-public class MainMenuBar extends JMenuBar {
+class GameMainMenuBar extends JMenuBar {
 
     private final SnakeMenuBarListener snakeMenuBarListener;
 
-    public MainMenuBar(final JFrame frame) {
+    GameMainMenuBar(final JFrame frame) {
         snakeMenuBarListener = new SnakeMenuBarListener(frame);
 
         this.setOpaque(true);
