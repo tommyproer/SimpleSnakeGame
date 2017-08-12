@@ -5,8 +5,8 @@ Built using gradle.
 
 Preview:
 
-<img width="150" height="150" src="http://imgur.com/O5qfR85">
-<img width="150" height="150" src="http://imgur.com/A0uVNic">
+<img align="left" width="150" height="150" src="http://imgur.com/O5qfR85.png">
+<img align="right" width="150" height="150" src="http://imgur.com/A0uVNic.png">
 
 How to run the game:
 * Double click PlayGame.bat (for windows) or PlayGame.sh to play the game
