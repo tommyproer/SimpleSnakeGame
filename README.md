@@ -5,8 +5,8 @@ Built using gradle.
 
 Preview:
 
-![alt tag](http://imgur.com/O5qfR85)
-![alt tag](http://imgur.com/O5qfR85)
+![Screenshot](http://imgur.com/O5qfR85.png)
+![Screenshot](http://imgur.com/A0uVNic.png)
 
 How to run the game:
 * Double click PlayGame.bat (for windows) or PlayGame.sh to play the game
