@@ -1,12 +1,12 @@
-Simple Snake Game
+<h2 align="center">Simple Snake Game</h2>
 
 A simple snake game made in Java using swing.
 Built using gradle.
 
 Preview:
 
-<img width="300" height="300" src="http://imgur.com/O5qfR85.png">
-<img width="300" height="300" src="http://imgur.com/A0uVNic.png">
+<img width="350" height="350" src="http://imgur.com/O5qfR85.png">
+<img width="350" height="350" src="http://imgur.com/A0uVNic.png">
 
 How to run the game:
 * Double click PlayGame.bat (for windows) or PlayGame.sh to play the game
