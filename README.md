@@ -5,8 +5,9 @@ Built using gradle.
 
 Preview:
 
-<img width="370" height="370" src="http://imgur.com/O5qfR85.png">
-<img align="right" width="370" height="370" src="http://imgur.com/A0uVNic.png">
+<img width="400" height="400" src="http://imgur.com/O5qfR85.png">
+<img width="400" height="400" src="http://imgur.com/A0uVNic.png">
+</br>
 
 Features:
 * Different themes and difficulty levels
