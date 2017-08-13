@@ -34,6 +34,12 @@ public class Configuration {
             .put("initial_snake_size", "4")
             .build();
 
+    // Difficulties
+    private static final String EASY = "Easy";
+    private static final String NORMAL = "Normal";
+    private static final String HARD = "Hard";
+    private static final String EXTREME = "Extreme";
+
     /**
      * Loads up game properties from GAME_CFG_LOCATION.
      */
@@ -124,10 +130,10 @@ public class Configuration {
 
     public static Map<String, Integer> getDifficultyMap() {
         return ImmutableMap.<String, Integer>builder()
-                .put("Easy", 140)
-                .put("Normal", 90)
-                .put("Hard", 70)
-                .put("Extreme", 50)
+                .put(EASY, 140)
+                .put(NORMAL, 90)
+                .put(HARD, 70)
+                .put(EXTREME, 50)
                 .build();
     }
 }

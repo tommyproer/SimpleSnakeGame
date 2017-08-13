@@ -15,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -30,12 +31,6 @@ class GameDialogMenu extends JDialog {
 
     private static final int HEIGHT = 310;
     private static final int WIDTH = 200;
-
-    // Difficulties
-    private static final String EASY = "Easy";
-    private static final String NORMAL = "Normal";
-    private static final String HARD = "Hard";
-    private static final String EXTREME = "Extreme"; // TODO: this also needs to be in configuration
 
     // Themes
     private static final List<String> THEMES = Arrays.asList("default", "princess", "retro");
@@ -131,23 +126,14 @@ class GameDialogMenu extends JDialog {
     }
 
     private JPanel createDifficultyPanel() {
-        final int numDifficulty = 4;
+        ArrayList<String> difficulties = new ArrayList<>(DIFFICULTY_TO_SPEED_MAP.keySet());
+        final int numDifficulty = difficulties.size();
         JRadioButton[] radioButtons = new JRadioButton[numDifficulty];
         difficultyButtonGroup = new ButtonGroup();
 
-        radioButtons[0] = new JRadioButton(EASY);
-        radioButtons[0].setActionCommand(EASY);
-
-        radioButtons[1] = new JRadioButton(NORMAL);
-        radioButtons[1].setActionCommand(NORMAL);
-
-        radioButtons[2] = new JRadioButton(HARD);
-        radioButtons[2].setActionCommand(HARD);
-
-        radioButtons[3] = new JRadioButton(EXTREME);
-        radioButtons[3].setActionCommand(EXTREME);
-
         for (int i = 0; i < numDifficulty; i++) {
+            radioButtons[i] = new JRadioButton(difficulties.get(i));
+            radioButtons[i].setActionCommand(difficulties.get(i));
             difficultyButtonGroup.add(radioButtons[i]);
         }
         radioButtons[1].setSelected(true);
