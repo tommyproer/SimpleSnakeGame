@@ -15,6 +15,9 @@ import java.security.NoSuchAlgorithmException;
 
 import com.snake.main.exception.CryptoException;
 
+/**
+ * Handles writing and retrieving high score of the game through a file.
+ */
 public class HighscoreHandler {
 
     private static final String ALGORITHM = "AES";

@@ -14,6 +14,8 @@ public class SoundController {
 
     private static volatile SoundController soundController;
 
+    private static Configuration configuration = Configuration.getInstance();
+
     public static SoundController getInstance() {
         if (soundController == null) {
             soundController = new SoundController();
@@ -44,6 +46,20 @@ public class SoundController {
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(1);
+        }
+    }
+
+    /**
+     * Decide whether to play music and sound effects
+     * in the game based on the configuration in
+     * game.cfg
+     */
+    public void setDefaultSoundSettings() {
+        if (!configuration.defaultPlaySoundEffects()) {
+            soundController.toggleMuteSoundEffects();
+        }
+        if (configuration.defaultPlayMusic()) {
+            soundController.playThemeMusic();
         }
     }
 

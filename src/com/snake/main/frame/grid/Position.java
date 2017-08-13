@@ -4,6 +4,7 @@ import com.snake.main.frame.GameWindow;
 
 /**
  * Position of the game.
+ * X position is position from the top, Y position is the position from the left.
  */
 public class Position {
 	private int x;

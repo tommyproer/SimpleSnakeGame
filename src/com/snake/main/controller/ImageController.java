@@ -8,14 +8,11 @@ import com.snake.main.frame.GameWindow;
 import com.snake.main.util.ImageUtil;
 
 /**
- * TODO: Right now the images are perfectly 42 by 42 pixels... will this always be true?
- * TODO: The answer is no, we have to find a way to scale
+ * Initializes and stores the images used for the game.
  */
 public class ImageController {
 
     private static volatile ImageController imageController;
-
-    private static final int SIZE = 42;
 
     public static ImageController getInstance() {
         if (imageController == null) {
@@ -26,15 +23,17 @@ public class ImageController {
 
     private static ImageUtil imageUtil = ImageUtil.getInstance();
 
-    private static BufferedImage bgImage;
-    private static BufferedImage food;
-    private static BufferedImage snakeHeadRight;
-    private static BufferedImage snakeHeadLeft;
-    private static BufferedImage snakeHeadDown;
-    private static BufferedImage snakeHeadUp;
-    private static BufferedImage snake;
-    private static BufferedImage snakeTail;
-    private static BufferedImage collision;
+    private BufferedImage bgImage;
+    private BufferedImage food;
+    private BufferedImage snakeHeadRight;
+    private BufferedImage snakeHeadLeft;
+    private BufferedImage snakeHeadDown;
+    private BufferedImage snakeHeadUp;
+    private BufferedImage snake;
+    private BufferedImage snakeTail;
+    private BufferedImage collision;
+
+    private boolean isImagesInitialized = false;
 
     private ImageController() {}
 
@@ -50,6 +49,7 @@ public class ImageController {
             snakeHeadLeft = imageUtil.getFlippedImage(imageUtil.getRotatedImage(snakeHeadRight, 180));
             snakeHeadUp = imageUtil.getRotatedImage(snakeHeadRight, -90);
             snakeHeadDown = imageUtil.getRotatedImage(snakeHeadRight, 90);
+            isImagesInitialized = true;
         } catch (Exception e) {
             System.out.println("Encountered Exception: " + e.getMessage());
             e.printStackTrace();
@@ -66,6 +66,9 @@ public class ImageController {
     public BufferedImage getSnake() { return snake; }
     public BufferedImage getSnakeTail() { return snakeTail; }
     public BufferedImage getCollision() { return collision; }
+    public boolean isImagesInitialized() {
+        return isImagesInitialized;
+    }
 
     public void rescaleImages(double widthScale, double heightScale) {
         bgImage = imageUtil.getScaledImage(bgImage, widthScale, heightScale);

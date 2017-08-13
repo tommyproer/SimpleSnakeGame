@@ -12,36 +12,39 @@ public class RunnableGame implements Runnable {
     private GameWindow gameWindow;
 
     private static boolean exitGame = false;
+    private static boolean gameOver;
 
     public RunnableGame() {
         gameWindow = new GameWindow();
     }
 
     /**
-     * Called when we want to exit the game
+     * Called when we want to exit the game.
      */
     public static void exitGame() {
         exitGame = true;
     }
 
     /**
-     * Run the game
+     * Run the game.
      */
     @Override
     public void run() {
         int n = JOptionPane.YES_OPTION;
         while (n == JOptionPane.YES_OPTION && !exitGame) {
+
             int highscore = gameWindow.getHighscore();
 
-            boolean gameOver = false;
-            while (!gameOver) {
+            gameOver = false;
+            while (!gameOver && !exitGame) {
                 gameOver = gameWindow.iterate();
             }
 
             n = showGameOverDialog(highscore);
 
             if (n == JOptionPane.YES_OPTION) {
-                gameWindow.reset();
+                gameWindow.resetGameState();
+                exitGame = false;
             } else {
                 gameWindow.dispose();
             }

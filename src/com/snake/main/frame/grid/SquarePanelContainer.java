@@ -2,11 +2,14 @@ package com.snake.main.frame.grid;
 
 import java.awt.Image;
 
-public class DataOfSquare {
+/**
+ * Container for square panel.
+ */
+public class SquarePanelContainer {
 
 	private SquarePanel square;
 
-	public DataOfSquare(){
+	public SquarePanelContainer(){
 		square = new SquarePanel();
 	}
 	public void lightSquare(final Image image){

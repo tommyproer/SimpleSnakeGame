@@ -48,6 +48,12 @@ class GameMainMenuBar extends JMenuBar {
         musicItem.addActionListener(snakeMenuBarListener);
         fileMenu.add(musicItem);
 
+        JMenuItem exitItem = new JMenuItem("End Game");
+        exitItem.setMnemonic(KeyEvent.VK_E);
+        exitItem.setActionCommand(SnakeMenuBarListener.EXIT);
+        exitItem.addActionListener(snakeMenuBarListener);
+        fileMenu.add(exitItem);
+
         return fileMenu;
     }
 

@@ -5,7 +5,7 @@ Opens a new window and lets you play a simple Snake game.
 
 To play just build the project with gradle build then run either PlayGame.bat (Windows) or PlayGame.sh (Linux)
 
-Created by Tommy Chen.
+Created by Tommy.
 """
 
 sourceSets {
@@ -15,7 +15,6 @@ sourceSets {
 		}
 		resources {
 			srcDir 'src/resources'
-//			includes ["**/*.png"]
 		}
 	}
 	test {

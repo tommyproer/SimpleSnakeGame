@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Shows instructions to users on how to play the game.
+ * Shows instructions to users on how to play the game. TODO: play around with layout
  */
 public class GameInstructions extends JDialog implements ActionListener {
 

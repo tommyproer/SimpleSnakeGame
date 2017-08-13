@@ -4,10 +4,14 @@ import javax.swing.JFrame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import com.snake.main.RunnableGame;
 import com.snake.main.controller.SoundController;
 import com.snake.main.frame.GameInstructions;
 import com.snake.main.frame.GameWindow;
 
+/**
+ * Listener for the Menu Bar.
+ */
 public class SnakeMenuBarListener implements ActionListener {
 
     private static final SoundController soundController = SoundController.getInstance();
@@ -16,6 +20,7 @@ public class SnakeMenuBarListener implements ActionListener {
     public static final String PAUSE = "pause";
     public static final String PAUSE_MUSIC = "pause_music";
     public static final String INSTRUCTIONS = "instructions";
+    public static final String EXIT = "exit";
 
     private JFrame frame;
 
@@ -41,6 +46,8 @@ public class SnakeMenuBarListener implements ActionListener {
             }
 
             GameWindow.unpauseGame();
+        } else if (event.getActionCommand().equals(EXIT)) {
+            RunnableGame.exitGame();
         }
     }
 }

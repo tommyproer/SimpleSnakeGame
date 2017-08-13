@@ -6,20 +6,23 @@ import java.awt.event.KeyEvent;
 
 import com.snake.main.controller.SoundController;
 
-public class WindowListener implements AWTEventListener {
+/**
+ * Listener for the Game Window.
+ */
+public class GameWindowListener implements AWTEventListener {
 
-    private static volatile WindowListener windowListener;
+    private static volatile GameWindowListener gameWindowListener;
 
-    public static WindowListener getInstance() {
-        if (windowListener == null) {
-            windowListener = new WindowListener();
+    public static GameWindowListener getInstance() {
+        if (gameWindowListener == null) {
+            gameWindowListener = new GameWindowListener();
         }
-        return windowListener;
+        return gameWindowListener;
     }
 
     private static final SoundController soundController = SoundController.getInstance();
 
-    private WindowListener() {}
+    private GameWindowListener() {}
 
     @Override
     public void eventDispatched(AWTEvent event) {

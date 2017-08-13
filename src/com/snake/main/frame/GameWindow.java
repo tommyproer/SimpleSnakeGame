@@ -23,15 +23,14 @@ import com.snake.main.Configuration;
 import com.snake.main.controller.ImageController;
 import com.snake.main.controller.SoundController;
 import com.snake.main.exception.CryptoException;
-import com.snake.main.frame.grid.DataOfSquare;
+import com.snake.main.frame.grid.SquarePanelContainer;
 import com.snake.main.enums.GameDirection;
 import com.snake.main.frame.grid.Position;
-import com.snake.main.frame.listener.WindowListener;
+import com.snake.main.frame.listener.GameWindowListener;
 import com.snake.main.handler.HighscoreHandler;
 
 /**
- * Container frame for the entire snake game.
- * X position is position from the top, Y position is the position from the left.
+ * Container frame for the entire application.
  */
 public class GameWindow extends JFrame {
 
@@ -61,9 +60,9 @@ public class GameWindow extends JFrame {
 	private final Set<Position> allPossiblePositions = new HashSet<>();
 
 	/**
-	 * Actual representation of the game
+	 * Actual visual representation of the game
 	 */
-	private static ArrayList<ArrayList<DataOfSquare>> gameGrid;
+	private static ArrayList<ArrayList<SquarePanelContainer>> gameGrid;
 
 	/**
 	 * Previous direction that the snake moved.
@@ -119,7 +118,7 @@ public class GameWindow extends JFrame {
 	 */
 	private static SoundController soundController = SoundController.getInstance();
 	private static ImageController imageController = ImageController.getInstance();
-	private static WindowListener windowListener = WindowListener.getInstance();
+	private static GameWindowListener gameWindowListener = GameWindowListener.getInstance();
 
 	/**
 	 * Score panel displays the score and difficulty level.
@@ -143,22 +142,20 @@ public class GameWindow extends JFrame {
 	private static boolean paused = false;
 
 	/**
-	 * 1. Initialize game window frame.
-	 * 2. Set default sound settings.
-	 * 3. Initialize all possible positions, used for spawning food.
-	 * 4. Display game instructions.
-	 * 5. Reset score and snake.
+	 * 1. Initialize game window.
+	 * 2. Display game instructions.
+	 * 3. Reset state of game
 	 */
 	public GameWindow() {
 		initializeGameWindow();
-		getDefaultSoundSettings();
 		new GameInstructions(this, true);
-		reset();
+		resetGameState();
 	}
 
 	/**
 	 * Configure and display game window.
 	 * Initialize all arrays and menus.
+	 * Set default sound settings.
 	 */
 	private void initializeGameWindow() {
 		setIcon();
@@ -172,40 +169,35 @@ public class GameWindow extends JFrame {
 		setJMenuBar(new GameMainMenuBar(this));
 
 		initializeAllPossiblePositions();
+		soundController.setDefaultSoundSettings();
 	}
 
 	/**
-	 * Decide whether to play music and sound effects
-	 * in the game based on the configuration in
-	 * game.cfg
+	 * Set game to its initial state.
+	 * 1. Reset game variables
+	 * 2. Display game menu
+	 * 3. Reset score
+	 * 4. Spawn food
 	 */
-	private void getDefaultSoundSettings() {
-		if (!configuration.defaultPlaySoundEffects()) {
-			soundController.toggleMuteSoundEffects();
+	public void resetGameState() {
+		resetGameVariables();
+		new GameDialogMenu(this, "Game Menu", true);
+		if (!imageController.isImagesInitialized()) {
+			// Return if user selects exit.
+			return;
 		}
-		if (configuration.defaultPlayMusic()) {
-			soundController.playThemeMusic();
-		}
+		gameScorePanel.resetScore();
+		spawnFood();
 	}
 
-	/**
-	 * Reset the game.
-	 */
-	public void reset() {
+	private void resetGameVariables() {
 		sizeSnake = configuration.getInitialSnakeSize();
 		snakePositions = new ArrayList<>();
-
 		currentDirection = configuration.getInitialSnakeDirection();
 		lastDirection = configuration.getInitialSnakeDirection();
-
 		headSnakePosition = new Position(configuration.getInitialSnakePosx(), configuration.getInitialSnakePoxy());
+
 		snakePositions.add(new Position(headSnakePosition.getX(), headSnakePosition.getY()));
-
-		new GameDialogMenu(this, "Game Menu", true);
-
-		spawnFoodRandomly();
-
-		gameScorePanel.resetScore();
 	}
 
 	/**
@@ -255,7 +247,7 @@ public class GameWindow extends JFrame {
 
 	public int getHighscore() { return highscore; }
 
-	public void reinitializeColors() {
+	public static void reinitializeColors() {
 		gameGrid.forEach(outerGrid -> {
 			outerGrid.forEach(square -> {
 				square.lightSquare(imageController.getBgImage());
@@ -272,8 +264,8 @@ public class GameWindow extends JFrame {
 	}
 
 	/**
-	 * Initialize JPanel container and gameGrid. Both contain the same DataOfSquare objects,
-	 * but the gameGrid will be the object used to mutate the DataOfSquare objects,
+	 * Initialize JPanel container and gameGrid. Both contain the same SquarePanelContainer objects,
+	 * but the gameGrid will be the object used to mutate the SquarePanelContainer objects,
 	 * while snakeGridContainer is used to display the objects.
 	 */
 	private void initializeGrid() {
@@ -287,11 +279,11 @@ public class GameWindow extends JFrame {
 		gameGrid = new ArrayList<>();
 		final JPanel snakeGridContainer = new JPanel(new GridLayout(gridSize, gridSize));
 		for (int i = 0; i < gridSize; i++) {
-			final ArrayList<DataOfSquare> data = new ArrayList<>();
+			final ArrayList<SquarePanelContainer> data = new ArrayList<>();
 			for(int j = 0; j < gridSize; j++){
-				DataOfSquare dataOfSquare = new DataOfSquare();
-				data.add(dataOfSquare);
-				snakeGridContainer.add(dataOfSquare.getSquare());
+				SquarePanelContainer squarePanelContainer = new SquarePanelContainer();
+				data.add(squarePanelContainer);
+				snakeGridContainer.add(squarePanelContainer.getSquare());
 			}
 			gameGrid.add(data);
 		}
@@ -300,7 +292,7 @@ public class GameWindow extends JFrame {
 		initializeMovementKeyStrokes(snakeGridContainer);
 
 		// Initialize key strokes for sound toggling
-		this.getToolkit().addAWTEventListener(windowListener, AWTEvent.KEY_EVENT_MASK);
+		this.getToolkit().addAWTEventListener(gameWindowListener, AWTEvent.KEY_EVENT_MASK);
 
 		getContentPane().add(snakeGridContainer);
 		snakeGridContainer.requestFocusInWindow();
@@ -478,7 +470,7 @@ public class GameWindow extends JFrame {
 
 			sizeSnake = sizeSnake + 1;
 			soundController.playEatClip();
-			spawnFoodRandomly();
+			spawnFood();
 		}
 
 		return false;
@@ -489,10 +481,7 @@ public class GameWindow extends JFrame {
 	 * Does this by getting all the positions that isn't occupied by the snake
 	 * then pick a random location.
 	 */
-	private void spawnFoodRandomly() {
-		if (imageController.getFood() == null) {
-			return; // This is needed in the case that the user selects exit.
-		}
+	private void spawnFood() {
 		final List<Position> nonSnakePositions = new ArrayList<>(Sets.filter(allPossiblePositions, (input) -> !snakePositions.contains(input)));
 		if (nonSnakePositions.size() == 0) {
 			System.out.println("YOU WIN!");
