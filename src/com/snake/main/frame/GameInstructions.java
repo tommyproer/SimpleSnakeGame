@@ -7,6 +7,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -14,7 +17,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Shows instructions to users on how to play the game. TODO: play around with layout
+ * Shows instructions to users on how to play the game.
+ * See GridBagLayout tutorial: https://docs.oracle.com/javase/tutorial/uiswing/layout/gridbag.html
  */
 public class GameInstructions extends JDialog implements ActionListener {
 
@@ -23,18 +27,27 @@ public class GameInstructions extends JDialog implements ActionListener {
     public GameInstructions(final Frame owner, final boolean modal) {
         super(owner, "Instructions", modal);
 
-        this.setLayout(new BorderLayout(10, 10));
+        this.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 0;
+        c.insets = new Insets(20,20,20,20);
+
         this.add(createInstructionsPanel(
                 Arrays.asList(
                         "Use WASD or Arrow Keys to move snake\n",
-                        "Press P to pause game\n",
+                        "Press P to toggle pause\n",
                         "Press N to toggle sound effects\n",
                         "Press M to toggle music\n"
                 )
-        ));
-        this.add(createButtonsPanel(), BorderLayout.SOUTH);
+        ), c);
 
-        this.setSize(300,150);
+        c.gridx = 1;
+        c.gridy = 1;
+        c.insets = new Insets(20,20,20,20);
+        this.add(createButtonsPanel(), c);
+
+        this.setSize(320,200);
         this.setLocationRelativeTo(this);
         this.setVisible(true);
     }
