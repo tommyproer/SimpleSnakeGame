@@ -1,4 +1,5 @@
 apply plugin: 'java'
+apply plugin: 'application' //https://docs.gradle.org/3.3/userguide/application_plugin.html
 
 description ="""
 Simple Snake Game application.
@@ -39,3 +40,5 @@ jar {
 		attributes 'Main-Class': 'com.snake.main.Main'
 	}
 }
+
+mainClassName = 'com.snake.main.Main'

@@ -31,6 +31,9 @@ import com.snake.main.handler.HighscoreHandler;
 
 /**
  * Container frame for the entire application.
+ * TODO: gameGrid and the jframe needs to be separated into two classes,
+ * since there is more game logic in this class than frame initialization,
+ * it would be easier to keep the game logic/gameGrid in this class and export the frame initialization in a different class
  */
 public class GameWindow extends JFrame {
 
